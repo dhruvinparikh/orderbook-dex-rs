@@ -79,8 +79,24 @@ path = 'src/main.rs'
 
 [build-dependencies]
 vergen = '3'
+
+[profile.dev]
+panic = 'unwind'  
+incremental = true
+
 [profile.release]
 panic = 'unwind'
+incremental = false
+
+[profile.test]
+debug = 2
+panic = 'unwind'
+incremental = true
+
+[profile.bench]
+panic = 'unwind'
+incremental = false
+
 
 [package]
 authors = ['Parity Technologies <admin@parity.io>']

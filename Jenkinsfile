@@ -1,14 +1,9 @@
 pipeline {
 agent any
 options {
-      timeout(time:10, unit: 'MINUTES') 
+      timeout(time:100, unit: 'HOURS') 
     }
     stages {
-        stage('rust'){
-            steps{
-                sh('curl https://getsubstrate.io -sSf | bash')
-            }
-        }
         stage('Cargo Build') {
             steps {
                 sh 'cargo build --jobs 8'

@@ -4,7 +4,17 @@ options {
       timeout(time:1, unit: 'HOURS') 
     }
     stages {
-        stage('Cargo Build') {
+        stage('Install required tools'){
+            steps {
+                sh './scripts/init.sh'
+            }
+        }
+            stage('Build the WebAssembly binary') {
+            steps {
+                sh './scripts/build.sh'
+            }
+        }
+        stage('Build all native code') {
             steps {
                 sh 'cargo build --jobs 8'
             }

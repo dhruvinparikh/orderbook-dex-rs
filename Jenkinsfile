@@ -4,6 +4,11 @@ options {
       timeout(time:10, unit: 'MINUTES') 
     }
     stages {
+        stage('rust'){
+            steps{
+                sh('curl https://getsubstrate.io -sSf | bash')
+            }
+        }
         stage('Cargo Build') {
             steps {
                 sh 'cargo build --jobs 8'

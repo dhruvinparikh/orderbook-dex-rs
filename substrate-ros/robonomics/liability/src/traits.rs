@@ -15,12 +15,10 @@
 //  limitations under the License.
 //
 ///////////////////////////////////////////////////////////////////////////////
+///! Robonomics Liability traits.
 
-use vergen::{ConstantsFlags, generate_cargo_keys};
+pub trait Liability {
 
-const ERROR_MSG: &str = "Failed to generate metadata files";
 
-fn main() {
-    generate_cargo_keys(ConstantsFlags::all()).expect(ERROR_MSG);
-    println!("cargo:rerun-if-changed=.git/HEAD");
 }
+

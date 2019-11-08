@@ -16,11 +16,11 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-use vergen::{ConstantsFlags, generate_cargo_keys};
+use rosrust::api::error::Error;
+use std::sync::Arc;
 
-const ERROR_MSG: &str = "Failed to generate metadata files";
-
-fn main() {
-    generate_cargo_keys(ConstantsFlags::all()).expect(ERROR_MSG);
-    println!("cargo:rerun-if-changed=.git/HEAD");
+///! Simple ROS RPC launcher trait
+pub trait RosRpc {
+    ///! Launch ROS RPC services
+    fn start(api: Arc<Self>) -> Result<Vec<rosrust::Service>, Error>;
 }

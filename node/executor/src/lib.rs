@@ -15,12 +15,15 @@
 //  limitations under the License.
 //
 ///////////////////////////////////////////////////////////////////////////////
+//! A `CodeExecutor` specialization which uses natively compiled runtime when the wasm to be
+//! executed is equivalent to the natively compiled code.
 
-use vergen::{ConstantsFlags, generate_cargo_keys};
+pub use substrate_executor::NativeExecutor;
+pub use substrate_executor::RuntimesCache;
+use substrate_executor::native_executor_instance;
 
-const ERROR_MSG: &str = "Failed to generate metadata files";
-
-fn main() {
-    generate_cargo_keys(ConstantsFlags::all()).expect(ERROR_MSG);
-    println!("cargo:rerun-if-changed=.git/HEAD");
-}
+native_executor_instance!(
+    pub Executor,
+    node_runtime::api::dispatch,
+    node_runtime::native_version
+);

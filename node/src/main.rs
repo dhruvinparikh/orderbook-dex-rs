@@ -15,12 +15,24 @@
 //  limitations under the License.
 //
 ///////////////////////////////////////////////////////////////////////////////
+//! Robonomics node executable.
 
-use vergen::{ConstantsFlags, generate_cargo_keys};
-
-const ERROR_MSG: &str = "Failed to generate metadata files";
+#![warn(missing_docs)]
+#![warn(unused_extern_crates)]
 
 fn main() {
-    generate_cargo_keys(ConstantsFlags::all()).expect(ERROR_MSG);
-    println!("cargo:rerun-if-changed=.git/HEAD");
+    let version = cli::VersionInfo {
+        name: "Robonomics Node",
+        author: "Airalab <research@aira.life>",
+        commit: env!("VERGEN_SHA_SHORT"),
+        version: env!("CARGO_PKG_VERSION"),
+        description: "Substrate based implementation of Robonomics Network",
+        support_url: "https://github.com/airalab/substrate-node-robonomics/issues",
+        executable_name: "robonomics",
+    };
+
+    if let Err(e) = cli::run(::std::env::args(), cli::Exit, version) {
+        eprintln!("Error starting the node: {}\n\n{:?}", e, e);
+        std::process::exit(1)
+    }
 }

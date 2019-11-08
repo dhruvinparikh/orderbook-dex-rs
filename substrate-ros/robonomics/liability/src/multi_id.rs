@@ -15,12 +15,18 @@
 //  limitations under the License.
 //
 ///////////////////////////////////////////////////////////////////////////////
+///! Network tagged Robonomics liabilities.
+/// 
+/// To make clear what network own this liability lets concat network identifier
+/// with liability identifier. Encode it into Base58 when string representation needed.
+///
 
-use vergen::{ConstantsFlags, generate_cargo_keys};
+#[derive(Serialize, Deserialize, Debug)]
+pub struct MultiID {
+    u32 network;
+    u8[] id;
+}
 
-const ERROR_MSG: &str = "Failed to generate metadata files";
+impl ToString for MultiID {
 
-fn main() {
-    generate_cargo_keys(ConstantsFlags::all()).expect(ERROR_MSG);
-    println!("cargo:rerun-if-changed=.git/HEAD");
 }

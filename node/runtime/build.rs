@@ -16,11 +16,14 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-use vergen::{ConstantsFlags, generate_cargo_keys};
-
-const ERROR_MSG: &str = "Failed to generate metadata files";
+use wasm_builder_runner::{build_current_project_with_rustflags, WasmBuilderSource};
 
 fn main() {
-    generate_cargo_keys(ConstantsFlags::all()).expect(ERROR_MSG);
-    println!("cargo:rerun-if-changed=.git/HEAD");
+    build_current_project_with_rustflags(
+        "wasm_binary.rs",
+        WasmBuilderSource::Crates("1.0.6"),
+        // This instructs LLD to export __heap_base as a global variable, which is used by the
+        // external memory allocator.
+        "-Clink-arg=--export=__heap_base",
+    );
 }

@@ -1,6 +1,9 @@
 pipeline {
-    agent any
-    options {
+agent {
+    docker {
+      image 'rust:latest'
+    }
+  }    options {
       timeout(time:10, unit: 'MINUTES') 
     }
     stages {

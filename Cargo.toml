@@ -1,106 +1,112 @@
-[dependencies]
-error-chain = '0.12'
-exit-future = '0.1'
-futures = '0.1'
-hex-literal = '0.1'
-log = '0.4'
-parity-codec = '3.2'
-parking_lot = '0.7.1'
-tokio = '0.1'
-trie-root = '0.12.0'
-serde_json = '1.0.0'
-
-
-[dependencies.basic-authorship]
-git = 'https://github.com/paritytech/substrate.git'
-package = 'substrate-basic-authorship'
-rev = 'cc1d67e973fd02c0c997b164ba516cf041bf21f1'
-
-[dependencies.consensus]
-git = 'https://github.com/paritytech/substrate.git'
-package = 'substrate-consensus-aura'
-rev = 'cc1d67e973fd02c0c997b164ba516cf041bf21f1'
-
-[dependencies.ctrlc]
-features = ['termination']
-version = '3.0'
-
-[dependencies.inherents]
-git = 'https://github.com/paritytech/substrate.git'
-package = 'substrate-inherents'
-rev = 'cc1d67e973fd02c0c997b164ba516cf041bf21f1'
-
-[dependencies.network]
-git = 'https://github.com/paritytech/substrate.git'
-package = 'substrate-network'
-rev = 'cc1d67e973fd02c0c997b164ba516cf041bf21f1'
-
-[dependencies.dna-runtime]
-path = 'runtime'
-
-[dependencies.primitives]
-git = 'https://github.com/paritytech/substrate.git'
-package = 'substrate-primitives'
-rev = 'cc1d67e973fd02c0c997b164ba516cf041bf21f1'
-
-[dependencies.sr-io]
-git = 'https://github.com/paritytech/substrate.git'
-rev = 'cc1d67e973fd02c0c997b164ba516cf041bf21f1'
-
-[dependencies.substrate-cli]
-git = 'https://github.com/paritytech/substrate.git'
-rev = 'cc1d67e973fd02c0c997b164ba516cf041bf21f1'
-
-[dependencies.substrate-client]
-git = 'https://github.com/paritytech/substrate.git'
-rev = 'cc1d67e973fd02c0c997b164ba516cf041bf21f1'
-
-[dependencies.substrate-executor]
-git = 'https://github.com/paritytech/substrate.git'
-rev = 'cc1d67e973fd02c0c997b164ba516cf041bf21f1'
-
-[dependencies.substrate-service]
-git = 'https://github.com/paritytech/substrate.git'
-rev = 'cc1d67e973fd02c0c997b164ba516cf041bf21f1'
-
-[dependencies.transaction-pool]
-git = 'https://github.com/paritytech/substrate.git'
-package = 'substrate-transaction-pool'
-rev = 'cc1d67e973fd02c0c997b164ba516cf041bf21f1'
-
-[dependencies.substrate-telemetry]
-git = 'https://github.com/paritytech/substrate.git'
-package = 'substrate-telemetry'
-rev = 'cc1d67e973fd02c0c997b164ba516cf041bf21f1'
-
-[[bin]]
-name = 'dna'
-path = 'src/main.rs'
-
-[build-dependencies]
-vergen = '3'
-
-[profile.dev]
-panic = 'unwind'  
-incremental = true
+[workspace]
+members = [
+	"core/authority-discovery",
+	"core/application-crypto",
+	"core/chain-spec",
+	"core/chain-spec/derive",
+	"core/cli",
+	"core/client",
+	"core/client/db",
+	"core/client/header-metadata",
+	"core/consensus/aura",
+	"core/consensus/babe",
+	"core/consensus/common",
+	"core/consensus/rhd",
+	"core/consensus/slots",
+	"core/consensus/uncles",
+	"core/consensus/pow",
+	"core/executor",
+	"core/executor/runtime-test",
+	"core/externalities",
+	"core/finality-grandpa",
+	"core/finality-grandpa/primitives",
+	"core/inherents",
+	"core/keyring",
+	"core/keystore",
+	"core/network",
+	"core/panic-handler",
+	"core/primitives",
+	"core/rpc",
+	"core/rpc/primitives",
+	"core/rpc-servers",
+	"core/serializer",
+	"core/service",
+	"core/service/test",
+	"core/session",
+	"core/sr-api-macros",
+	"core/sr-arithmetic",
+	"core/sr-io",
+	"core/sr-primitives",
+	"core/sr-staking-primitives",
+	"core/sr-sandbox",
+	"core/sr-std",
+	"core/sr-version",
+	"core/state-machine",
+	"core/telemetry",
+	"core/test-client",
+	"core/test-runtime",
+	"core/test-runtime/client",
+	"core/transaction-pool",
+	"core/transaction-pool/graph",
+	"core/trie",
+	"core/utils/fork-tree",
+	"core/utils/wasm-builder",
+	"core/utils/wasm-builder-runner",
+	"core/wasm-interface",
+	"srml/support",
+	"srml/support/procedural",
+	"srml/support/procedural/tools",
+	"srml/support/procedural/tools/derive",
+	"srml/support/test",
+	"srml/authorship",
+	"srml/assets",
+	"srml/aura",
+	"srml/balances",
+	"srml/contracts",
+	"srml/contracts/rpc",
+	"srml/collective",
+	"srml/democracy",
+	"srml/elections",
+	"srml/elections-phragmen",
+	"srml/example",
+	"srml/executive",
+	"srml/finality-tracker",
+	"srml/generic-asset",
+	"srml/grandpa",
+	"srml/im-online",
+	"srml/authority-discovery",
+	"srml/indices",
+	"srml/membership",
+	"srml/metadata",
+	"srml/nicks",
+	"srml/offences",
+	"srml/randomness-collective-flip",
+	"srml/scored-pool",
+	"srml/session",
+	"srml/staking",
+	"srml/staking/reward-curve",
+	"srml/sudo",
+	"srml/system",
+	"srml/system/rpc",
+	"srml/timestamp",
+	"srml/treasury",
+	"srml/transaction-payment",
+	"srml/transaction-payment/rpc",
+	"srml/utility",
+	"srml/evm",
+	"node/cli",
+	"node/executor",
+	"node/primitives",
+	"node/rpc",
+	"node/rpc-client",
+	"node/runtime",
+	"node/testing",
+	"node-template",
+	"subkey",
+	"test-utils/chain-spec-builder",
+]
 
 [profile.release]
-panic = 'unwind'
-incremental = false
+# Substrate runtime requires unwinding.
+panic = "unwind"
 
-[profile.test]
-debug = 2
-panic = 'unwind'
-incremental = true
-
-[profile.bench]
-panic = 'unwind'
-incremental = false
-
-
-[package]
-authors = ['Parity Technologies <admin@parity.io>']
-build = 'build.rs'
-edition = '2018'
-name = 'dna'
-version = '1.0.0'

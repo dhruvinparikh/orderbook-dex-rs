@@ -49,7 +49,7 @@ node 2
 
 node 3 
 
-./target/release/dna   --base-path /tmp/prod3   --chain=prod  --key 'debate convince invite virus shy tank swift fuel aerobic open alien address'   --port 30336   --valator   --name node3   --bootnodes /ip4/127.0.0.1/tcp/303339/p2p/QmerFAhkTD8Rgj1aJFQWWDnQq2bR7SFxzuoHnPrpeKBzEd /ip4/192.168.1.166/tcp/30334/p2p/QmRbfyF3AtWB2HiMYxziY6f1FfKM2GkSDEtj8FFFsdQ4BV --ws-port 9946 
+./target/release/dna   --base-path /tmp/prod3   --chain ./customSpec.json --key 'debate convince invite virus shy tank swift fuel aerobic open alien address'   --port 30336   --valator   --name node3   --bootnodes /ip4/192.168.1.201/tcp/30333/p2p/QmSav5TQvwWuH7HwqkzjBMynPnoB8PL1q1j1CTezUZJZHa --ws-port 9946 
 
 
 

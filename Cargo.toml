@@ -101,8 +101,6 @@ members = [
 	"node/rpc-client",
 	"node/runtime",
 	"node/testing",
-	"node-template",
-	"subkey",
 	"test-utils/chain-spec-builder",
 ]
 

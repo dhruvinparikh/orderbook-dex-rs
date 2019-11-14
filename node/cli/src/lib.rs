@@ -52,11 +52,9 @@ pub enum ChainSpec {
     Development,
     /// Whatever the current runtime is, with simple Alice/Bob auths.
     LocalTestnet,
-    /// The Flaming Fir testnet.
+    /// The DNA  testnet.
     TestDna,
 
-    /// Whatever the current runtime is with the "global testnet" defaults.
-    StagingTestnet,
 }
 
 /// Get a chain config from a spec setting.
@@ -66,7 +64,6 @@ impl ChainSpec {
             ChainSpec::TestDna => chain_spec::dna_config()?,
             ChainSpec::Development => chain_spec::development_config(),
             ChainSpec::LocalTestnet => chain_spec::local_testnet_config(),
-            ChainSpec::StagingTestnet => chain_spec::staging_testnet_config(),
         })
     }
 
@@ -75,7 +72,6 @@ impl ChainSpec {
             "dev" => Some(ChainSpec::Development),
             "local" => Some(ChainSpec::LocalTestnet),
             "" | "dna" => Some(ChainSpec::TestDna),
-            "staging" => Some(ChainSpec::StagingTestnet),
             _ => None,
         }
     }

@@ -42,8 +42,9 @@ pub use node_runtime::GenesisConfig;
 
 type AccountPublic = <Signature as Verify>::Signer;
 
-const STAGING_TELEMETRY_URL: &str = "wss://telemetry.polkadot.io/submit/";
+const STAGING_TELEMETRY_URL: &str = " ws://localhost:1024";
 
+const PRODUCTION_TELEMETRY_URL: &str = " ws://localhost:1024";
 /// Node `ChainSpec` extensions.
 ///
 /// Additional parameters for some Substrate core modules,
@@ -56,9 +57,10 @@ pub struct Extensions {
 
 /// Specialized `ChainSpec`.
 pub type ChainSpec = substrate_service::ChainSpec<GenesisConfig, Extensions>;
-/// Flaming Fir testnet generator
-pub fn flaming_fir_config() -> Result<ChainSpec, String> {
-    ChainSpec::from_json_bytes(&include_bytes!("../res/flaming-fir.json")[..])
+
+// dna testnet generator
+pub fn dna_config() -> Result<ChainSpec, String> {
+    ChainSpec::from_json_bytes(&include_bytes!("../res/dna_raw.json")[..])
 }
 
 fn session_keys(grandpa: GrandpaId, babe: BabeId, im_online: ImOnlineId) -> SessionKeys {

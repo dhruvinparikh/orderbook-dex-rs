@@ -16,7 +16,7 @@ Use command ifconfig to get the machine network ip.
 ```
 - Open another terminal window and run `./target/release/substrate --chain ./customRaw.json --base-path /tmp/bob1 --bootnodes /ip4/<validator-node-ip>/tcp/30333/p2p/<node-key>`.
 
-# in lib
+# Staking Configuration
 
 in `node/cli/src/chain_spec.rs line 170`
 

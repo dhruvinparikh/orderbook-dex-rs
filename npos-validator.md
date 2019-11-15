@@ -1,4 +1,4 @@
-# Running atleast validator with rotating session keys
+# Running atleast one validator with rotating session keys
 
 ## Getting Started
 
@@ -15,3 +15,22 @@ Note : Copy the node key from the logs that appear on console.
 Use command ifconfig to get the machine network ip.
 ```
 - Open another terminal window and run `./target/release/substrate --chain ./customRaw.json --base-path /tmp/bob1 --bootnodes /ip4/<validator-node-ip>/tcp/30333/p2p/<node-key>`.
+
+# Staking Configuration
+
+in `node/cli/src/chain_spec.rs line 170`
+
+```
+staking: Some(StakingConfig {
+            current_era: 0,
+            validator_count: 1,
+            minimum_validator_count: initial_authorities.len() as u32,
+            stakers: initial_authorities
+                .iter()
+                .map(|x| (x.0.clone(), x.1.clone(), STASH, StakerStatus::Validator))
+                .collect(),
+            invulnerables: initial_authorities.iter().map(|x| x.0.clone()).collect(),
+            slash_reward_fraction: Perbill::from_percent(10),
+            ..Default::default()
+        })
+```

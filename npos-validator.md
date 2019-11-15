@@ -1,4 +1,4 @@
-# Running atleast validator with rotating session keys
+# Running atleast one validator with rotating session keys
 
 ## Getting Started
 
@@ -23,7 +23,7 @@ in `node/cli/src/chain_spec.rs line 170`
 ```
 staking: Some(StakingConfig {
             current_era: 0,
-            validator_count: 2,
+            validator_count: 1,
             minimum_validator_count: initial_authorities.len() as u32,
             stakers: initial_authorities
                 .iter()

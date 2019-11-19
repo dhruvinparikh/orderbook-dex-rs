@@ -5,11 +5,11 @@ authors = ["Parity Technologies <admin@parity.io>"]
 edition = "2018"
 
 [dependencies]
-primitives = { package = "substrate-primitives", path = "../../core/primitives", default-features = false }
-sr-primitives = { path = "../../core/sr-primitives", default-features = false }
+primitives = { package = "substrate-primitives", git = "https://github.com/blockxlabs/substrate.git", default-features = false }
+sr-primitives = { git = "https://github.com/blockxlabs/substrate.git", default-features = false }
 
 [dev-dependencies]
-substrate-serializer = { path = "../../core/serializer" }
+substrate-serializer = { git = "https://github.com/blockxlabs/substrate.git" }
 pretty_assertions = "0.6.1"
 
 [features]

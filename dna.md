@@ -44,7 +44,7 @@ node 1
 
 node 2 
 
-./target/release/dna   --base-path /tmp/prod2   --chain=prod  --key 'coconut session disorder bone spot tattoo uncover basket basic laundry glad shiver'   --port 30334   --validator   --name node2   --bootnodes /ip4/127.0.0.1/tcp/303339/p2p/QmerFAhkTD8Rgj1aJFQWWDnQq2bR7SFxzuoHnPrpeKBzEd ----ws-port 9945
+./target/release/dna   --base-path /tmp/prod2   --chain=prod  --key 'coconut session disorder bone spot tattoo uncover basket basic laundry glad shiver'   --port 30334   --validator   --name node2   --bootnodes /ip4/127.0.0.1/tcp/30333/p2p/QmerFAhkTD8Rgj1aJFQWWDnQq2bR7SFxzuoHnPrpeKBzEd ----ws-port 9945
 
 
 node 3 

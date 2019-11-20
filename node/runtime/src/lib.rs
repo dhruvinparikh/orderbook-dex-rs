@@ -458,15 +458,6 @@ parameter_types! {
 	pub const MaxLength: usize = 16;
 }
 
-impl nicks::Trait for Runtime {
-	type Event = Event;
-	type Currency = Balances;
-	type ReservationFee = ReservationFee;
-	type Slashed = Treasury;
-	type ForceOrigin = collective::EnsureMember<AccountId, CouncilCollective>;
-	type MinLength = MinLength;
-	type MaxLength = MaxLength;
-}
 
 impl system::offchain::CreateTransaction<Runtime, UncheckedExtrinsic> for Runtime {
 	type Public = <Signature as traits::Verify>::Signer;
@@ -528,7 +519,6 @@ construct_runtime!(
 		AuthorityDiscovery: authority_discovery::{Module, Call, Config},
 		Offences: offences::{Module, Call, Storage, Event},
 		RandomnessCollectiveFlip: randomness_collective_flip::{Module, Call, Storage},
-		Nicks: nicks::{Module, Call, Storage, Event<T>},
 	}
 );
 

@@ -90,8 +90,6 @@ pub fn config(support_changes_trie: bool, code: Option<&[u8]>) -> GenesisConfig 
 		}),
 		im_online: Some(Default::default()),
 		authority_discovery: Some(Default::default()),
-		collective_Instance1: Some(Default::default()),
-		collective_Instance2: Some(Default::default()),
 		sudo: Some(Default::default()),
 	}
 }

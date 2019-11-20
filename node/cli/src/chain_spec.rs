@@ -24,9 +24,9 @@ use im_online::sr25519::AuthorityId as ImOnlineId;
 use node_runtime::constants::currency::*;
 use node_runtime::Block;
 use node_runtime::{
-    AuthorityDiscoveryConfig, BabeConfig, BalancesConfig, ContractsConfig, CouncilConfig, GrandpaConfig,
+    AuthorityDiscoveryConfig, BabeConfig, BalancesConfig, ContractsConfig, GrandpaConfig,
     ImOnlineConfig, IndicesConfig, SessionConfig, SessionKeys, StakerStatus, StakingConfig,
-    SudoConfig, SystemConfig, TechnicalCommitteeConfig,  WASM_BINARY,
+    SudoConfig, SystemConfig,  WASM_BINARY,
 };
 use primitives::{crypto::UncheckedInto, sr25519, Pair, Public};
 use serde::{Deserialize, Serialize};
@@ -191,14 +191,6 @@ pub fn testnet_genesis(
         sudo: Some(SudoConfig { key: root_key }),
         babe: Some(BabeConfig {
             authorities: vec![],
-        }),
-        collective_Instance1: Some(CouncilConfig {
-            members: vec![],
-            phantom: Default::default(),
-        }),
-        collective_Instance2: Some(TechnicalCommitteeConfig {
-            members: vec![],
-            phantom: Default::default(),
         }),
         im_online: Some(ImOnlineConfig { keys: vec![] }),
         grandpa: Some(GrandpaConfig {

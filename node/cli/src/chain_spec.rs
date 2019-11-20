@@ -19,7 +19,6 @@
 use babe_primitives::AuthorityId as BabeId;
 use chain_spec::ChainSpecExtension;
 use grandpa_primitives::AuthorityId as GrandpaId;
-use hex_literal::hex;
 use im_online::sr25519::AuthorityId as ImOnlineId;
 use node_runtime::constants::currency::*;
 use node_runtime::Block;
@@ -28,7 +27,7 @@ use node_runtime::{
     ImOnlineConfig, IndicesConfig, SessionConfig, SessionKeys, StakerStatus, StakingConfig,
     SudoConfig, SystemConfig,  WASM_BINARY,
 };
-use primitives::{crypto::UncheckedInto, sr25519, Pair, Public};
+use primitives::{sr25519, Pair, Public};
 use serde::{Deserialize, Serialize};
 use sr_primitives::{
     traits::{IdentifyAccount, Verify},
@@ -46,7 +45,7 @@ type AccountPublic = <Signature as Verify>::Signer;
 
 const STAGING_TELEMETRY_URL: &str = " ws://localhost:1024";
 
-const PRODUCTION_TELEMETRY_URL: &str = " ws://localhost:1024";
+// const PRODUCTION_TELEMETRY_URL: &str = " ws://localhost:1024";
 /// Node `ChainSpec` extensions.
 ///
 /// Additional parameters for some Substrate core modules,

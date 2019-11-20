@@ -2948,16 +2948,13 @@ dependencies = [
  "paint-authorship",
  "paint-babe",
  "paint-balances",
- "paint-collective",
  "paint-contracts",
  "paint-contracts-rpc-runtime-api",
- "paint-elections-phragmen",
  "paint-executive",
  "paint-finality-tracker",
  "paint-grandpa",
  "paint-im-online",
  "paint-indices",
- "paint-membership",
  "paint-offences",
  "paint-randomness-collective-flip",
  "paint-session",
@@ -2970,7 +2967,6 @@ dependencies = [
  "paint-timestamp",
  "paint-transaction-payment",
  "paint-transaction-payment-rpc-runtime-api",
- "paint-treasury",
  "paint-utility",
  "parity-scale-codec",
  "rustc-hex",
@@ -3249,22 +3245,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "paint-collective"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate.git#73f4c118c07ff4a45c3acbbf62e8be96af96c28a"
-dependencies = [
- "paint-support",
- "paint-system",
- "parity-scale-codec",
- "safe-mix",
- "serde",
- "sr-io",
- "sr-primitives",
- "sr-std",
- "substrate-primitives",
-]
-
-[[package]]
 name = "paint-contracts"
 version = "2.0.0"
 source = "git+https://github.com/blockxlabs/substrate.git#73f4c118c07ff4a45c3acbbf62e8be96af96c28a"
@@ -3310,19 +3290,6 @@ dependencies = [
  "sr-api",
  "sr-primitives",
  "sr-std",
-]
-
-[[package]]
-name = "paint-elections-phragmen"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate.git#73f4c118c07ff4a45c3acbbf62e8be96af96c28a"
-dependencies = [
- "paint-support",
- "paint-system",
- "parity-scale-codec",
- "sr-primitives",
- "sr-std",
- "substrate-phragmen",
 ]
 
 [[package]]
@@ -3406,20 +3373,6 @@ dependencies = [
  "sr-std",
  "substrate-keyring",
  "substrate-primitives",
-]
-
-[[package]]
-name = "paint-membership"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate.git#73f4c118c07ff4a45c3acbbf62e8be96af96c28a"
-dependencies = [
- "paint-support",
- "paint-system",
- "parity-scale-codec",
- "serde",
- "sr-io",
- "sr-primitives",
- "sr-std",
 ]
 
 [[package]]

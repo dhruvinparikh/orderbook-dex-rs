@@ -24,9 +24,9 @@ use im_online::sr25519::AuthorityId as ImOnlineId;
 use node_runtime::constants::currency::*;
 use node_runtime::Block;
 use node_runtime::{
-    AuthorityDiscoveryConfig, BabeConfig, BalancesConfig, ContractsConfig, CouncilConfig, DemocracyConfig, GrandpaConfig,
+    AuthorityDiscoveryConfig, BabeConfig, BalancesConfig, ContractsConfig, CouncilConfig, GrandpaConfig,
     ImOnlineConfig, IndicesConfig, SessionConfig, SessionKeys, StakerStatus, StakingConfig,
-    SudoConfig, SystemConfig, TechnicalCommitteeConfig, WASM_BINARY,
+    SudoConfig, SystemConfig, TechnicalCommitteeConfig,  WASM_BINARY,
 };
 use primitives::{crypto::UncheckedInto, sr25519, Pair, Public};
 use serde::{Deserialize, Serialize};
@@ -181,15 +181,6 @@ pub fn testnet_genesis(
             slash_reward_fraction: Perbill::from_percent(10),
             ..Default::default()
         }),
-        democracy: Some(DemocracyConfig::default()),
-        collective_Instance1: Some(CouncilConfig {
-            members: vec![],
-            phantom: Default::default(),
-        }),
-        collective_Instance2: Some(TechnicalCommitteeConfig {
-            members: vec![],
-            phantom: Default::default(),
-        }),
         contracts: Some(ContractsConfig {
             current_schedule: contracts::Schedule {
                 enable_println, // this should only be enabled on development chains
@@ -201,17 +192,24 @@ pub fn testnet_genesis(
         babe: Some(BabeConfig {
             authorities: vec![],
         }),
+        collective_Instance1: Some(CouncilConfig {
+            members: vec![],
+            phantom: Default::default(),
+        }),
+        collective_Instance2: Some(TechnicalCommitteeConfig {
+            members: vec![],
+            phantom: Default::default(),
+        }),
         im_online: Some(ImOnlineConfig { keys: vec![] }),
         grandpa: Some(GrandpaConfig {
             authorities: vec![],
 		}),
 		authority_discovery: Some(AuthorityDiscoveryConfig {
 			keys: vec![],
-		}),
-        membership_Instance1: Some(Default::default()),
-        treasury: Some(Default::default()),
+        }),
+        
     }
-}
+ }
 
 fn development_config_genesis() -> GenesisConfig {
     testnet_genesis(

@@ -19,7 +19,7 @@
 //! Since `substrate` core functionality makes no assumptions
 //! about the modules used inside the runtime, so do
 //! RPC methods defined in `substrate-rpc` crate.
-//! It means that `core/rpc` can't have any methods that
+//! It means that `client/rpc` can't have any methods that
 //! need some strong assumptions about the particular runtime.
 //!
 //! The RPCs available in this crate however can make some assumptions
@@ -41,15 +41,15 @@ pub fn create<C, P, M>(client: Arc<C>, pool: Arc<Pool<P>>) -> jsonrpc_core::IoHa
 	C: ProvideRuntimeApi,
 	C: client::blockchain::HeaderBackend<Block>,
 	C: Send + Sync + 'static,
-	C::Api: srml_system_rpc::AccountNonceApi<Block, AccountId, Index>,
-	C::Api: srml_contracts_rpc::ContractsRuntimeApi<Block, AccountId, Balance>,
-	C::Api: srml_transaction_payment_rpc::TransactionPaymentRuntimeApi<Block, Balance, UncheckedExtrinsic>,
+	C::Api: paint_system_rpc::AccountNonceApi<Block, AccountId, Index>,
+	C::Api: paint_contracts_rpc::ContractsRuntimeApi<Block, AccountId, Balance>,
+	C::Api: paint_transaction_payment_rpc::TransactionPaymentRuntimeApi<Block, Balance, UncheckedExtrinsic>,
 	P: ChainApi + Sync + Send + 'static,
 	M: jsonrpc_core::Metadata + Default,
 {
-	use srml_system_rpc::{System, SystemApi};
-	use srml_contracts_rpc::{Contracts, ContractsApi};
-	use srml_transaction_payment_rpc::{TransactionPayment, TransactionPaymentApi};
+	use paint_system_rpc::{System, SystemApi};
+	use paint_contracts_rpc::{Contracts, ContractsApi};
+	use paint_transaction_payment_rpc::{TransactionPayment, TransactionPaymentApi};
 
 	let mut io = jsonrpc_core::IoHandler::default();
 	io.extend_with(

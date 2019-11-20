@@ -19,16 +19,15 @@
 use babe_primitives::AuthorityId as BabeId;
 use chain_spec::ChainSpecExtension;
 use grandpa_primitives::AuthorityId as GrandpaId;
-use hex_literal::hex;
 use im_online::sr25519::AuthorityId as ImOnlineId;
 use node_runtime::constants::currency::*;
 use node_runtime::Block;
 use node_runtime::{
-    BabeConfig, BalancesConfig, ContractsConfig, CouncilConfig, DemocracyConfig, GrandpaConfig,
+    AuthorityDiscoveryConfig, BabeConfig, BalancesConfig, ContractsConfig, GrandpaConfig,
     ImOnlineConfig, IndicesConfig, SessionConfig, SessionKeys, StakerStatus, StakingConfig,
-    SudoConfig, SystemConfig, TechnicalCommitteeConfig, WASM_BINARY,
+    SudoConfig, SystemConfig,  WASM_BINARY,
 };
-use primitives::{crypto::UncheckedInto, sr25519, Pair, Public};
+use primitives::{sr25519, Pair, Public};
 use serde::{Deserialize, Serialize};
 use sr_primitives::{
     traits::{IdentifyAccount, Verify},
@@ -37,6 +36,7 @@ use sr_primitives::{
 use substrate_service::{self, Properties};
 use substrate_telemetry::TelemetryEndpoints;
 use serde_json::json;
+use authority_discovery_primitives::AuthorityId as AuthorityDiscoveryId;
 
 pub use node_primitives::{AccountId, Balance, Signature};
 pub use node_runtime::GenesisConfig;
@@ -45,7 +45,7 @@ type AccountPublic = <Signature as Verify>::Signer;
 
 const STAGING_TELEMETRY_URL: &str = " ws://localhost:1024";
 
-const PRODUCTION_TELEMETRY_URL: &str = " ws://localhost:1024";
+// const PRODUCTION_TELEMETRY_URL: &str = " ws://localhost:1024";
 /// Node `ChainSpec` extensions.
 ///
 /// Additional parameters for some Substrate core modules,
@@ -64,13 +64,15 @@ pub fn dna_config() -> Result<ChainSpec, String> {
     ChainSpec::from_json_bytes(&include_bytes!("../res/dna_raw.json")[..])
 }
 
-fn session_keys(grandpa: GrandpaId, babe: BabeId, im_online: ImOnlineId) -> SessionKeys {
-    SessionKeys {
-        grandpa,
-        babe,
-        im_online,
-    }
+fn session_keys(
+	grandpa: GrandpaId,
+	babe: BabeId,
+	im_online: ImOnlineId,
+	authority_discovery: AuthorityDiscoveryId,
+) -> SessionKeys {
+	SessionKeys { grandpa, babe, im_online, authority_discovery }
 }
+
 
 fn dna_props() -> Properties {
 	json!({"tokenDecimals": 4, "tokenSymbol": "DNA" }).as_object().unwrap().clone()
@@ -96,19 +98,20 @@ where
 /// Helper function to generate stash, controller and session key from seed
 pub fn get_authority_keys_from_seed(
     seed: &str,
-) -> (AccountId, AccountId, GrandpaId, BabeId, ImOnlineId) {
+) -> (AccountId, AccountId, GrandpaId, BabeId, ImOnlineId, AuthorityDiscoveryId) {
     (
         get_account_id_from_seed::<sr25519::Public>(&format!("{}//stash", seed)),
         get_account_id_from_seed::<sr25519::Public>(seed),
         get_from_seed::<GrandpaId>(seed),
         get_from_seed::<BabeId>(seed),
-        get_from_seed::<ImOnlineId>(seed),
+		get_from_seed::<ImOnlineId>(seed),
+		get_from_seed::<AuthorityDiscoveryId>(seed),
     )
 }
 
 /// Helper function to create GenesisConfig for testing
 pub fn testnet_genesis(
-    initial_authorities: Vec<(AccountId, AccountId, GrandpaId, BabeId, ImOnlineId)>,
+    initial_authorities: Vec<(AccountId, AccountId, GrandpaId, BabeId, ImOnlineId, AuthorityDiscoveryId)>,
     root_key: AccountId,
     endowed_accounts: Option<Vec<AccountId>>,
     enable_println: bool,
@@ -160,7 +163,7 @@ pub fn testnet_genesis(
                 .map(|x| {
                     (
                         x.0.clone(),
-                        session_keys(x.2.clone(), x.3.clone(), x.4.clone()),
+                        session_keys(x.2.clone(), x.3.clone(), x.4.clone(), x.5.clone()),
                     )
                 })
                 .collect::<Vec<_>>(),
@@ -177,15 +180,6 @@ pub fn testnet_genesis(
             slash_reward_fraction: Perbill::from_percent(10),
             ..Default::default()
         }),
-        democracy: Some(DemocracyConfig::default()),
-        collective_Instance1: Some(CouncilConfig {
-            members: vec![],
-            phantom: Default::default(),
-        }),
-        collective_Instance2: Some(TechnicalCommitteeConfig {
-            members: vec![],
-            phantom: Default::default(),
-        }),
         contracts: Some(ContractsConfig {
             current_schedule: contracts::Schedule {
                 enable_println, // this should only be enabled on development chains
@@ -200,11 +194,13 @@ pub fn testnet_genesis(
         im_online: Some(ImOnlineConfig { keys: vec![] }),
         grandpa: Some(GrandpaConfig {
             authorities: vec![],
+		}),
+		authority_discovery: Some(AuthorityDiscoveryConfig {
+			keys: vec![],
         }),
-        membership_Instance1: Some(Default::default()),
-        treasury: Some(Default::default()),
+        
     }
-}
+ }
 
 fn development_config_genesis() -> GenesisConfig {
     testnet_genesis(

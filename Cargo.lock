@@ -2951,7 +2951,6 @@ dependencies = [
  "paint-collective",
  "paint-contracts",
  "paint-contracts-rpc-runtime-api",
- "paint-democracy",
  "paint-elections-phragmen",
  "paint-executive",
  "paint-finality-tracker",
@@ -2959,7 +2958,6 @@ dependencies = [
  "paint-im-online",
  "paint-indices",
  "paint-membership",
- "paint-nicks",
  "paint-offences",
  "paint-randomness-collective-flip",
  "paint-session",
@@ -3315,21 +3313,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "paint-democracy"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate.git#73f4c118c07ff4a45c3acbbf62e8be96af96c28a"
-dependencies = [
- "paint-support",
- "paint-system",
- "parity-scale-codec",
- "safe-mix",
- "serde",
- "sr-io",
- "sr-primitives",
- "sr-std",
-]
-
-[[package]]
 name = "paint-elections-phragmen"
 version = "2.0.0"
 source = "git+https://github.com/blockxlabs/substrate.git#73f4c118c07ff4a45c3acbbf62e8be96af96c28a"
@@ -3448,20 +3431,6 @@ dependencies = [
  "serde",
  "sr-std",
  "substrate-primitives",
-]
-
-[[package]]
-name = "paint-nicks"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate.git#73f4c118c07ff4a45c3acbbf62e8be96af96c28a"
-dependencies = [
- "paint-support",
- "paint-system",
- "parity-scale-codec",
- "serde",
- "sr-io",
- "sr-primitives",
- "sr-std",
 ]
 
 [[package]]

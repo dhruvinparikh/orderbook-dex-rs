@@ -38,7 +38,6 @@ balances = { package = "paint-balances", git = "https://github.com/blockxlabs/su
 collective = { package = "paint-collective", git = "https://github.com/blockxlabs/substrate.git", default-features = false }
 contracts = { package = "paint-contracts", git = "https://github.com/blockxlabs/substrate.git", default-features = false }
 contracts-rpc-runtime-api = { package = "paint-contracts-rpc-runtime-api", git = "https://github.com/blockxlabs/substrate.git", default-features = false }
-democracy = { package = "paint-democracy", git = "https://github.com/blockxlabs/substrate.git", default-features = false }
 elections-phragmen = { package = "paint-elections-phragmen", git = "https://github.com/blockxlabs/substrate.git", default-features = false }
 executive = { package = "paint-executive", git = "https://github.com/blockxlabs/substrate.git", default-features = false }
 finality-tracker = { package = "paint-finality-tracker", git = "https://github.com/blockxlabs/substrate.git", default-features = false }
@@ -81,7 +80,6 @@ std = [
 	"collective/std",
 	"contracts-rpc-runtime-api/std",
 	"contracts/std",
-	"democracy/std",
 	"elections-phragmen/std",
 	"executive/std",
 	"finality-tracker/std",

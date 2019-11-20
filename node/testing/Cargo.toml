@@ -9,7 +9,6 @@ edition = "2018"
 balances = { package = "paint-balances", git = "https://github.com/blockxlabs/substrate.git" }
 client = { package = "substrate-client", git = "https://github.com/blockxlabs/substrate.git" }
 codec = { package = "parity-scale-codec", version = "1.0.0" }
-contracts = { package = "paint-contracts", git = "https://github.com/blockxlabs/substrate.git" }
 grandpa = { package = "paint-grandpa", git = "https://github.com/blockxlabs/substrate.git" }
 indices = { package = "paint-indices", git = "https://github.com/blockxlabs/substrate.git" }
 keyring = { package = "substrate-keyring", git = "https://github.com/blockxlabs/substrate.git" }

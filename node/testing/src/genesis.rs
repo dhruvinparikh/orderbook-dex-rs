@@ -20,7 +20,7 @@ use crate::keyring::*;
 use keyring::{Ed25519Keyring, Sr25519Keyring};
 use node_runtime::{
 	GenesisConfig, BalancesConfig, SessionConfig, StakingConfig, SystemConfig,
-	GrandpaConfig, IndicesConfig, ContractsConfig, WASM_BINARY,
+	GrandpaConfig, IndicesConfig, WASM_BINARY,
 };
 use node_runtime::constants::currency::*;
 use primitives::ChangesTrieConfiguration;
@@ -79,10 +79,6 @@ pub fn config(support_changes_trie: bool, code: Option<&[u8]>) -> GenesisConfig 
 			slash_reward_fraction: Perbill::from_percent(10),
 			invulnerables: vec![alice(), bob(), charlie()],
 			.. Default::default()
-		}),
-		contracts: Some(ContractsConfig {
-			current_schedule: Default::default(),
-			gas_price: 1 * MILLICENTS,
 		}),
 		babe: Some(Default::default()),
 		grandpa: Some(GrandpaConfig {

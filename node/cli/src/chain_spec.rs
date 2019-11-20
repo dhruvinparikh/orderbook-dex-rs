@@ -24,7 +24,7 @@ use im_online::sr25519::AuthorityId as ImOnlineId;
 use node_runtime::constants::currency::*;
 use node_runtime::Block;
 use node_runtime::{
-    AuthorityDiscoveryConfig, BabeConfig, BalancesConfig, ContractsConfig, CouncilConfig, DemocracyConfig, GrandpaConfig,
+    AuthorityDiscoveryConfig, BabeConfig, BalancesConfig, CouncilConfig, DemocracyConfig, GrandpaConfig,
     ImOnlineConfig, IndicesConfig, SessionConfig, SessionKeys, StakerStatus, StakingConfig,
     SudoConfig, SystemConfig, TechnicalCommitteeConfig, WASM_BINARY,
 };
@@ -189,13 +189,6 @@ pub fn testnet_genesis(
         collective_Instance2: Some(TechnicalCommitteeConfig {
             members: vec![],
             phantom: Default::default(),
-        }),
-        contracts: Some(ContractsConfig {
-            current_schedule: contracts::Schedule {
-                enable_println, // this should only be enabled on development chains
-                ..Default::default()
-            },
-            gas_price: 1 * MILLICENTS,
         }),
         sudo: Some(SudoConfig { key: root_key }),
         babe: Some(BabeConfig {

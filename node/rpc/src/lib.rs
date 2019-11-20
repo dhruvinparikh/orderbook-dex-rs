@@ -42,21 +42,16 @@ pub fn create<C, P, M>(client: Arc<C>, pool: Arc<Pool<P>>) -> jsonrpc_core::IoHa
 	C: client::blockchain::HeaderBackend<Block>,
 	C: Send + Sync + 'static,
 	C::Api: paint_system_rpc::AccountNonceApi<Block, AccountId, Index>,
-	C::Api: paint_contracts_rpc::ContractsRuntimeApi<Block, AccountId, Balance>,
 	C::Api: paint_transaction_payment_rpc::TransactionPaymentRuntimeApi<Block, Balance, UncheckedExtrinsic>,
 	P: ChainApi + Sync + Send + 'static,
 	M: jsonrpc_core::Metadata + Default,
 {
 	use paint_system_rpc::{System, SystemApi};
-	use paint_contracts_rpc::{Contracts, ContractsApi};
 	use paint_transaction_payment_rpc::{TransactionPayment, TransactionPaymentApi};
 
 	let mut io = jsonrpc_core::IoHandler::default();
 	io.extend_with(
 		SystemApi::to_delegate(System::new(client.clone(), pool))
-	);
-	io.extend_with(
-		ContractsApi::to_delegate(Contracts::new(client.clone()))
 	);
 	io.extend_with(
 		TransactionPaymentApi::to_delegate(TransactionPayment::new(client))

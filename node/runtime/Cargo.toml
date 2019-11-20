@@ -46,7 +46,6 @@ grandpa = { package = "paint-grandpa", git = "https://github.com/blockxlabs/subs
 im-online = { package = "paint-im-online", git = "https://github.com/blockxlabs/substrate.git", default-features = false }
 indices = { package = "paint-indices", git = "https://github.com/blockxlabs/substrate.git", default-features = false }
 membership = { package = "paint-membership", git = "https://github.com/blockxlabs/substrate.git", default-features = false }
-nicks = { package = "paint-nicks", git = "https://github.com/blockxlabs/substrate.git", default-features = false }
 offences = { package = "paint-offences", git = "https://github.com/blockxlabs/substrate.git", default-features = false }
 randomness-collective-flip = { package = "paint-randomness-collective-flip", git = "https://github.com/blockxlabs/substrate.git", default-features = false }
 session = { package = "paint-session", git = "https://github.com/blockxlabs/substrate.git", default-features = false, features = ["historical"] }
@@ -91,7 +90,6 @@ std = [
 	"indices/std",
 	"inherents/std",
 	"membership/std",
-	"nicks/std",
 	"node-primitives/std",
 	"offchain-primitives/std",
 	"offences/std",

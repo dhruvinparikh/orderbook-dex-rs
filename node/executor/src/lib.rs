@@ -32,7 +32,7 @@ native_executor_instance!(
 mod tests {
 	use substrate_executor::error::Result;
 	use super::Executor;
-	use {balances, contracts, indices, system, timestamp};
+	use {balances, indices, system, timestamp};
 	use codec::{Encode, Decode, Joiner};
 	use runtime_support::{Hashable, StorageValue, StorageMap, traits::Currency};
 	use state_machine::TestExternalities as CoreTestExternalities;
@@ -45,7 +45,6 @@ mod tests {
 		traits::{Header as HeaderT, Hash as HashT, Convert}, ApplyResult,
 		transaction_validity::InvalidTransaction, weights::GetDispatchInfo,
 	};
-	use contracts::ContractAddressFor;
 	use substrate_executor::{NativeExecutor, WasmExecutionMethod};
 	use system::{EventRecord, Phase};
 	use node_runtime::{
@@ -700,74 +699,6 @@ mod tests {
 	)
 )
 "#;
-
-	#[test]
-	fn deploying_wasm_contract_should_work() {
-		let transfer_code = wabt::wat2wasm(CODE_TRANSFER).unwrap();
-		let transfer_ch = <Runtime as system::Trait>::Hashing::hash(&transfer_code);
-
-		let addr = <Runtime as contracts::Trait>::DetermineContractAddress::contract_address_for(
-			&transfer_ch,
-			&[],
-			&charlie(),
-		);
-
-		let b = construct_block(
-			&mut new_test_ext(COMPACT_CODE, false),
-			1,
-			GENESIS_HASH.into(),
-			vec![
-				CheckedExtrinsic {
-					signed: None,
-					function: Call::Timestamp(timestamp::Call::set(42 * 1000)),
-				},
-				CheckedExtrinsic {
-					signed: Some((charlie(), signed_extra(0, 0))),
-					function: Call::Contracts(
-						contracts::Call::put_code::<Runtime>(10_000, transfer_code)
-					),
-				},
-				CheckedExtrinsic {
-					signed: Some((charlie(), signed_extra(1, 0))),
-					function: Call::Contracts(
-						contracts::Call::instantiate::<Runtime>(1 * DOLLARS, 10_000, transfer_ch, Vec::new())
-					),
-				},
-				CheckedExtrinsic {
-					signed: Some((charlie(), signed_extra(2, 0))),
-					function: Call::Contracts(
-						contracts::Call::call::<Runtime>(
-							indices::address::Address::Id(addr.clone()),
-							10,
-							10_000,
-							vec![0x00, 0x01, 0x02, 0x03]
-						)
-					),
-				},
-			]
-		);
-
-		let mut t = new_test_ext(COMPACT_CODE, false);
-
-		executor_call::<NeverNativeValue, fn() -> _>(
-			&mut t,
-			"Core_execute_block",
-			&b.0,
-			false,
-			None,
-		).0.unwrap();
-
-		t.execute_with(|| {
-			// Verify that the contract constructor worked well and code of TRANSFER contract is actually deployed.
-			assert_eq!(
-				&contracts::ContractInfoOf::<Runtime>::get(addr)
-					.and_then(|c| c.get_alive())
-					.unwrap()
-					.code_hash,
-				&transfer_ch
-			);
-		});
-	}
 
 	#[test]
 	fn wasm_big_block_import_fails() {

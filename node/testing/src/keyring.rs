@@ -72,7 +72,6 @@ pub fn signed_extra(nonce: Index, extra_fee: Balance) -> SignedExtra {
 		system::CheckNonce::from(nonce),
 		system::CheckWeight::new(),
 		transaction_payment::ChargeTransactionPayment::from(extra_fee),
-		Default::default(),
 	)
 }
 

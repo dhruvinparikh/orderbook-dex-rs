@@ -8,34 +8,37 @@ edition = "2018"
 [dependencies]
 trie-root = "0.15.2"
 codec = { package = "parity-scale-codec", version = "1.0.0" }
-runtime_io = { package = "sr-io", path = "../../core/sr-io" }
-state_machine = { package = "substrate-state-machine", path = "../../core/state-machine" }
-substrate-executor = { path = "../../core/executor" }
-primitives = { package = "substrate-primitives", path = "../../core/primitives" }
-trie = { package = "substrate-trie", path = "../../core/trie" }
+runtime_io = { package = "sr-io", git = "https://github.com/blockxlabs/substrate.git" }
+state_machine = { package = "substrate-state-machine", git = "https://github.com/blockxlabs/substrate.git" }
+substrate-executor = { git = "https://github.com/blockxlabs/substrate.git" }
+primitives = { package = "substrate-primitives", git = "https://github.com/blockxlabs/substrate.git" }
+trie = { package = "substrate-trie", git = "https://github.com/blockxlabs/substrate.git" }
 node-primitives = { path = "../primitives" }
 node-runtime = { path = "../runtime" }
 
 [dev-dependencies]
 node-testing = { path = "../testing" }
-test-client = { package = "substrate-test-client", path = "../../core/test-client" }
-sr-primitives = { path = "../../core/sr-primitives" }
-runtime_support = { package = "srml-support", path = "../../srml/support" }
-balances = { package = "srml-balances", path = "../../srml/balances" }
-transaction-payment = { package = "srml-transaction-payment", path = "../../srml/transaction-payment" }
-session = { package = "srml-session", path = "../../srml/session" }
-system = { package = "srml-system", path = "../../srml/system" }
-timestamp = { package = "srml-timestamp", path = "../../srml/timestamp" }
-treasury = { package = "srml-treasury", path = "../../srml/treasury" }
-contracts = { package = "srml-contracts", path = "../../srml/contracts" }
-grandpa = { package = "srml-grandpa", path = "../../srml/grandpa" }
-indices = { package = "srml-indices", path = "../../srml/indices" }
+test-client = { package = "substrate-test-client", git = "https://github.com/blockxlabs/substrate.git" }
+sr-primitives = { git = "https://github.com/blockxlabs/substrate.git" }
+runtime_support = { package = "paint-support", git = "https://github.com/blockxlabs/substrate.git" }
+balances = { package = "paint-balances", git = "https://github.com/blockxlabs/substrate.git" }
+transaction-payment = { package = "paint-transaction-payment", git = "https://github.com/blockxlabs/substrate.git" }
+session = { package = "paint-session", git = "https://github.com/blockxlabs/substrate.git" }
+system = { package = "paint-system", git = "https://github.com/blockxlabs/substrate.git" }
+timestamp = { package = "paint-timestamp", git = "https://github.com/blockxlabs/substrate.git" }
+treasury = { package = "paint-treasury", git = "https://github.com/blockxlabs/substrate.git" }
+contracts = { package = "paint-contracts", git = "https://github.com/blockxlabs/substrate.git" }
+grandpa = { package = "paint-grandpa", git = "https://github.com/blockxlabs/substrate.git" }
+indices = { package = "paint-indices", git = "https://github.com/blockxlabs/substrate.git" }
 wabt = "0.9.2"
 criterion = "0.3.0"
 
 [features]
 wasmtime = [
     "substrate-executor/wasmtime",
+]
+wasmi-errno = [
+	"substrate-executor/wasmi-errno",
 ]
 stress-test = []
 

@@ -26,7 +26,6 @@
 //! Despite its name the produced WASM can theoretically also be used from NodeJS, although this
 //! hasn't been tested.
 
-#![warn(missing_docs)]
 #![warn(unused_extern_crates)]
 
 pub mod chain_spec;

@@ -22,18 +22,11 @@
 
 use rstd::prelude::*;
 use support::{
-	construct_runtime, parameter_types, traits::{SplitTwoWays, Currency, Randomness}
+	construct_runtime, parameter_types, traits::{Currency, Randomness}
 };
-use primitives::u32_trait::{_1, _2, _3, _4};
-use node_primitives::{
-	AccountId, AccountIndex, Balance, BlockNumber, Hash, Index,
-	Moment, Signature,
-};
-use client::{
-	block_builder::api::{self as block_builder_api, InherentData, CheckInherentsResult},
-	runtime_api as client_api, impl_runtime_apis
-};
-use sr_primitives::{Permill, Perbill, ApplyResult, impl_opaque_keys, generic, create_runtime_str};
+use node_primitives::{AccountId, AccountIndex, Balance, BlockNumber, Hash, Index, Moment, Signature};
+use sr_api::impl_runtime_apis;
+use sr_primitives::{Perbill, ApplyResult, impl_opaque_keys, generic, create_runtime_str};
 use sr_primitives::curve::PiecewiseLinear;
 use sr_primitives::transaction_validity::TransactionValidity;
 use sr_primitives::weights::Weight;
@@ -48,9 +41,11 @@ use primitives::OpaqueMetadata;
 use grandpa::AuthorityList as GrandpaAuthorityList;
 use grandpa::fg_primitives;
 use im_online::sr25519::{AuthorityId as ImOnlineId};
+use authority_discovery_primitives::AuthorityId as AuthorityDiscoveryId;
 use transaction_payment_rpc_runtime_api::RuntimeDispatchInfo;
 use contracts_rpc_runtime_api::ContractExecResult;
 use system::offchain::TransactionSubmitter;
+use inherents::{InherentData, CheckInherentsResult};
 
 #[cfg(any(feature = "std", test))]
 pub use sr_primitives::BuildStorage;
@@ -62,7 +57,7 @@ pub use staking::StakerStatus;
 
 /// Implementations of some helper traits passed into runtime modules as associated types.
 pub mod impls;
-use impls::{CurrencyToVoteHandler, Author, LinearWeightToFee, TargetedFeeAdjustment};
+use impls::{CurrencyToVoteHandler, LinearWeightToFee, TargetedFeeAdjustment};
 
 /// Constant values used within the runtime.
 pub mod constants;
@@ -81,8 +76,8 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
 	// and set impl_version to equal spec_version. If only runtime
 	// implementation changes and behavior does not, then leave spec_version as
 	// is and increment impl_version.
-	spec_version: 193,
-	impl_version: 193,
+	spec_version: 194,
+	impl_version: 194,
 	apis: RUNTIME_API_VERSIONS,
 };
 
@@ -96,13 +91,6 @@ pub fn native_version() -> NativeVersion {
 }
 
 type NegativeImbalance = <Balances as Currency<AccountId>>::NegativeImbalance;
-
-pub type DealWithFees = SplitTwoWays<
-	Balance,
-	NegativeImbalance,
-	_4, Treasury,   // 4 parts (80%) goes to the treasury.
-	_1, Author,     // 1 part (20%) goes to the block author.
->;
 
 parameter_types! {
 	pub const BlockHashCount: BlockNumber = 250;
@@ -182,7 +170,7 @@ parameter_types! {
 
 impl transaction_payment::Trait for Runtime {
 	type Currency = Balances;
-	type OnTransactionPayment = DealWithFees;
+	type OnTransactionPayment = ();
 	type TransactionBaseFee = TransactionBaseFee;
 	type TransactionByteFee = TransactionByteFee;
 	type WeightToFee = LinearWeightToFee<WeightFeeCoefficient>;
@@ -214,6 +202,7 @@ impl_opaque_keys! {
 		pub grandpa: Grandpa,
 		pub babe: Babe,
 		pub im_online: ImOnline,
+		pub authority_discovery: AuthorityDiscovery,
 	}
 }
 
@@ -238,7 +227,7 @@ impl session::historical::Trait for Runtime {
 	type FullIdentificationOf = staking::ExposureOf<Runtime>;
 }
 
-srml_staking_reward_curve::build! {
+paint_staking_reward_curve::build! {
 	const REWARD_CURVE: PiecewiseLinear<'static> = curve!(
 		min_inflation: 0_025_000,
 		max_inflation: 0_100_000,
@@ -259,9 +248,9 @@ impl staking::Trait for Runtime {
 	type Currency = Balances;
 	type Time = Timestamp;
 	type CurrencyToVote = CurrencyToVoteHandler;
-	type RewardRemainder = Treasury;
+	type RewardRemainder = ();
 	type Event = Event;
-	type Slash = Treasury; // send the slashed funds to the treasury.
+	type Slash = (); // send the slashed funds to the treasury.
 	type Reward = (); // rewards are minted from the void
 	type SessionsPerEra = SessionsPerEra;
 	type BondingDuration = BondingDuration;
@@ -269,107 +258,6 @@ impl staking::Trait for Runtime {
 	type RewardCurve = RewardCurve;
 }
 
-parameter_types! {
-	pub const LaunchPeriod: BlockNumber = 28 * 24 * 60 * MINUTES;
-	pub const VotingPeriod: BlockNumber = 28 * 24 * 60 * MINUTES;
-	pub const EmergencyVotingPeriod: BlockNumber = 3 * 24 * 60 * MINUTES;
-	pub const MinimumDeposit: Balance = 100 * DOLLARS;
-	pub const EnactmentPeriod: BlockNumber = 30 * 24 * 60 * MINUTES;
-	pub const CooloffPeriod: BlockNumber = 28 * 24 * 60 * MINUTES;
-}
-
-impl democracy::Trait for Runtime {
-	type Proposal = Call;
-	type Event = Event;
-	type Currency = Balances;
-	type EnactmentPeriod = EnactmentPeriod;
-	type LaunchPeriod = LaunchPeriod;
-	type VotingPeriod = VotingPeriod;
-	type EmergencyVotingPeriod = EmergencyVotingPeriod;
-	type MinimumDeposit = MinimumDeposit;
-	/// A straight majority of the council can decide what their next motion is.
-	type ExternalOrigin = collective::EnsureProportionAtLeast<_1, _2, AccountId, CouncilCollective>;
-	/// A super-majority can have the next scheduled referendum be a straight majority-carries vote.
-	type ExternalMajorityOrigin = collective::EnsureProportionAtLeast<_3, _4, AccountId, CouncilCollective>;
-	/// A unanimous council can have the next scheduled referendum be a straight default-carries
-	/// (NTB) vote.
-	type ExternalDefaultOrigin = collective::EnsureProportionAtLeast<_1, _1, AccountId, CouncilCollective>;
-	/// Two thirds of the technical committee can have an ExternalMajority/ExternalDefault vote
-	/// be tabled immediately and with a shorter voting/enactment period.
-	type FastTrackOrigin = collective::EnsureProportionAtLeast<_2, _3, AccountId, TechnicalCollective>;
-	// To cancel a proposal which has been passed, 2/3 of the council must agree to it.
-	type CancellationOrigin = collective::EnsureProportionAtLeast<_2, _3, AccountId, CouncilCollective>;
-	// Any single technical committee member may veto a coming council proposal, however they can
-	// only do it once and it lasts only for the cooloff period.
-	type VetoOrigin = collective::EnsureMember<AccountId, TechnicalCollective>;
-	type CooloffPeriod = CooloffPeriod;
-}
-
-type CouncilCollective = collective::Instance1;
-impl collective::Trait<CouncilCollective> for Runtime {
-	type Origin = Origin;
-	type Proposal = Call;
-	type Event = Event;
-}
-
-parameter_types! {
-	pub const CandidacyBond: Balance = 10 * DOLLARS;
-	pub const VotingBond: Balance = 1 * DOLLARS;
-	pub const TermDuration: BlockNumber = 7 * DAYS;
-	pub const DesiredMembers: u32 = 13;
-	pub const DesiredRunnersUp: u32 = 7;
-}
-
-impl elections_phragmen::Trait for Runtime {
-	type Event = Event;
-	type Currency = Balances;
-	type CurrencyToVote = CurrencyToVoteHandler;
-	type CandidacyBond = CandidacyBond;
-	type VotingBond = VotingBond;
-	type TermDuration = TermDuration;
-	type DesiredMembers = DesiredMembers;
-	type DesiredRunnersUp = DesiredRunnersUp;
-	type LoserCandidate = ();
-	type BadReport = ();
-	type KickedMember = ();
-	type ChangeMembers = Council;
-}
-
-type TechnicalCollective = collective::Instance2;
-impl collective::Trait<TechnicalCollective> for Runtime {
-	type Origin = Origin;
-	type Proposal = Call;
-	type Event = Event;
-}
-
-impl membership::Trait<membership::Instance1> for Runtime {
-	type Event = Event;
-	type AddOrigin = collective::EnsureProportionMoreThan<_1, _2, AccountId, CouncilCollective>;
-	type RemoveOrigin = collective::EnsureProportionMoreThan<_1, _2, AccountId, CouncilCollective>;
-	type SwapOrigin = collective::EnsureProportionMoreThan<_1, _2, AccountId, CouncilCollective>;
-	type ResetOrigin = collective::EnsureProportionMoreThan<_1, _2, AccountId, CouncilCollective>;
-	type MembershipInitialized = TechnicalCommittee;
-	type MembershipChanged = TechnicalCommittee;
-}
-
-parameter_types! {
-	pub const ProposalBond: Permill = Permill::from_percent(5);
-	pub const ProposalBondMinimum: Balance = 1 * DOLLARS;
-	pub const SpendPeriod: BlockNumber = 1 * DAYS;
-	pub const Burn: Permill = Permill::from_percent(50);
-}
-
-impl treasury::Trait for Runtime {
-	type Currency = Balances;
-	type ApproveOrigin = collective::EnsureMembers<_4, AccountId, CouncilCollective>;
-	type RejectOrigin = collective::EnsureMembers<_2, AccountId, CouncilCollective>;
-	type Event = Event;
-	type ProposalRejection = ();
-	type ProposalBond = ProposalBond;
-	type ProposalBondMinimum = ProposalBondMinimum;
-	type SpendPeriod = SpendPeriod;
-	type Burn = Burn;
-}
 
 parameter_types! {
 	pub const ContractTransferFee: Balance = 1 * CENTS;
@@ -438,6 +326,8 @@ impl offences::Trait for Runtime {
 	type OnOffenceHandler = Staking;
 }
 
+impl authority_discovery::Trait for Runtime {}
+
 impl grandpa::Trait for Runtime {
 	type Event = Event;
 }
@@ -459,15 +349,6 @@ parameter_types! {
 	pub const MaxLength: usize = 16;
 }
 
-impl nicks::Trait for Runtime {
-	type Event = Event;
-	type Currency = Balances;
-	type ReservationFee = ReservationFee;
-	type Slashed = Treasury;
-	type ForceOrigin = collective::EnsureMember<AccountId, CouncilCollective>;
-	type MinLength = MinLength;
-	type MaxLength = MaxLength;
-}
 
 impl system::offchain::CreateTransaction<Runtime, UncheckedExtrinsic> for Runtime {
 	type Public = <Signature as traits::Verify>::Signer;
@@ -515,20 +396,18 @@ construct_runtime!(
 		TransactionPayment: transaction_payment::{Module, Storage},
 		Staking: staking::{default, OfflineWorker},
 		Session: session::{Module, Call, Storage, Event, Config<T>},
-		Democracy: democracy::{Module, Call, Storage, Config, Event<T>},
-		Council: collective::<Instance1>::{Module, Call, Storage, Origin<T>, Event<T>, Config<T>},
-		TechnicalCommittee: collective::<Instance2>::{Module, Call, Storage, Origin<T>, Event<T>, Config<T>},
-		Elections: elections_phragmen::{Module, Call, Storage, Event<T>},
-		TechnicalMembership: membership::<Instance1>::{Module, Call, Storage, Event<T>, Config<T>},
+		
+		
 		FinalityTracker: finality_tracker::{Module, Call, Inherent},
 		Grandpa: grandpa::{Module, Call, Storage, Config, Event},
-		Treasury: treasury::{Module, Call, Storage, Config, Event<T>},
+		
+		
 		Contracts: contracts,
 		Sudo: sudo,
 		ImOnline: im_online::{Module, Call, Storage, Event<T>, ValidateUnsigned, Config<T>},
+		AuthorityDiscovery: authority_discovery::{Module, Call, Config},
 		Offences: offences::{Module, Call, Storage, Event},
 		RandomnessCollectiveFlip: randomness_collective_flip::{Module, Call, Storage},
-		Nicks: nicks::{Module, Call, Storage, Event<T>},
 	}
 );
 
@@ -562,7 +441,7 @@ pub type CheckedExtrinsic = generic::CheckedExtrinsic<AccountId, Call, SignedExt
 pub type Executive = executive::Executive<Runtime, Block, system::ChainContext<Runtime>, Runtime, AllModules>;
 
 impl_runtime_apis! {
-	impl client_api::Core<Block> for Runtime {
+	impl sr_api::Core<Block> for Runtime {
 		fn version() -> RuntimeVersion {
 			VERSION
 		}
@@ -576,7 +455,7 @@ impl_runtime_apis! {
 		}
 	}
 
-	impl client_api::Metadata<Block> for Runtime {
+	impl sr_api::Metadata<Block> for Runtime {
 		fn metadata() -> OpaqueMetadata {
 			Runtime::metadata().into()
 		}
@@ -604,7 +483,7 @@ impl_runtime_apis! {
 		}
 	}
 
-	impl client_api::TaggedTransactionQueue<Block> for Runtime {
+	impl tx_pool_api::TaggedTransactionQueue<Block> for Runtime {
 		fn validate_transaction(tx: <Block as BlockT>::Extrinsic) -> TransactionValidity {
 			Executive::validate_transaction(tx)
 		}
@@ -637,6 +516,12 @@ impl_runtime_apis! {
 				randomness: Babe::randomness(),
 				secondary_slots: true,
 			}
+		}
+	}
+
+	impl authority_discovery_primitives::AuthorityDiscoveryApi<Block> for Runtime {
+		fn authorities() -> Vec<AuthorityDiscoveryId> {
+			AuthorityDiscovery::authorities()
 		}
 	}
 
@@ -698,12 +583,11 @@ impl_runtime_apis! {
 
 	impl substrate_session::SessionKeys<Block> for Runtime {
 		fn generate_session_keys(seed: Option<Vec<u8>>) -> Vec<u8> {
-			let seed = seed.as_ref().map(|s| rstd::str::from_utf8(&s)
-				.expect("Seed is an utf8 string"));
 			SessionKeys::generate(seed)
 		}
 	}
 }
+
 #[cfg(test)]
 mod tests {
 	use super::*;
@@ -723,5 +607,37 @@ mod tests {
 	fn validate_bounds() {
 		let x = SubmitTransaction::default();
 		is_submit_signed_transaction(x);
+	}
+
+	#[test]
+	fn block_hooks_weight_should_not_exceed_limits() {
+		use sr_primitives::weights::WeighBlock;
+		let check_for_block = |b| {
+			let block_hooks_weight =
+				<AllModules as WeighBlock<BlockNumber>>::on_initialize(b) +
+				<AllModules as WeighBlock<BlockNumber>>::on_finalize(b);
+
+			assert_eq!(
+				block_hooks_weight,
+				0,
+				"This test might fail simply because the value being compared to has increased to a \
+				module declaring a new weight for a hook or call. In this case update the test and \
+				happily move on.",
+			);
+
+			// Invariant. Always must be like this to have a sane chain.
+			assert!(block_hooks_weight < MaximumBlockWeight::get());
+
+			// Warning.
+			if block_hooks_weight > MaximumBlockWeight::get() / 2 {
+				println!(
+					"block hooks weight is consuming more than a block's capacity. You probably want \
+					to re-think this. This test will fail now."
+				);
+				assert!(false);
+			}
+		};
+
+		let _ = (0..100_000).for_each(check_for_block);
 	}
 }

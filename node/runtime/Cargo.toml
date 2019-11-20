@@ -35,16 +35,13 @@ authority-discovery = { package = "paint-authority-discovery", git = "https://gi
 authorship = { package = "paint-authorship", git = "https://github.com/blockxlabs/substrate.git", default-features = false }
 babe = { package = "paint-babe", git = "https://github.com/blockxlabs/substrate.git", default-features = false }
 balances = { package = "paint-balances", git = "https://github.com/blockxlabs/substrate.git", default-features = false }
-collective = { package = "paint-collective", git = "https://github.com/blockxlabs/substrate.git", default-features = false }
 contracts = { package = "paint-contracts", git = "https://github.com/blockxlabs/substrate.git", default-features = false }
 contracts-rpc-runtime-api = { package = "paint-contracts-rpc-runtime-api", git = "https://github.com/blockxlabs/substrate.git", default-features = false }
-elections-phragmen = { package = "paint-elections-phragmen", git = "https://github.com/blockxlabs/substrate.git", default-features = false }
 executive = { package = "paint-executive", git = "https://github.com/blockxlabs/substrate.git", default-features = false }
 finality-tracker = { package = "paint-finality-tracker", git = "https://github.com/blockxlabs/substrate.git", default-features = false }
 grandpa = { package = "paint-grandpa", git = "https://github.com/blockxlabs/substrate.git", default-features = false }
 im-online = { package = "paint-im-online", git = "https://github.com/blockxlabs/substrate.git", default-features = false }
 indices = { package = "paint-indices", git = "https://github.com/blockxlabs/substrate.git", default-features = false }
-membership = { package = "paint-membership", git = "https://github.com/blockxlabs/substrate.git", default-features = false }
 offences = { package = "paint-offences", git = "https://github.com/blockxlabs/substrate.git", default-features = false }
 randomness-collective-flip = { package = "paint-randomness-collective-flip", git = "https://github.com/blockxlabs/substrate.git", default-features = false }
 session = { package = "paint-session", git = "https://github.com/blockxlabs/substrate.git", default-features = false, features = ["historical"] }
@@ -55,7 +52,6 @@ support = { package = "paint-support", git = "https://github.com/blockxlabs/subs
 system = { package = "paint-system", git = "https://github.com/blockxlabs/substrate.git", default-features = false }
 system-rpc-runtime-api = { package = "paint-system-rpc-runtime-api", git = "https://github.com/blockxlabs/substrate.git", default-features = false }
 timestamp = { package = "paint-timestamp", git = "https://github.com/blockxlabs/substrate.git", default-features = false }
-treasury = { package = "paint-treasury", git = "https://github.com/blockxlabs/substrate.git", default-features = false }
 utility = { package = "paint-utility", git = "https://github.com/blockxlabs/substrate.git", default-features = false }
 transaction-payment = { package = "paint-transaction-payment", git = "https://github.com/blockxlabs/substrate.git", default-features = false }
 transaction-payment-rpc-runtime-api = { package = "paint-transaction-payment-rpc-runtime-api", git = "https://github.com/blockxlabs/substrate.git", default-features = false }
@@ -77,17 +73,14 @@ std = [
 	"balances/std",
 	"block-builder-api/std",
 	"codec/std",
-	"collective/std",
 	"contracts-rpc-runtime-api/std",
 	"contracts/std",
-	"elections-phragmen/std",
 	"executive/std",
 	"finality-tracker/std",
 	"grandpa/std",
 	"im-online/std",
 	"indices/std",
 	"inherents/std",
-	"membership/std",
 	"node-primitives/std",
 	"offchain-primitives/std",
 	"offences/std",
@@ -111,7 +104,6 @@ std = [
 	"timestamp/std",
 	"transaction-payment-rpc-runtime-api/std",
 	"transaction-payment/std",
-	"treasury/std",
 	"tx-pool-api/std",
 	"utility/std",
 	"version/std",

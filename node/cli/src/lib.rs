@@ -28,7 +28,6 @@
 
 #![warn(unused_extern_crates)]
 
-use substrate_cli as cli;
 pub mod chain_spec;
 
 #[macro_use]
@@ -43,11 +42,7 @@ mod factory_impl;
 #[cfg(feature = "browser")]
 pub use browser::*;
 #[cfg(feature = "cli")]
-// pub use cli::*;
-
-pub use cli::{AugmentClap, GetLogFilter, parse_and_prepare, ParseAndPrepare};
-pub use cli::{VersionInfo, IntoExit, NoCustom, SharedParams, ExecutionStrategyParam};
-pub use cli::error;
+pub use cli::*;
 
 /// The chain specification option.
 #[derive(Clone, Debug, PartialEq)]
@@ -87,4 +82,3 @@ fn load_spec(id: &str) -> Result<Option<chain_spec::ChainSpec>, String> {
         None => None,
     })
 }
-

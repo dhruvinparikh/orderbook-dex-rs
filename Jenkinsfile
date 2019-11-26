@@ -4,11 +4,6 @@ options {
       timeout(time:2, unit: 'HOURS')
     }
     stages {
-        stage('Install required tools'){
-            steps {
-                sh './scripts/init.sh'
-            }
-        }
         //     stage('Build the WebAssembly binary') {
         //     steps {
         //         sh './scripts/build.sh'

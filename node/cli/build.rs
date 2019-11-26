@@ -16,7 +16,6 @@
 
 use std::{fs, env, path::Path};
 use structopt::{StructOpt, clap::Shell};
-use substrate_cli::{NoCustom, CoreParams};
 use vergen::{ConstantsFlags, generate_cargo_keys};
 
 fn main() {
@@ -47,6 +46,4 @@ fn build_completion(shell: &Shell) {
 		.join("completion-scripts");
 
 	fs::create_dir(&path).ok();
-
-	CoreParams::<NoCustom, NoCustom>::clap().gen_completions("substrate-node", *shell, &path);
 }

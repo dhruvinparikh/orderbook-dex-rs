@@ -13,11 +13,9 @@
 
 // You should have received a copy of the GNU General Public License
 // along with Substrate.  If not, see <http://www.gnu.org/licenses/>.
-// extern crate dna_cli as cli;
 
 use std::{fs, env, path::Path};
 use structopt::{StructOpt, clap::Shell};
-// use cli::{NoCustom, CoreParams};
 use vergen::{ConstantsFlags, generate_cargo_keys};
 
 fn main() {
@@ -48,6 +46,4 @@ fn build_completion(shell: &Shell) {
 		.join("completion-scripts");
 
 	fs::create_dir(&path).ok();
-
-	// CoreParams::<NoCustom, NoCustom>::clap().gen_completions("substrate-node", *shell, &path);
 }

@@ -43,7 +43,6 @@ mod factory_impl;
 #[cfg(feature = "browser")]
 pub use browser::*;
 #[cfg(feature = "cli")]
-// pub use cli::*;
 
 pub use cli::{AugmentClap, GetLogFilter, parse_and_prepare, ParseAndPrepare};
 pub use cli::{VersionInfo, IntoExit, NoCustom, SharedParams, ExecutionStrategyParam};

@@ -17,16 +17,16 @@
 //! Substrate Node CLI
 
 #![warn(missing_docs)]
-
+extern crate substrate_cli as cli;
 use futures::sync::oneshot;
 use futures::{future, Future};
-use substrate_cli::VersionInfo;
+use cli::VersionInfo;
 
 use std::cell::RefCell;
 
 // handles ctrl-c
 struct Exit;
-impl substrate_cli::IntoExit for Exit {
+impl cli::IntoExit for Exit {
 	type Exit = future::MapErr<oneshot::Receiver<()>, fn(oneshot::Canceled) -> ()>;
 	fn into_exit(self) -> Self::Exit {
 		// can't use signal directly here because CtrlC takes only `Fn`.
@@ -43,16 +43,16 @@ impl substrate_cli::IntoExit for Exit {
 	}
 }
 
-fn main() -> Result<(), substrate_cli::error::Error> {
+fn main() -> Result<(), cli::error::Error> {
 	let version = VersionInfo {
-		name: "Substrate Node",
+		name: "DNA node",
 		commit: env!("VERGEN_SHA_SHORT"),
 		version: env!("CARGO_PKG_VERSION"),
-		executable_name: "substrate",
-		author: "Parity Technologies <admin@parity.io>",
-		description: "Generic substrate node",
-		support_url: "https://github.com/paritytech/substrate/issues/new",
+		executable_name: "dna",
+		author: "BlockX Labs <info@blockxlabs.com>",
+		description: "Metaverse DNA node",
+		support_url: "https://github.com/blockxlabs/metaverse-dna/issues/new",
 	};
 
-	node_cli::run(std::env::args(), Exit, version)
+	dna_cli::run(std::env::args(), Exit, version)
 }

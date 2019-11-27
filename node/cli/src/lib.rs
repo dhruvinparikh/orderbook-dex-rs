@@ -28,7 +28,6 @@
 
 #![warn(unused_extern_crates)]
 
-use substrate_cli as cli;
 pub mod chain_spec;
 
 #[macro_use]
@@ -38,15 +37,12 @@ mod browser;
 #[cfg(feature = "cli")]
 mod cli;
 #[cfg(feature = "cli")]
+pub use cli::*;
 mod factory_impl;
 
 #[cfg(feature = "browser")]
 pub use browser::*;
 #[cfg(feature = "cli")]
-
-pub use cli::{AugmentClap, GetLogFilter, parse_and_prepare, ParseAndPrepare};
-pub use cli::{VersionInfo, IntoExit, NoCustom, SharedParams, ExecutionStrategyParam};
-pub use cli::error;
 
 /// The chain specification option.
 #[derive(Clone, Debug, PartialEq)]

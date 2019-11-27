@@ -1,12 +1,12 @@
 [package]
-name = "node-cli"
+name = "dna-cli"
 version = "0.1.0"
 authors = ["BlockX Labs <info@blockxlabs.com>"]
 edition = "2018"
-default-run = "substrate"
+default-run = "dna"
 
 [[bin]]
-name = "substrate"
+name = "dna"
 path = "bin/main.rs"
 required-features = ["cli"]
 

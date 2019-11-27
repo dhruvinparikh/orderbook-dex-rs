@@ -10,5 +10,5 @@ members = [
 ]
 
 [profile.release]
-# Substrate runtime requires unwinding.
+# DNA runtime requires unwinding.
 panic = "unwind"

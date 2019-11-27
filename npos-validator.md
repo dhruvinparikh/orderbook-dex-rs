@@ -1,20 +1,19 @@
 # Running atleast one validator with rotating session keys
 
 ## Getting Started
+ * Start validator with `./target/release/substrate --bob --base-path /tmp/bob --port 3033 --validator --ws-port 9944`
+ * Start second validator with `./target/release/substrate --alice --base-path /tmp/alice --port 3034 --validator --bootnodes /ip4/##bob_ip#/tcp/30333/p2p/##bob_node_identifier## --ws-port 9945`
+ * Both should start producing blocks
+ * Run a regular validator with --validator option. Also run ws-port which has dep to second step
+ * Connect PDOTJS APP to your local node
+ * Create 2 accounts. 1 Controller & 1 Stash
+ * Fill Stash and Controlller with funds
+ * Extrinsics → Extrnsic ( staking) → Function ( bond ) → Choose correct ‘controller’ → value :  selection something → payee ( staked )
+ * Get correct session key. PDOTJS APP → Extrinsics → Extrinsic (author) → function (rotateKeys() → Submit. Returns Session Key
+ * Add Session key. Staking → Account Card → Account Gear Wheel → Add Session Key → Complete this call
+ * Start validation step. Staking → Account Card → Click Validate
+ * Wait for Session to complete. Should valdiator on next session
 
-- Open new terminal window.
-- Run `git clone https://dhruvinparikh@bitbucket.org/apigarage-core/metaverse-dna.git` to clone this repo.
-- Run `./scripts/getgoing.sh` to install Rust.
-- 
-- Run `./scripts/init.sh` to initialise WASM build environment.
-- Run `./scripts/update.sh` to build WASM binaries.
-- Run `cargo build --release` to build the target using WASM binaries.
-- Run `./target/release/substrate --chain ./customRaw.json --bob --base-path /tmp/bob --port 30333` to start a node with inbuilt validator.
-```
-Note : Copy the node key from the logs that appear on console.
-Use command ifconfig to get the machine network ip.
-```
-- Open another terminal window and run `./target/release/substrate --chain ./customRaw.json --base-path /tmp/bob1 --bootnodes /ip4/<validator-node-ip>/tcp/30333/p2p/<node-key>`.
 
 # Staking Configuration
 

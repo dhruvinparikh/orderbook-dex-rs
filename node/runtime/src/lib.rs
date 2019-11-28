@@ -58,12 +58,11 @@ pub use staking::StakerStatus;
 /// Implementations of some helper traits passed into runtime modules as associated types.
 pub mod impls;
 use impls::{CurrencyToVoteHandler, LinearWeightToFee, TargetedFeeAdjustment};
+pub mod substratekitties;
 
 /// Constant values used within the runtime.
 pub mod constants;
 use constants::{time::*, currency::*};
-pub mod token;
-use token::*;
 
 // Make the WASM binary available.
 #[cfg(feature = "std")]
@@ -307,6 +306,8 @@ impl sudo::Trait for Runtime {
 	type Proposal = Call;
 }
 
+impl substratekitties::Trait for Runtime {}
+
 type SubmitTransaction = TransactionSubmitter<ImOnlineId, Runtime, UncheckedExtrinsic>;
 
 parameter_types! {
@@ -343,10 +344,6 @@ impl finality_tracker::Trait for Runtime {
 	type OnFinalizationStalled = Grandpa;
 	type WindowSize = WindowSize;
 	type ReportLatency = ReportLatency;
-}
-
-impl tcr::Trait for Runtime {
-    type Event = Event;
 }
 
 parameter_types! {
@@ -414,7 +411,7 @@ construct_runtime!(
 		AuthorityDiscovery: authority_discovery::{Module, Call, Config},
 		Offences: offences::{Module, Call, Storage, Event},
 		RandomnessCollectiveFlip: randomness_collective_flip::{Module, Call, Storage},
-		token: tcr::{Module, Call, Storage, Event<T>, Config<T>},
+		Substratekitties: substratekitties::{Module, Call, Storage},
 	}
 );
 

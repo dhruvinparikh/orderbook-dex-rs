@@ -55,11 +55,11 @@ pub use contracts::Gas;
 pub use support::StorageValue;
 pub use staking::StakerStatus;
 
+pub mod robonomics;
 /// Implementations of some helper traits passed into runtime modules as associated types.
 pub mod impls;
 use impls::{CurrencyToVoteHandler, LinearWeightToFee, TargetedFeeAdjustment};
-pub mod substratekitties;
-
+// pub mod substratekitties;
 /// Constant values used within the runtime.
 pub mod constants;
 use constants::{time::*, currency::*};
@@ -306,7 +306,12 @@ impl sudo::Trait for Runtime {
 	type Proposal = Call;
 }
 
-impl substratekitties::Trait for Runtime {}
+// impl substratekitties::Trait for Runtime {
+// 	type Event = Event;
+// 	type KittyIndex = u64;
+// 	type Currency = Balances;
+// 	type Randomness = RandomnessCollectiveFlip;
+// }
 
 type SubmitTransaction = TransactionSubmitter<ImOnlineId, Runtime, UncheckedExtrinsic>;
 
@@ -383,6 +388,13 @@ impl system::offchain::CreateTransaction<Runtime, UncheckedExtrinsic> for Runtim
 	}
 }
 
+impl robonomics::Trait for Runtime {
+    /// Native token as processing currency.
+    type Currency = Balances;
+    /// The uniquitous event type.
+    type Event = Event;
+}
+
 construct_runtime!(
 	pub enum Runtime where
 		Block = Block,
@@ -411,7 +423,8 @@ construct_runtime!(
 		AuthorityDiscovery: authority_discovery::{Module, Call, Config},
 		Offences: offences::{Module, Call, Storage, Event},
 		RandomnessCollectiveFlip: randomness_collective_flip::{Module, Call, Storage},
-		Substratekitties: substratekitties::{Module, Call, Storage},
+		// Substratekitties: substratekitties::{Module, Call, Storage},
+		Robonomics: robonomics::{Module, Call, Storage, Event<T>},
 	}
 );
 

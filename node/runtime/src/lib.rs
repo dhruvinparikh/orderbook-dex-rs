@@ -8,6 +8,9 @@
 #[cfg(feature = "std")]
 include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 
+pub mod robonomics;
+// pub mod substratekitties;
+
 use aura_primitives::sr25519::AuthorityId as AuraId;
 use grandpa::fg_primitives;
 use grandpa::AuthorityList as GrandpaAuthorityList;
@@ -239,6 +242,13 @@ impl sudo::Trait for Runtime {
 
 // impl assets::Trait for Runtime {}
 
+// impl substratekitties::Trait for Runtime {
+// 	type Event = Event;
+// 	type KittyIndex = u64;
+// 	type Currency = Balances;
+// 	type Randomness = RandomnessCollectiveFlip;
+// }
+
 impl robonomics::Trait for Runtime {
     /// Native token as processing currency.
     type Currency = Balances;
@@ -265,6 +275,8 @@ construct_runtime!(
         // Oracle: oracle::{Module, Call, Storage},
         // Assets: assets::{Module, Call, Storage},
         // Contracts: contracts::{Module, Call, Storage},
+        Robonomics: robonomics::{Module, Call, Storage, Event<T>},
+
 	}
 );
 

@@ -276,7 +276,7 @@ construct_runtime!(
         // Assets: assets::{Module, Call, Storage},
         // Contracts: contracts::{Module, Call, Storage},
         Robonomics: robonomics::{Module, Call, Storage, Event<T>},
-
+        // Assets: assets::{Module, Call, Storage},
 	}
 );
 

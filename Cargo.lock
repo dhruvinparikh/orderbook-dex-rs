@@ -725,6 +725,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "dna-assets"
+version = "0.1.0"
+dependencies = [
+ "frame-support",
+ "frame-system",
+ "parity-scale-codec",
+ "sr-primitives",
+ "sr-std",
+]
+
+[[package]]
 name = "dna-chain"
 version = "0.0.1"
 dependencies = [
@@ -765,6 +776,7 @@ dependencies = [
 name = "dna-runtime"
 version = "0.0.1"
 dependencies = [
+ "dna-assets",
  "frame-executive",
  "frame-support",
  "frame-system",

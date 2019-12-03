@@ -240,7 +240,7 @@ impl sudo::Trait for Runtime {
 
 // impl oracle::Trait for Runtime {}
 
-// impl assets::Trait for Runtime {}
+impl assets::Trait for Runtime {}
 
 // impl substratekitties::Trait for Runtime {
 // 	type Event = Event;
@@ -276,7 +276,7 @@ construct_runtime!(
         // Assets: assets::{Module, Call, Storage},
         // Contracts: contracts::{Module, Call, Storage},
         Robonomics: robonomics::{Module, Call, Storage, Event<T>},
-        // Assets: assets::{Module, Call, Storage},
+        Assets: assets::{Module, Call, Storage},
 	}
 );
 

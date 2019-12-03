@@ -728,11 +728,12 @@ dependencies = [
 name = "dna-assets"
 version = "0.1.0"
 dependencies = [
+ "dna-structures",
  "frame-support",
  "frame-system",
  "parity-scale-codec",
  "sr-primitives",
- "sr-std",
+ "substrate-primitives",
 ]
 
 [[package]]
@@ -804,6 +805,14 @@ dependencies = [
  "substrate-primitives",
  "substrate-session",
  "substrate-wasm-builder-runner",
+]
+
+[[package]]
+name = "dna-structures"
+version = "1.0.0"
+dependencies = [
+ "parity-scale-codec",
+ "sr-std",
 ]
 
 [[package]]

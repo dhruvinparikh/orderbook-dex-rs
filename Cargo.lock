@@ -774,10 +774,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "dna-exchange"
+version = "0.1.0"
+dependencies = [
+ "frame-support",
+ "frame-system",
+ "parity-scale-codec",
+ "sr-primitives",
+ "substrate-primitives",
+]
+
+[[package]]
 name = "dna-runtime"
 version = "0.0.1"
 dependencies = [
  "dna-assets",
+ "dna-exchange",
  "frame-executive",
  "frame-support",
  "frame-system",

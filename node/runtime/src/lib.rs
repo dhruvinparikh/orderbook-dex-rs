@@ -239,6 +239,8 @@ impl sudo::Trait for Runtime {
 
 impl assets::Trait for Runtime {}
 
+impl exchange::Trait for Runtime {}
+
 construct_runtime!(
 	pub enum Runtime where
 		Block = Block,
@@ -260,6 +262,7 @@ construct_runtime!(
         // Assets: assets::{Module, Call, Storage},
         // Contracts: contracts::{Module, Call, Storage},
         Assets: assets::{Module, Call, Storage},
+        Exchange: exchange::{Module, Call},
 	}
 );
 

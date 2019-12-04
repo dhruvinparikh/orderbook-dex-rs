@@ -8,9 +8,6 @@
 #[cfg(feature = "std")]
 include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 
-pub mod robonomics;
-// pub mod substratekitties;
-
 use aura_primitives::sr25519::AuthorityId as AuraId;
 use grandpa::fg_primitives;
 use grandpa::AuthorityList as GrandpaAuthorityList;
@@ -242,20 +239,6 @@ impl sudo::Trait for Runtime {
 
 impl assets::Trait for Runtime {}
 
-// impl substratekitties::Trait for Runtime {
-// 	type Event = Event;
-// 	type KittyIndex = u64;
-// 	type Currency = Balances;
-// 	type Randomness = RandomnessCollectiveFlip;
-// }
-
-impl robonomics::Trait for Runtime {
-    /// Native token as processing currency.
-    type Currency = Balances;
-    /// The uniquitous event type.
-    type Event = Event;
-}
-
 construct_runtime!(
 	pub enum Runtime where
 		Block = Block,
@@ -269,13 +252,13 @@ construct_runtime!(
 		Indices: indices,
 		Balances: balances::{default, Error},
 		TransactionPayment: transaction_payment::{Module, Storage},
-		Sudo: sudo,
-		RandomnessCollectiveFlip: randomness_collective_flip::{Module, Call, Storage},
+        Sudo: sudo,
+        RandomnessCollectiveFlip: randomness_collective_flip::{Module, Call, Storage},
+
         // Custom modules
         // Oracle: oracle::{Module, Call, Storage},
         // Assets: assets::{Module, Call, Storage},
         // Contracts: contracts::{Module, Call, Storage},
-        Robonomics: robonomics::{Module, Call, Storage, Event<T>},
         Assets: assets::{Module, Call, Storage},
 	}
 );
@@ -349,6 +332,7 @@ impl_runtime_apis! {
         }
 
         fn random_seed() -> <Block as BlockT>::Hash {
+        
             RandomnessCollectiveFlip::random_seed()
         }
     }

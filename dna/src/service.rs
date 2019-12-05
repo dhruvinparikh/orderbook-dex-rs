@@ -8,10 +8,10 @@ use network::construct_simple_protocol;
 use runtime::{self, opaque::Block, GenesisConfig, RuntimeApi};
 use std::sync::Arc;
 use std::time::Duration;
-use substrate_client::LongestChain;
-use substrate_executor::native_executor_instance;
-pub use substrate_executor::NativeExecutor;
-use substrate_service::{
+use sc_client::LongestChain;
+use sc_executor::native_executor_instance;
+pub use sc_executor::NativeExecutor;
+use sc_service::{
     error::Error as ServiceError, AbstractService, Configuration, ServiceBuilder,
 };
 
@@ -36,13 +36,13 @@ macro_rules! new_full_start {
         let mut import_setup = None;
         let inherent_data_providers = inherents::InherentDataProviders::new();
 
-        let builder = substrate_service::ServiceBuilder::new_full::<
+        let builder = sc_service::ServiceBuilder::new_full::<
             runtime::opaque::Block,
             runtime::RuntimeApi,
             crate::service::Executor,
         >($config)?
         .with_select_chain(|_config, backend| {
-            Ok(substrate_client::LongestChain::new(backend.clone()))
+            Ok(sc_client::LongestChain::new(backend.clone()))
         })?
         .with_transaction_pool(|config, client, _fetcher| {
             let pool_api = txpool::FullChainApi::new(client.clone());
@@ -54,7 +54,7 @@ macro_rules! new_full_start {
         .with_import_queue(|_config, client, mut select_chain, transaction_pool| {
             let select_chain = select_chain
                 .take()
-                .ok_or_else(|| substrate_service::Error::SelectChainRequired)?;
+                .ok_or_else(|| sc_service::Error::SelectChainRequired)?;
 
             let (grandpa_block_import, grandpa_link) =
                 grandpa::block_import::<_, _, _, runtime::RuntimeApi, _>(

@@ -7,15 +7,15 @@ use runtime::{
     SudoConfig, SystemConfig,
     WASM_BINARY,
 };
-use sr_primitives::traits::{IdentifyAccount, Verify};
+use sp_runtime::traits::{IdentifyAccount, Verify};
 use std::borrow::Cow; // Used to import from json file
-use substrate_service;
-use substrate_telemetry::TelemetryEndpoints;
+use sc_service;
+use sc_telemetry::TelemetryEndpoints;
 
 const STAGING_TELEMETRY_URL: &str = "wss://telemetry.polkadot.io/submit/";
 
 /// Specialized `ChainSpec`. This is a specialization of the general Substrate ChainSpec type.
-pub type ChainSpec = substrate_service::ChainSpec<GenesisConfig>;
+pub type ChainSpec = sc_service::ChainSpec<GenesisConfig>;
 
 /// The chain specification option. This is expected to come in from the CLI and
 /// is little more than one of a number of alternatives which can easily be converted

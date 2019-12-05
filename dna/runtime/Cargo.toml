@@ -1,5 +1,5 @@
 [package]
-name = "node-runtime"
+name = "dna-runtime"
 version = "0.1.0"
 authors = ["BlockX Labs <info@blockxlabs.com>"]
 edition = "2018"

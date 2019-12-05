@@ -38,7 +38,7 @@ consensus-common = { package = "substrate-consensus-common", git = "https://gith
 grandpa = { package = "substrate-finality-grandpa", git = "https://github.com/blockxlabs/substrate", branch = "master" }
 grandpa-primitives = { package = "substrate-finality-grandpa-primitives", git = "https://github.com/blockxlabs/substrate", branch = "master" }
 substrate-client = {  git = "https://github.com/blockxlabs/substrate", branch = "master" }
-runtime = { package = "dna-runtime", path = "node/runtime" }
+runtime = { package = "dna-runtime", path = "dna/runtime" }
 sr-primitives = { git = "https://github.com/blockxlabs/substrate", branch = "master" }
 basic-authorship = { package = "substrate-basic-authorship", git = "https://github.com/blockxlabs/substrate", branch = "master" }
 

@@ -9,7 +9,7 @@ mod service;
 mod cli;
 mod fixtures;
 
-pub use substrate_cli::{error, IntoExit, VersionInfo};
+pub use sc_cli::{error, IntoExit, VersionInfo};
 
 fn main() -> Result<(), cli::error::Error> {
     let version = VersionInfo {

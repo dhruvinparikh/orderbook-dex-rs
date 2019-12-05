@@ -29,12 +29,12 @@ use node_runtime::{
 };
 use primitives::{sr25519, Pair, Public};
 use serde::{Deserialize, Serialize};
-use sr_primitives::{
+use sp_runtime::{
     traits::{IdentifyAccount, Verify},
     Perbill,
 };
-use substrate_service::{self, Properties};
-use substrate_telemetry::TelemetryEndpoints;
+use sc_service::{self, Properties};
+use sc_telemetry::TelemetryEndpoints;
 use serde_json::json;
 use authority_discovery_primitives::AuthorityId as AuthorityDiscoveryId;
 
@@ -57,7 +57,7 @@ pub struct Extensions {
 }
 
 /// Specialized `ChainSpec`.
-pub type ChainSpec = substrate_service::ChainSpec<GenesisConfig, Extensions>;
+pub type ChainSpec = sc_service::ChainSpec<GenesisConfig, Extensions>;
 
 // dna testnet generator
 pub fn dna_config() -> Result<ChainSpec, String> {
@@ -262,7 +262,7 @@ pub(crate) mod tests {
     use super::*;
     use crate::service::new_full;
     use service_test;
-    use substrate_service::Roles;
+    use sc_service::Roles;
 
     fn local_testnet_genesis_instant_single() -> GenesisConfig {
         testnet_genesis(

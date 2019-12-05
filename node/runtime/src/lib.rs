@@ -25,12 +25,12 @@ use support::{
 	construct_runtime, parameter_types, traits::{Currency, Randomness}
 };
 use node_primitives::{AccountId, AccountIndex, Balance, BlockNumber, Hash, Index, Moment, Signature};
-use sr_api::impl_runtime_apis;
-use sr_primitives::{Perbill, ApplyResult, impl_opaque_keys, generic, create_runtime_str};
-use sr_primitives::curve::PiecewiseLinear;
-use sr_primitives::transaction_validity::TransactionValidity;
-use sr_primitives::weights::Weight;
-use sr_primitives::traits::{
+use sp_api::impl_runtime_apis;
+use sp_runtime::{Perbill, ApplyResult, impl_opaque_keys, generic, create_runtime_str};
+use sp_runtime::curve::PiecewiseLinear;
+use sp_runtime::transaction_validity::TransactionValidity;
+use sp_runtime::weights::Weight;
+use sp_runtime::traits::{
 	self, BlakeTwo256, Block as BlockT, NumberFor, StaticLookup, SaturatedConversion,
 	OpaqueKeys,
 };
@@ -48,7 +48,7 @@ use system::offchain::TransactionSubmitter;
 use inherents::{InherentData, CheckInherentsResult};
 
 #[cfg(any(feature = "std", test))]
-pub use sr_primitives::BuildStorage;
+pub use sp_runtime::BuildStorage;
 pub use timestamp::Call as TimestampCall;
 pub use balances::Call as BalancesCall;
 pub use contracts::Gas;
@@ -227,7 +227,7 @@ impl session::historical::Trait for Runtime {
 	type FullIdentificationOf = staking::ExposureOf<Runtime>;
 }
 
-paint_staking_reward_curve::build! {
+pallet_staking_reward_curve::build! {
 	const REWARD_CURVE: PiecewiseLinear<'static> = curve!(
 		min_inflation: 0_025_000,
 		max_inflation: 0_100_000,
@@ -239,7 +239,7 @@ paint_staking_reward_curve::build! {
 }
 
 parameter_types! {
-	pub const SessionsPerEra: sr_staking_primitives::SessionIndex = 6;
+	pub const SessionsPerEra: sp_staking::SessionIndex = 6;
 	pub const BondingDuration: staking::EraIndex = 24 * 28;
 	pub const RewardCurve: &'static PiecewiseLinear<'static> = &REWARD_CURVE;
 }
@@ -441,7 +441,7 @@ pub type CheckedExtrinsic = generic::CheckedExtrinsic<AccountId, Call, SignedExt
 pub type Executive = executive::Executive<Runtime, Block, system::ChainContext<Runtime>, Runtime, AllModules>;
 
 impl_runtime_apis! {
-	impl sr_api::Core<Block> for Runtime {
+	impl sp_api::Core<Block> for Runtime {
 		fn version() -> RuntimeVersion {
 			VERSION
 		}
@@ -455,7 +455,7 @@ impl_runtime_apis! {
 		}
 	}
 
-	impl sr_api::Metadata<Block> for Runtime {
+	impl sp_api::Metadata<Block> for Runtime {
 		fn metadata() -> OpaqueMetadata {
 			Runtime::metadata().into()
 		}
@@ -581,7 +581,7 @@ impl_runtime_apis! {
 		}
 	}
 
-	impl substrate_session::SessionKeys<Block> for Runtime {
+	impl sp_session::SessionKeys<Block> for Runtime {
 		fn generate_session_keys(seed: Option<Vec<u8>>) -> Vec<u8> {
 			SessionKeys::generate(seed)
 		}
@@ -611,7 +611,7 @@ mod tests {
 
 	#[test]
 	fn block_hooks_weight_should_not_exceed_limits() {
-		use sr_primitives::weights::WeighBlock;
+		use sp_runtime::weights::WeighBlock;
 		let check_for_block = |b| {
 			let block_hooks_weight =
 				<AllModules as WeighBlock<BlockNumber>>::on_initialize(b) +

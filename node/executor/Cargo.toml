@@ -8,37 +8,37 @@ edition = "2018"
 [dependencies]
 trie-root = "0.15.2"
 codec = { package = "parity-scale-codec", version = "1.0.0" }
-runtime_io = { package = "sr-io", git = "https://github.com/blockxlabs/substrate.git" }
-state_machine = { package = "substrate-state-machine", git = "https://github.com/blockxlabs/substrate.git" }
-substrate-executor = { git = "https://github.com/blockxlabs/substrate.git" }
-primitives = { package = "substrate-primitives", git = "https://github.com/blockxlabs/substrate.git" }
-trie = { package = "substrate-trie", git = "https://github.com/blockxlabs/substrate.git" }
+runtime_io = { package = "sp-io", git = "https://github.com/blockxlabs/substrate.git" }
+state_machine = { package = "sp-state-machine", git = "https://github.com/blockxlabs/substrate.git" }
+sc-executor = { git = "https://github.com/blockxlabs/substrate.git" }
+primitives = { package = "sp-core", git = "https://github.com/blockxlabs/substrate.git" }
+trie = { package = "sp-trie", git = "https://github.com/blockxlabs/substrate.git" }
 node-primitives = { path = "../primitives" }
 node-runtime = { path = "../runtime" }
 
 [dev-dependencies]
 node-testing = { path = "../testing" }
 test-client = { package = "substrate-test-client", git = "https://github.com/blockxlabs/substrate.git" }
-sr-primitives = { git = "https://github.com/blockxlabs/substrate.git" }
-runtime_support = { package = "paint-support", git = "https://github.com/blockxlabs/substrate.git" }
-balances = { package = "paint-balances", git = "https://github.com/blockxlabs/substrate.git" }
-transaction-payment = { package = "paint-transaction-payment", git = "https://github.com/blockxlabs/substrate.git" }
-session = { package = "paint-session", git = "https://github.com/blockxlabs/substrate.git" }
-system = { package = "paint-system", git = "https://github.com/blockxlabs/substrate.git" }
-timestamp = { package = "paint-timestamp", git = "https://github.com/blockxlabs/substrate.git" }
-treasury = { package = "paint-treasury", git = "https://github.com/blockxlabs/substrate.git" }
-contracts = { package = "paint-contracts", git = "https://github.com/blockxlabs/substrate.git" }
-grandpa = { package = "paint-grandpa", git = "https://github.com/blockxlabs/substrate.git" }
-indices = { package = "paint-indices", git = "https://github.com/blockxlabs/substrate.git" }
+sp-runtime = { git = "https://github.com/blockxlabs/substrate.git" }
+runtime_support = { package = "frame-support", git = "https://github.com/blockxlabs/substrate.git" }
+balances = { package = "pallet-balances", git = "https://github.com/blockxlabs/substrate.git" }
+transaction-payment = { package = "pallet-transaction-payment", git = "https://github.com/blockxlabs/substrate.git" }
+session = { package = "pallet-session", git = "https://github.com/blockxlabs/substrate.git" }
+system = { package = "frame-system", git = "https://github.com/blockxlabs/substrate.git" }
+timestamp = { package = "pallet-timestamp", git = "https://github.com/blockxlabs/substrate.git" }
+treasury = { package = "pallet-treasury", git = "https://github.com/blockxlabs/substrate.git" }
+contracts = { package = "pallet-contracts", git = "https://github.com/blockxlabs/substrate.git" }
+grandpa = { package = "pallet-grandpa", git = "https://github.com/blockxlabs/substrate.git" }
+indices = { package = "pallet-indices", git = "https://github.com/blockxlabs/substrate.git" }
 wabt = "0.9.2"
 criterion = "0.3.0"
 
 [features]
 wasmtime = [
-    "substrate-executor/wasmtime",
+    "sc-executor/wasmtime",
 ]
 wasmi-errno = [
-	"substrate-executor/wasmi-errno",
+	"sc-executor/wasmi-errno",
 ]
 stress-test = []
 

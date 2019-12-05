@@ -17,7 +17,7 @@
 //! Substrate Node CLI
 
 #![warn(missing_docs)]
-extern crate substrate_cli as cli;
+extern crate sc_cli as cli;
 use futures::sync::oneshot;
 use futures::{future, Future};
 use cli::VersionInfo;

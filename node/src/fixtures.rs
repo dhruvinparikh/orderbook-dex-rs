@@ -1,5 +1,6 @@
 
-use aura_primitives::sr25519::AuthorityId as AuraId;
+use babe_primitives::AuthorityId as BabeId;
+use im_online::sr25519::AuthorityId as ImOnlineId;
 use grandpa_primitives::AuthorityId as GrandpaId;
 use hex_literal::hex;
 use primitives::{crypto::UncheckedInto, ed25519};
@@ -18,11 +19,7 @@ pub fn get_staging_bootnodes() -> Vec<String> {
     ];
 }
 
-// AuraId is sr25519
-// subkey -s inspect "$secret"
-// GrandpaId is ed25519
-// subkey -e inspect "$secret"
-pub fn get_staging_initial_authorities() -> Vec<(AuraId, GrandpaId)> {
+pub fn get_staging_initial_authorities() -> Vec<(BabeId, GrandpaId)> {
     return vec![
         (
             // 5GNa5NWbUnhHqDRcsvKRehfb1cxdskaECcmBjxniEgu5mqu5
@@ -62,7 +59,7 @@ pub fn get_chain_properties() -> Option<Properties> {
     {
         "ss58Format": 7,
         "tokenDecimals": 9,
-        "tokenSymbol": "XTL"
+        "tokenSymbol": "DNA"
     }"#;
     return serde_json::from_str(data).unwrap();
 }

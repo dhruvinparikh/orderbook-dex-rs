@@ -1,11 +1,23 @@
+// Copyright 2019 by Trinkler Software AG (Switzerland).
+// This file is part of the Katal Chain.
+//
+// Katal Chain is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version <http://www.gnu.org/licenses/>.
+//
+// Katal Chain is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+
 use crate::fixtures::*;
 use aura_primitives::sr25519::AuthorityId as AuraId;
 use grandpa_primitives::AuthorityId as GrandpaId;
 use primitives::{sr25519, Pair, Public};
 use runtime::{
     AccountId, AuraConfig, BalancesConfig, GenesisConfig, GrandpaConfig, IndicesConfig, Signature,
-    SudoConfig, SystemConfig,
-    WASM_BINARY,
+    SudoConfig, SystemConfig, WASM_BINARY,
 };
 use sp_runtime::traits::{IdentifyAccount, Verify};
 use std::borrow::Cow; // Used to import from json file
@@ -28,7 +40,7 @@ pub enum Alternative {
     LocalTestnet,
     /// Hosted testnet with auto-generated genesis block. Use this to build-spec and
     /// generate a template for a unified genesis block.
-    /// Use `dna build-spec --chain staging >> node/res/dna_raw.json` to generate
+    /// Use `katalchain build-spec --chain staging >> node/res/katalchain.json` to generate
     /// Testnet chainspec json file
     /// Update name, id, properties and if necessary bootnodes
     // "properties": {
@@ -123,7 +135,7 @@ impl Alternative {
                 None,
             ),
             Alternative::StagingTestnet => ChainSpec::from_genesis(
-                "DNA Chain Staging", // Name
+                "Katal Chain Staging", // Name
                 "staging",             // Id
                 || {
                     testnet_genesis(

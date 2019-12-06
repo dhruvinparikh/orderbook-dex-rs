@@ -254,7 +254,7 @@ construct_runtime!(
 		TransactionPayment: transaction_payment::{Module, Storage},
         Sudo: sudo,
         RandomnessCollectiveFlip: randomness_collective_flip::{Module, Call, Storage},
-
+        // Add Babe here
         // Custom modules
         // Oracle: oracle::{Module, Call, Storage},
         // Assets: assets::{Module, Call, Storage},

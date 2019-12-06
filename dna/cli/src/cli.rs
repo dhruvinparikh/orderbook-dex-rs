@@ -14,14 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with Substrate.  If not, see <http://www.gnu.org/licenses/>.
 
-pub use sc_cli::error;
+pub use substrate_cli::error;
 use tokio::prelude::Future;
 use tokio::runtime::{Builder as RuntimeBuilder, Runtime};
-pub use sc_cli::{VersionInfo, IntoExit, NoCustom, SharedParams, ExecutionStrategyParam};
-use sc_service::{AbstractService, Roles as ServiceRoles, Configuration};
+pub use substrate_cli::{VersionInfo, IntoExit, NoCustom, SharedParams, ExecutionStrategyParam};
+use substrate_service::{AbstractService, Roles as ServiceRoles, Configuration};
 use log::info;
 use structopt::{StructOpt, clap::App};
-use sc_cli::{display_role, parse_and_prepare, AugmentClap, GetLogFilter, ParseAndPrepare};
+use substrate_cli::{display_role, parse_and_prepare, AugmentClap, GetLogFilter, ParseAndPrepare};
 use crate::{service, ChainSpec, load_spec};
 use crate::factory_impl::FactoryState;
 use transaction_factory::RuntimeAdapter;
@@ -100,7 +100,7 @@ impl AugmentClap for FactoryCmd {
 }
 
 /// Parse command line arguments into service configuration.
-pub fn run<I, T, E>(args: I, exit: E, version: sc_cli::VersionInfo) -> error::Result<()> where
+pub fn run<I, T, E>(args: I, exit: E, version: substrate_cli::VersionInfo) -> error::Result<()> where
 	I: IntoIterator<Item = T>,
 	T: Into<std::ffi::OsString> + Clone,
 	E: IntoExit,
@@ -140,7 +140,7 @@ pub fn run<I, T, E>(args: I, exit: E, version: sc_cli::VersionInfo) -> error::Re
 		ParseAndPrepare::RevertChain(cmd) => cmd.run_with_builder(|config: Config<_, _>|
 			Ok(new_full_start!(config).0), load_spec),
 		ParseAndPrepare::CustomCommand(CustomSubcommands::Factory(cli_args)) => {
-			let mut config: Config<_, _> = sc_cli::create_config_with_db_path(
+			let mut config: Config<_, _> = substrate_cli::create_config_with_db_path(
 				load_spec,
 				&cli_args.shared_params,
 				&version,
@@ -187,7 +187,7 @@ where
 {
 	let (exit_send, exit) = exit_future::signal();
 
-	let informant = sc_cli::informant::build(&service);
+	let informant = substrate_cli::informant::build(&service);
 	runtime.executor().spawn(exit.until(informant).map(|_| ()));
 
 	// we eagerly drop the service so that the internal exit future is fired,

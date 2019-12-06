@@ -14,10 +14,10 @@ use grandpa::AuthorityList as GrandpaAuthorityList;
 use primitives::OpaqueMetadata;
 use rstd::prelude::*;
 use sr_api::impl_runtime_apis;
-use sr_primitives::traits::{
+use sp_runtime::traits::{
     BlakeTwo256, Block as BlockT, ConvertInto, IdentifyAccount, NumberFor, StaticLookup, Verify,
 };
-use sr_primitives::{
+use sp_runtime::{
     create_runtime_str, generic, impl_opaque_keys, transaction_validity::TransactionValidity,
     ApplyExtrinsicResult, MultiSignature,
 };
@@ -28,8 +28,8 @@ use version::RuntimeVersion;
 // A few exports that help ease life for downstream crates.
 pub use balances::Call as BalancesCall;
 #[cfg(any(feature = "std", test))]
-pub use sr_primitives::BuildStorage;
-pub use sr_primitives::{Perbill, Permill};
+pub use sp_runtime::BuildStorage;
+pub use sp_runtime::{Perbill, Permill};
 pub use support::{
     construct_runtime, parameter_types, traits::Randomness, weights::Weight, StorageValue,
 };
@@ -68,7 +68,7 @@ pub type DigestItem = generic::DigestItem<Hash>;
 pub mod opaque {
     use super::*;
 
-    pub use sr_primitives::OpaqueExtrinsic as UncheckedExtrinsic;
+    pub use sp_runtime::OpaqueExtrinsic as UncheckedExtrinsic;
 
     /// Opaque block header type.
     pub type Header = generic::Header<BlockNumber, BlakeTwo256>;
@@ -337,7 +337,7 @@ impl_runtime_apis! {
         }
     }
 
-    impl txpool_runtime_api::TaggedTransactionQueue<Block> for Runtime {
+    impl txpool_runtime_api::runtime_api::TaggedTransactionQueue<Block> for Runtime {
         fn validate_transaction(tx: <Block as BlockT>::Extrinsic) -> TransactionValidity {
             Executive::validate_transaction(tx)
         }

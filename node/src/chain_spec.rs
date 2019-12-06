@@ -7,7 +7,7 @@ use runtime::{
     SudoConfig, SystemConfig,
     WASM_BINARY,
 };
-use sr_primitives::traits::{IdentifyAccount, Verify};
+use sp_runtime::traits::{IdentifyAccount, Verify};
 use std::borrow::Cow; // Used to import from json file
 use substrate_service;
 use substrate_telemetry::TelemetryEndpoints;

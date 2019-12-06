@@ -147,7 +147,7 @@ impl Alternative {
                 None,
             ),
             Alternative::Testnet => ChainSpec::from_json_bytes(Cow::Owned(
-                include_bytes!("../res/dna_raw.json").to_vec(),
+                include_bytes!("../res/dnachain_raw.json").to_vec(),
             ))
             .unwrap(),
         })

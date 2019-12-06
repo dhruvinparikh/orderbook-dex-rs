@@ -237,7 +237,7 @@ impl sudo::Trait for Runtime {
 
 // impl oracle::Trait for Runtime {}
 
-// impl assets::Trait for Runtime {}
+impl assets::Trait for Runtime {}
 
 construct_runtime!(
 	pub enum Runtime where
@@ -252,12 +252,14 @@ construct_runtime!(
 		Indices: indices,
 		Balances: balances::{default, Error},
 		TransactionPayment: transaction_payment::{Module, Storage},
-		Sudo: sudo,
-		RandomnessCollectiveFlip: randomness_collective_flip::{Module, Call, Storage},
+        Sudo: sudo,
+        RandomnessCollectiveFlip: randomness_collective_flip::{Module, Call, Storage},
+
         // Custom modules
         // Oracle: oracle::{Module, Call, Storage},
         // Assets: assets::{Module, Call, Storage},
         // Contracts: contracts::{Module, Call, Storage},
+        Assets: assets::{Module, Call, Storage},
 	}
 );
 
@@ -330,6 +332,7 @@ impl_runtime_apis! {
         }
 
         fn random_seed() -> <Block as BlockT>::Hash {
+        
             RandomnessCollectiveFlip::random_seed()
         }
     }

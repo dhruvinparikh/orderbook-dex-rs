@@ -13,10 +13,10 @@ rustc-hex = { version = "2.0", optional = true }
 serde = { version = "1.0.102", optional = true }
 
 # primitives
-authority-discovery-primitives = { package = "sp-authority-discovery", git = "https://github.com/blockxlabs/substrate.git", default-features = false }
-babe-primitives = { package = "sp-consensus-babe", git = "https://github.com/blockxlabs/substrate.git", default-features = false }
-block-builder-api = { package = "sp-block-builder", git = "https://github.com/blockxlabs/substrate.git", default-features = false}
-inherents = { package = "sp-inherents", git = "https://github.com/blockxlabs/substrate.git", default-features = false }
+authority-discovery-primitives = { package = "substrate-authority-discovery-primitives", git = "https://github.com/blockxlabs/substrate.git", default-features = false }
+babe-primitives = { package = "substrate-consensus-babe-primitives", git = "https://github.com/blockxlabs/substrate.git", default-features = false }
+block-builder-api = { package = "substrate-block-builder-runtime-api", git = "https://github.com/blockxlabs/substrate.git", default-features = false}
+inherents = { package = "substrate-inherents", git = "https://github.com/blockxlabs/substrate.git", default-features = false }
 node-primitives = { git = "https://github.com/blockxlabs/substrate.git", default-features = false }
 offchain-primitives = { package = "sp-offchain", git = "https://github.com/blockxlabs/substrate.git", default-features = false }
 primitives = { package = "sp-core",  git = "https://github.com/blockxlabs/substrate.git", default-features = false }
@@ -82,12 +82,12 @@ std = [
 	"safe-mix/std",
 	"serde",
 	"session/std",
-	"sp-api/std",
-	"sp-runtime/std",
-	"sp-staking/std",
+	"sr-api/std",
+	"sr-primitives/std",
+	"sr-staking-primitives/std",
 	"staking/std",
-	"sp-keyring",
-	"sp-session/std",
+	"substrate-keyring",
+	"substrate-session/std",
 	"sudo/std",
 	"support/std",
 	"system/std",

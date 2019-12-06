@@ -7,22 +7,22 @@ edition = "2018"
 
 [dependencies]
 balances = { package = "paint-balances", git = "https://github.com/blockxlabs/substrate.git" }
-client = { package = "substrate-client", git = "https://github.com/blockxlabs/substrate.git" }
+client = { package = "sc-client", git = "https://github.com/blockxlabs/substrate.git" }
 codec = { package = "parity-scale-codec", version = "1.0.0" }
 contracts = { package = "paint-contracts", git = "https://github.com/blockxlabs/substrate.git" }
 grandpa = { package = "paint-grandpa", git = "https://github.com/blockxlabs/substrate.git" }
 indices = { package = "paint-indices", git = "https://github.com/blockxlabs/substrate.git" }
-keyring = { package = "substrate-keyring", git = "https://github.com/blockxlabs/substrate.git" }
+keyring = { package = "sp-keyring", git = "https://github.com/blockxlabs/substrate.git" }
 node-executor = { path = "../executor" }
 node-primitives = { path = "../primitives" }
 node-runtime = { path = "../runtime" }
-primitives = { package = "substrate-primitives", git = "https://github.com/blockxlabs/substrate.git" }
-runtime-io = { package = "sr-io", git = "https://github.com/blockxlabs/substrate.git" }
+primitives = { package = "sp-core", git = "https://github.com/blockxlabs/substrate.git" }
+runtime-io = { package = "sp-io", git = "https://github.com/blockxlabs/substrate.git" }
 runtime_support = { package = "paint-support", git = "https://github.com/blockxlabs/substrate.git" }
 session = { package = "paint-session", git = "https://github.com/blockxlabs/substrate.git" }
-sr-primitives = { git = "https://github.com/blockxlabs/substrate.git" }
+sp-runtime = { git = "https://github.com/blockxlabs/substrate.git" }
 staking = { package = "paint-staking", git = "https://github.com/blockxlabs/substrate.git" }
-substrate-executor = { git = "https://github.com/blockxlabs/substrate.git" }
+sc-executor = { git = "https://github.com/blockxlabs/substrate.git" }
 system = { package = "paint-system", git = "https://github.com/blockxlabs/substrate.git"    }
 test-client = { package = "substrate-test-client", git = "https://github.com/blockxlabs/substrate.git" }
 timestamp = { package = "paint-timestamp", git = "https://github.com/blockxlabs/substrate.git" }

@@ -32,8 +32,8 @@ transaction-payment = { package = "pallet-transaction-payment", git = "https://g
 txpool-runtime-api = { package = "sp-transaction-pool-api", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
 version = { package = "sp-version", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
 assets = { package = "dna-assets", path = "../../dna/assets", default-features = false }
-#babe = { package = "pallet-babe", git = "https://github.com/blockxlabs/substrate", default-features = false }
-#babe-primitives = { package = "sp-consensus-babe", git = "https://github.com/blockxlabs/substrate", default-features = false }
+babe = { package = "pallet-babe", git = "https://github.com/blockxlabs/substrate", default-features = false }
+babe-primitives = { package = "sp-consensus-babe", git = "https://github.com/blockxlabs/substrate", default-features = false }
 
 [build-dependencies]
 wasm-builder-runner = { package = "substrate-wasm-builder-runner", git = "https://github.com/blockxlabs/substrate", branch = "master", version = "1.0.4" }
@@ -43,8 +43,8 @@ default = ["std"]
 std = [
 	"aura-primitives/std",
 	"aura/std",
-	#"babe-primitives/std",
-    #"babe/std",
+	"babe-primitives/std",
+    "babe/std",
 	"balances/std",
 	"block-builder-api/std",
 	"codec/std",

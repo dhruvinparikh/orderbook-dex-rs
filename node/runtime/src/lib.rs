@@ -7,8 +7,8 @@
 // Make the WASM binary available.
 #[cfg(feature = "std")]
 include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
-
-use aura_primitives::sr25519::AuthorityId as AuraId;
+use babe_primitives::AuthorityId as BabeId;
+use im_online::sr25519::{AuthorityId as ImOnlineId};
 use grandpa::fg_primitives;
 use grandpa::AuthorityList as GrandpaAuthorityList;
 use primitives::OpaqueMetadata;
@@ -79,7 +79,8 @@ pub mod opaque {
 
     impl_opaque_keys! {
         pub struct SessionKeys {
-            pub aura: Aura,
+            pub babe: babe,
+            pub im_online: ImOnline,
             pub grandpa: Grandpa,
         }
     }
@@ -159,8 +160,8 @@ impl system::Trait for Runtime {
     type Version = Version;
 }
 
-impl aura::Trait for Runtime {
-    type AuthorityId = AuraId;
+impl babe::Trait for Runtime {
+    type AuthorityId = BabeId;
 }
 
 impl grandpa::Trait for Runtime {
@@ -186,7 +187,7 @@ parameter_types! {
 impl timestamp::Trait for Runtime {
     /// A timestamp: milliseconds since the unix epoch.
     type Moment = u64;
-    type OnTimestampSet = Aura;
+    type OnTimestampSet = Babe;
     type MinimumPeriod = MinimumPeriod;
 }
 
@@ -231,6 +232,12 @@ impl sudo::Trait for Runtime {
     type Proposal = Call;
 }
 
+impl im_online::Trait for Runtime {
+    type Call = Call;
+    type Event = Event;
+    type AuthorityId = ImOnlineId;
+}
+
 // impl contracts::Trait for Runtime {
 //     // Add `type Event = Event;` in case of event usage
 // }
@@ -247,7 +254,7 @@ construct_runtime!(
 	{
 		System: system::{Module, Call, Storage, Config, Event},
 		Timestamp: timestamp::{Module, Call, Storage, Inherent},
-		Aura: aura::{Module, Config<T>, Inherent(Timestamp)},
+        // Aura: aura::{Module, Config<T>, Inherent(Timestamp)},
 		Grandpa: grandpa::{Module, Call, Storage, Config, Event},
 		Indices: indices,
 		Balances: balances::{default, Error},
@@ -255,6 +262,7 @@ construct_runtime!(
         Sudo: sudo,
         RandomnessCollectiveFlip: randomness_collective_flip::{Module, Call, Storage},
         // Add Babe here
+        Babe: babe::{Module, Call, Storage, Config, Inherent(Timestamp)},
         // Custom modules
         // Oracle: oracle::{Module, Call, Storage},
         // Assets: assets::{Module, Call, Storage},
@@ -349,13 +357,13 @@ impl_runtime_apis! {
         }
     }
 
-    impl aura_primitives::AuraApi<Block, AuraId> for Runtime {
+    impl babe_primitives::BabeApi<Block, BabeId> for Runtime {
         fn slot_duration() -> u64 {
-            Aura::slot_duration()
+            Babe::slot_duration()
         }
 
-        fn authorities() -> Vec<AuraId> {
-            Aura::authorities()
+        fn authorities() -> Vec<BabeId> {
+            Babe::authorities()
         }
     }
 

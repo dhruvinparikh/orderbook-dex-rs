@@ -13,8 +13,8 @@ state_machine = { package = "sp-state-machine", git = "https://github.com/blockx
 sc-executor = { git = "https://github.com/blockxlabs/substrate.git" }
 primitives = { package = "sp-core", git = "https://github.com/blockxlabs/substrate.git" }
 trie = { package = "sp-trie", git = "https://github.com/blockxlabs/substrate.git" }
-node-primitives = { path = "../primitives" }
-node-runtime = { path = "../runtime" }
+node-primitives = { path = "../primitives" , package="dna-primitives"}
+node-runtime = { path = "../runtime", package="dna-runtime" }
 
 [dev-dependencies]
 node-testing = { path = "../testing" }

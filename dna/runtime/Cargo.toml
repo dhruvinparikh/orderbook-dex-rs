@@ -3,6 +3,7 @@ name = "dna-runtime"
 version = "0.1.0"
 authors = ["BlockX Labs <info@blockxlabs.com>"]
 edition = "2018"
+#build="build.rs"
 
 [dependencies]
 # third-party dependencies
@@ -17,7 +18,7 @@ authority-discovery-primitives = { package = "sp-authority-discovery", git = "ht
 babe-primitives = { package = "sp-consensus-babe", git = "https://github.com/blockxlabs/substrate.git", default-features = false }
 block-builder-api = { package = "sp-block-builder", git = "https://github.com/blockxlabs/substrate.git", default-features = false}
 inherents = { package = "sp-inherents", git = "https://github.com/blockxlabs/substrate.git", default-features = false }
-node-primitives = { git = "https://github.com/blockxlabs/substrate.git", default-features = false }
+node-primitives = { path="../primitives", package="dna-primitives", default-features = false }
 offchain-primitives = { package = "sp-offchain", git = "https://github.com/blockxlabs/substrate.git", default-features = false }
 primitives = { package = "sp-core",  git = "https://github.com/blockxlabs/substrate.git", default-features = false }
 rstd = { package = "sp-std", git = "https://github.com/blockxlabs/substrate.git", default-features = false }

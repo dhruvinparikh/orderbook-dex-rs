@@ -1,8 +1,8 @@
 [package]
-name = "dna-chain"
+name = "dnachain"
 version = "0.0.1"
 authors = ["BlockxLabs <info@blockxlabs.com>"]
-build = "dna/build.rs"
+build = "build.rs"
 edition = "2018"
 
 [[bin]]

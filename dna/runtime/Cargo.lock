@@ -450,16 +450,24 @@ dependencies = [
 ]
 
 [[package]]
+name = "dna-primitives"
+version = "2.0.0"
+dependencies = [
+ "sp-core 2.0.0 (git+https://github.com/blockxlabs/substrate)",
+ "sp-runtime 2.0.0 (git+https://github.com/blockxlabs/substrate)",
+]
+
+[[package]]
 name = "dna-runtime"
 version = "0.1.0"
 dependencies = [
+ "dna-primitives 2.0.0",
  "frame-executive 2.0.0 (git+https://github.com/blockxlabs/substrate)",
  "frame-support 2.0.0 (git+https://github.com/blockxlabs/substrate)",
  "frame-system 2.0.0 (git+https://github.com/blockxlabs/substrate)",
  "frame-system-rpc-runtime-api 2.0.0 (git+https://github.com/blockxlabs/substrate)",
  "frame-utility 2.0.0 (git+https://github.com/blockxlabs/substrate)",
  "integer-sqrt 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
- "node-primitives 2.0.0 (git+https://github.com/blockxlabs/substrate)",
  "pallet-aura 2.0.0 (git+https://github.com/blockxlabs/substrate)",
  "pallet-authority-discovery 0.1.0 (git+https://github.com/blockxlabs/substrate)",
  "pallet-authorship 0.1.0 (git+https://github.com/blockxlabs/substrate)",
@@ -1696,15 +1704,6 @@ dependencies = [
  "cfg-if 0.1.10 (registry+https://github.com/rust-lang/crates.io-index)",
  "libc 0.2.66 (registry+https://github.com/rust-lang/crates.io-index)",
  "winapi 0.3.8 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
-name = "node-primitives"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
-dependencies = [
- "sp-core 2.0.0 (git+https://github.com/blockxlabs/substrate)",
- "sp-runtime 2.0.0 (git+https://github.com/blockxlabs/substrate)",
 ]
 
 [[package]]
@@ -4384,7 +4383,6 @@ dependencies = [
 "checksum miow 0.2.1 (registry+https://github.com/rust-lang/crates.io-index)" = "8c1f2f3b1cf331de6896aabf6e9d55dca90356cc9960cca7eaaf408a355ae919"
 "checksum multistream-select 0.6.0 (registry+https://github.com/rust-lang/crates.io-index)" = "1242e4ecf2060b35fb58002988e4720fbb3a2cbd4c136d369c420fa028f69efe"
 "checksum net2 0.2.33 (registry+https://github.com/rust-lang/crates.io-index)" = "42550d9fb7b6684a6d404d9fa7250c2eb2646df731d1c06afc06dcee9e1bcf88"
-"checksum node-primitives 2.0.0 (git+https://github.com/blockxlabs/substrate)" = "<none>"
 "checksum nodrop 0.1.14 (registry+https://github.com/rust-lang/crates.io-index)" = "72ef4a56884ca558e5ddb05a1d1e7e1bfd9a68d9ed024c21704cc98872dae1bb"
 "checksum nohash-hasher 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)" = "4e657a6ec97f9a3ba46f6f7034ea6db9fcd5b71d25ef1074b7bc03da49be0e8e"
 "checksum nom 4.2.3 (registry+https://github.com/rust-lang/crates.io-index)" = "2ad2a91a8e869eeb30b9cb3119ae87773a8f4ae617f41b1eb9c154b2905f7bd6"

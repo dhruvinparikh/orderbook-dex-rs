@@ -13,9 +13,9 @@ contracts = { package = "paint-contracts", git = "https://github.com/blockxlabs/
 grandpa = { package = "paint-grandpa", git = "https://github.com/blockxlabs/substrate.git" }
 indices = { package = "paint-indices", git = "https://github.com/blockxlabs/substrate.git" }
 keyring = { package = "sp-keyring", git = "https://github.com/blockxlabs/substrate.git" }
-node-executor = { path = "../executor" }
-node-primitives = { path = "../primitives" }
-node-runtime = { path = "../runtime" }
+node-executor = { path = "../executor", package="dna-executor" }
+node-primitives = { path = "../primitives", package="dna-primitives" }
+node-runtime = { path = "../runtime", package="dna-runtime" }
 primitives = { package = "sp-core", git = "https://github.com/blockxlabs/substrate.git" }
 runtime-io = { package = "sp-io", git = "https://github.com/blockxlabs/substrate.git" }
 runtime_support = { package = "paint-support", git = "https://github.com/blockxlabs/substrate.git" }

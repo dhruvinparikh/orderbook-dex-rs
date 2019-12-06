@@ -734,28 +734,28 @@ dependencies = [
  "futures 0.3.1",
  "hex-literal",
  "log",
+ "pallet-grandpa",
  "parity-scale-codec",
  "parking_lot 0.9.0",
+ "sc-basic-authority",
+ "sc-cli",
+ "sc-client",
+ "sc-consensus-aura",
+ "sc-executor",
+ "sc-network",
+ "sc-service",
+ "sc-telemetry",
  "sc-transaction-pool",
  "serde_json",
+ "sp-consensus",
+ "sp-consensus-aura",
+ "sp-core",
+ "sp-finality-grandpa",
+ "sp-inherents",
+ "sp-io",
+ "sp-runtime",
  "sp-transaction-pool-api",
- "sr-io",
- "sr-primitives",
- "substrate-basic-authorship",
  "substrate-build-script-utils",
- "substrate-cli",
- "substrate-client",
- "substrate-consensus-aura",
- "substrate-consensus-aura-primitives",
- "substrate-consensus-common",
- "substrate-executor",
- "substrate-finality-grandpa",
- "substrate-finality-grandpa-primitives",
- "substrate-inherents",
- "substrate-network",
- "substrate-primitives",
- "substrate-service",
- "substrate-telemetry",
  "tokio",
  "trie-root",
  "vergen",
@@ -763,34 +763,55 @@ dependencies = [
 
 [[package]]
 name = "dna-runtime"
-version = "0.0.1"
+version = "0.1.0"
 dependencies = [
  "frame-executive",
  "frame-support",
  "frame-system",
+ "frame-system-rpc-runtime-api",
+ "frame-utility",
+ "integer-sqrt",
+ "node-primitives",
  "pallet-aura",
+ "pallet-authority-discovery",
+ "pallet-authorship",
+ "pallet-babe",
  "pallet-balances",
+ "pallet-contracts",
+ "pallet-contracts-rpc-runtime-api",
+ "pallet-finality-tracker",
  "pallet-grandpa",
+ "pallet-im-online",
  "pallet-indices",
+ "pallet-offences",
  "pallet-randomness-collective-flip",
+ "pallet-session",
+ "pallet-staking",
+ "pallet-staking-reward-curve",
  "pallet-sudo",
  "pallet-timestamp",
  "pallet-transaction-payment",
+ "pallet-transaction-payment-rpc-runtime-api",
  "parity-scale-codec",
  "safe-mix",
+ "sc-transaction-pool",
  "serde",
+ "sp-api",
+ "sp-authority-discovery",
+ "sp-block-builder",
+ "sp-consensus-aura",
+ "sp-consensus-babe",
+ "sp-core",
+ "sp-inherents",
+ "sp-io",
+ "sp-keyring",
+ "sp-offchain",
+ "sp-runtime",
+ "sp-session",
+ "sp-staking",
+ "sp-std",
  "sp-transaction-pool-runtime-api",
- "sr-api",
- "sr-io",
- "sr-primitives",
- "sr-std",
- "sr-version",
- "substrate-block-builder-runtime-api",
- "substrate-consensus-aura-primitives",
- "substrate-inherents",
- "substrate-offchain-primitives",
- "substrate-primitives",
- "substrate-session",
+ "sp-version",
  "substrate-wasm-builder-runner",
 ]
 
@@ -928,19 +949,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "finality-grandpa"
-version = "0.10.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bd555755b04f83d6ed3041f5da26c0123a417ae2b96a826c1171b3f6fb804803"
-dependencies = [
- "futures 0.1.29",
- "log",
- "num-traits",
- "parity-scale-codec",
- "parking_lot 0.9.0",
-]
-
-[[package]]
 name = "fixed-hash"
 version = "0.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -977,7 +985,7 @@ checksum = "2fad85553e09a6f881f739c29f0b00b0f01357c743266d478b68951ce23285f3"
 [[package]]
 name = "fork-tree"
 version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
 dependencies = [
  "parity-scale-codec",
 ]
@@ -985,32 +993,32 @@ dependencies = [
 [[package]]
 name = "frame-executive"
 version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
 dependencies = [
  "frame-support",
  "frame-system",
  "parity-scale-codec",
  "serde",
- "sr-io",
- "sr-primitives",
- "sr-std",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
 ]
 
 [[package]]
 name = "frame-metadata"
 version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
 dependencies = [
  "parity-scale-codec",
  "serde",
- "sr-std",
- "substrate-primitives",
+ "sp-core",
+ "sp-std",
 ]
 
 [[package]]
 name = "frame-support"
 version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
 dependencies = [
  "bitmask",
  "frame-metadata",
@@ -1021,20 +1029,20 @@ dependencies = [
  "parity-scale-codec",
  "paste",
  "serde",
- "sr-arithmetic",
- "sr-io",
- "sr-primitives",
- "sr-std",
- "substrate-inherents",
- "substrate-primitives",
- "substrate-state-machine",
+ "sp-arithmetic",
+ "sp-core",
+ "sp-inherents",
+ "sp-io",
+ "sp-runtime",
+ "sp-state-machine",
+ "sp-std",
  "tracing",
 ]
 
 [[package]]
 name = "frame-support-procedural"
 version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
 dependencies = [
  "frame-support-procedural-tools",
  "proc-macro2 1.0.6",
@@ -1045,7 +1053,7 @@ dependencies = [
 [[package]]
 name = "frame-support-procedural-tools"
 version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
 dependencies = [
  "frame-support-procedural-tools-derive",
  "proc-macro-crate",
@@ -1057,7 +1065,7 @@ dependencies = [
 [[package]]
 name = "frame-support-procedural-tools-derive"
 version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
 dependencies = [
  "proc-macro2 1.0.6",
  "quote 1.0.2",
@@ -1067,18 +1075,40 @@ dependencies = [
 [[package]]
 name = "frame-system"
 version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
 dependencies = [
  "frame-support",
  "impl-trait-for-tuples",
  "parity-scale-codec",
  "safe-mix",
  "serde",
- "sr-io",
- "sr-primitives",
- "sr-std",
- "sr-version",
- "substrate-primitives",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
+ "sp-version",
+]
+
+[[package]]
+name = "frame-system-rpc-runtime-api"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "parity-scale-codec",
+ "sp-api",
+]
+
+[[package]]
+name = "frame-utility"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "frame-support",
+ "frame-system",
+ "parity-scale-codec",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
 ]
 
 [[package]]
@@ -1364,7 +1394,7 @@ dependencies = [
 [[package]]
 name = "grafana-data-source"
 version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
 dependencies = [
  "async-std",
  "chrono",
@@ -2634,6 +2664,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "node-primitives"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "sp-core",
+ "sp-runtime",
+]
+
+[[package]]
 name = "nodrop"
 version = "0.1.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2756,42 +2795,125 @@ dependencies = [
 [[package]]
 name = "pallet-aura"
 version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
 dependencies = [
  "frame-support",
  "frame-system",
  "pallet-session",
  "pallet-timestamp",
  "parity-scale-codec",
+ "sc-application-crypto",
  "serde",
+ "sp-consensus-aura",
+ "sp-core",
+ "sp-inherents",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
  "sp-timestamp",
- "sr-io",
- "sr-primitives",
- "sr-std",
- "substrate-application-crypto",
- "substrate-consensus-aura-primitives",
- "substrate-inherents",
- "substrate-primitives",
+]
+
+[[package]]
+name = "pallet-authority-discovery"
+version = "0.1.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "frame-support",
+ "frame-system",
+ "pallet-session",
+ "parity-scale-codec",
+ "sc-application-crypto",
+ "sp-authority-discovery",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
+]
+
+[[package]]
+name = "pallet-authorship"
+version = "0.1.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "frame-support",
+ "frame-system",
+ "impl-trait-for-tuples",
+ "parity-scale-codec",
+ "sp-authorship",
+ "sp-core",
+ "sp-inherents",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
+]
+
+[[package]]
+name = "pallet-babe"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "frame-support",
+ "frame-system",
+ "hex-literal",
+ "pallet-session",
+ "pallet-timestamp",
+ "parity-scale-codec",
+ "sp-consensus-babe",
+ "sp-inherents",
+ "sp-io",
+ "sp-runtime",
+ "sp-staking",
+ "sp-std",
+ "sp-timestamp",
 ]
 
 [[package]]
 name = "pallet-balances"
 version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
 dependencies = [
  "frame-support",
  "frame-system",
  "parity-scale-codec",
  "safe-mix",
  "serde",
- "sr-primitives",
- "sr-std",
+ "sp-runtime",
+ "sp-std",
+]
+
+[[package]]
+name = "pallet-contracts"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "frame-support",
+ "frame-system",
+ "parity-scale-codec",
+ "parity-wasm",
+ "pwasm-utils",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+ "sp-sandbox",
+ "sp-std",
+ "wasmi-validation",
+]
+
+[[package]]
+name = "pallet-contracts-rpc-runtime-api"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "parity-scale-codec",
+ "sp-api",
+ "sp-runtime",
+ "sp-std",
 ]
 
 [[package]]
 name = "pallet-finality-tracker"
 version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -2799,15 +2921,15 @@ dependencies = [
  "parity-scale-codec",
  "serde",
  "sp-finality-tracker",
- "sr-primitives",
- "sr-std",
- "substrate-inherents",
+ "sp-inherents",
+ "sp-runtime",
+ "sp-std",
 ]
 
 [[package]]
 name = "pallet-grandpa"
 version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -2815,47 +2937,79 @@ dependencies = [
  "pallet-session",
  "parity-scale-codec",
  "serde",
- "sr-primitives",
- "sr-staking-primitives",
- "sr-std",
- "substrate-finality-grandpa-primitives",
- "substrate-primitives",
+ "sp-core",
+ "sp-finality-grandpa",
+ "sp-runtime",
+ "sp-staking",
+ "sp-std",
+]
+
+[[package]]
+name = "pallet-im-online"
+version = "0.1.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "frame-support",
+ "frame-system",
+ "pallet-authorship",
+ "pallet-session",
+ "parity-scale-codec",
+ "sc-application-crypto",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+ "sp-staking",
+ "sp-std",
 ]
 
 [[package]]
 name = "pallet-indices"
 version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
 dependencies = [
  "frame-support",
  "frame-system",
  "parity-scale-codec",
  "safe-mix",
  "serde",
- "sr-io",
- "sr-primitives",
- "sr-std",
- "substrate-keyring",
- "substrate-primitives",
+ "sp-core",
+ "sp-io",
+ "sp-keyring",
+ "sp-runtime",
+ "sp-std",
+]
+
+[[package]]
+name = "pallet-offences"
+version = "1.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "frame-support",
+ "frame-system",
+ "pallet-balances",
+ "parity-scale-codec",
+ "sp-runtime",
+ "sp-staking",
+ "sp-std",
 ]
 
 [[package]]
 name = "pallet-randomness-collective-flip"
 version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
 dependencies = [
  "frame-support",
  "frame-system",
  "parity-scale-codec",
  "safe-mix",
- "sr-primitives",
- "sr-std",
+ "sp-runtime",
+ "sp-std",
 ]
 
 [[package]]
 name = "pallet-session"
 version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
 dependencies = [
  "frame-support",
  "frame-system",
@@ -2864,67 +3018,98 @@ dependencies = [
  "parity-scale-codec",
  "safe-mix",
  "serde",
- "sr-io",
- "sr-primitives",
- "sr-staking-primitives",
- "sr-std",
- "substrate-trie",
+ "sp-io",
+ "sp-runtime",
+ "sp-staking",
+ "sp-std",
+ "sp-trie",
+]
+
+[[package]]
+name = "pallet-staking"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "frame-support",
+ "frame-system",
+ "pallet-authorship",
+ "pallet-session",
+ "parity-scale-codec",
+ "safe-mix",
+ "serde",
+ "sp-io",
+ "sp-keyring",
+ "sp-phragmen",
+ "sp-runtime",
+ "sp-staking",
+ "sp-std",
+]
+
+[[package]]
+name = "pallet-staking-reward-curve"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "proc-macro-crate",
+ "proc-macro2 1.0.6",
+ "quote 1.0.2",
+ "syn 1.0.9",
 ]
 
 [[package]]
 name = "pallet-sudo"
 version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
 dependencies = [
  "frame-support",
  "frame-system",
  "parity-scale-codec",
  "serde",
- "sr-io",
- "sr-primitives",
- "sr-std",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
 ]
 
 [[package]]
 name = "pallet-timestamp"
 version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
 dependencies = [
  "frame-support",
  "frame-system",
  "impl-trait-for-tuples",
  "parity-scale-codec",
  "serde",
+ "sp-inherents",
+ "sp-runtime",
+ "sp-std",
  "sp-timestamp",
- "sr-primitives",
- "sr-std",
- "substrate-inherents",
 ]
 
 [[package]]
 name = "pallet-transaction-payment"
 version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
 dependencies = [
  "frame-support",
  "frame-system",
  "pallet-transaction-payment-rpc-runtime-api",
  "parity-scale-codec",
- "sr-primitives",
- "sr-std",
+ "sp-runtime",
+ "sp-std",
 ]
 
 [[package]]
 name = "pallet-transaction-payment-rpc-runtime-api"
 version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
 dependencies = [
  "frame-support",
  "parity-scale-codec",
  "serde",
- "sr-api",
- "sr-primitives",
- "sr-std",
+ "sp-api",
+ "sp-runtime",
+ "sp-std",
 ]
 
 [[package]]
@@ -3291,6 +3476,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "40361836defdd5871ff7e84096c6f6444af7fc157f8ef1789f54f147687caa20"
 
 [[package]]
+name = "pwasm-utils"
+version = "0.12.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4f7a12f176deee919f4ba55326ee17491c8b707d0987aed822682c821b660192"
+dependencies = [
+ "byteorder 1.3.2",
+ "log",
+ "parity-wasm",
+]
+
+[[package]]
 name = "quick-error"
 version = "1.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3637,9 +3833,409 @@ dependencies = [
 ]
 
 [[package]]
+name = "sc-application-crypto"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "parity-scale-codec",
+ "serde",
+ "sp-core",
+ "sp-io",
+ "sp-std",
+]
+
+[[package]]
+name = "sc-basic-authority"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "futures 0.3.1",
+ "log",
+ "parity-scale-codec",
+ "sc-block-builder",
+ "sc-client",
+ "sc-client-api",
+ "sc-telemetry",
+ "sp-blockchain",
+ "sp-consensus",
+ "sp-core",
+ "sp-inherents",
+ "sp-runtime",
+ "sp-transaction-pool-api",
+ "tokio-executor 0.2.0-alpha.6",
+]
+
+[[package]]
+name = "sc-block-builder"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "parity-scale-codec",
+ "sp-api",
+ "sp-block-builder",
+ "sp-blockchain",
+ "sp-core",
+ "sp-runtime",
+ "sp-state-machine",
+]
+
+[[package]]
+name = "sc-chain-spec"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "impl-trait-for-tuples",
+ "sc-chain-spec-derive",
+ "sc-network",
+ "sc-telemetry",
+ "serde",
+ "serde_json",
+ "sp-core",
+ "sp-runtime",
+]
+
+[[package]]
+name = "sc-chain-spec-derive"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "proc-macro-crate",
+ "proc-macro2 1.0.6",
+ "quote 1.0.2",
+ "syn 1.0.9",
+]
+
+[[package]]
+name = "sc-cli"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "ansi_term 0.12.1",
+ "app_dirs",
+ "atty",
+ "clap",
+ "derive_more",
+ "env_logger 0.7.1",
+ "fdlimit",
+ "futures 0.3.1",
+ "futures01",
+ "lazy_static",
+ "log",
+ "names",
+ "regex",
+ "rpassword",
+ "sc-client-api",
+ "sc-network",
+ "sc-service",
+ "sc-telemetry",
+ "sc-tracing",
+ "serde_json",
+ "sp-blockchain",
+ "sp-core",
+ "sp-keyring",
+ "sp-panic-handler",
+ "sp-runtime",
+ "sp-state-machine",
+ "structopt",
+ "time",
+ "tokio",
+]
+
+[[package]]
+name = "sc-client"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "derive_more",
+ "fnv",
+ "futures 0.3.1",
+ "hash-db",
+ "hex-literal",
+ "kvdb",
+ "log",
+ "parity-scale-codec",
+ "parking_lot 0.9.0",
+ "sc-block-builder",
+ "sc-client-api",
+ "sc-executor",
+ "sc-telemetry",
+ "sp-api",
+ "sp-blockchain",
+ "sp-consensus",
+ "sp-core",
+ "sp-externalities",
+ "sp-inherents",
+ "sp-keyring",
+ "sp-runtime",
+ "sp-state-machine",
+ "sp-std",
+ "sp-trie",
+ "sp-version",
+ "tracing",
+]
+
+[[package]]
+name = "sc-client-api"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "derive_more",
+ "fnv",
+ "futures 0.3.1",
+ "hash-db",
+ "hex-literal",
+ "kvdb",
+ "log",
+ "parity-scale-codec",
+ "parking_lot 0.9.0",
+ "sc-block-builder",
+ "sc-executor",
+ "sc-telemetry",
+ "sp-api",
+ "sp-blockchain",
+ "sp-consensus",
+ "sp-core",
+ "sp-externalities",
+ "sp-inherents",
+ "sp-keyring",
+ "sp-runtime",
+ "sp-state-machine",
+ "sp-std",
+ "sp-transaction-pool-api",
+ "sp-trie",
+ "sp-version",
+]
+
+[[package]]
+name = "sc-client-db"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "hash-db",
+ "kvdb",
+ "kvdb-memorydb",
+ "kvdb-rocksdb",
+ "linked-hash-map",
+ "log",
+ "parity-scale-codec",
+ "parking_lot 0.9.0",
+ "sc-client",
+ "sc-client-api",
+ "sc-executor",
+ "sc-state-db",
+ "sp-blockchain",
+ "sp-consensus",
+ "sp-core",
+ "sp-runtime",
+ "sp-state-machine",
+ "sp-trie",
+]
+
+[[package]]
+name = "sc-consensus-aura"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "derive_more",
+ "futures 0.1.29",
+ "futures 0.3.1",
+ "futures-timer 0.4.0",
+ "log",
+ "parity-scale-codec",
+ "parking_lot 0.9.0",
+ "sc-application-crypto",
+ "sc-client",
+ "sc-client-api",
+ "sc-consensus-slots",
+ "sc-keystore",
+ "sc-telemetry",
+ "sp-api",
+ "sp-block-builder",
+ "sp-blockchain",
+ "sp-consensus",
+ "sp-consensus-aura",
+ "sp-core",
+ "sp-inherents",
+ "sp-io",
+ "sp-runtime",
+ "sp-timestamp",
+ "sp-version",
+]
+
+[[package]]
+name = "sc-consensus-slots"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "futures 0.3.1",
+ "futures-timer 2.0.2",
+ "log",
+ "parity-scale-codec",
+ "parking_lot 0.9.0",
+ "sc-client-api",
+ "sc-telemetry",
+ "sp-blockchain",
+ "sp-consensus",
+ "sp-core",
+ "sp-inherents",
+ "sp-runtime",
+]
+
+[[package]]
+name = "sc-executor"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "derive_more",
+ "lazy_static",
+ "libsecp256k1",
+ "log",
+ "parity-scale-codec",
+ "parity-wasm",
+ "parking_lot 0.9.0",
+ "sp-core",
+ "sp-externalities",
+ "sp-io",
+ "sp-panic-handler",
+ "sp-runtime-interface",
+ "sp-serializer",
+ "sp-trie",
+ "sp-version",
+ "sp-wasm-interface",
+ "wasmi",
+]
+
+[[package]]
+name = "sc-keystore"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "derive_more",
+ "hex",
+ "parking_lot 0.9.0",
+ "rand 0.7.2",
+ "sc-application-crypto",
+ "serde_json",
+ "sp-core",
+ "subtle 2.2.2",
+]
+
+[[package]]
+name = "sc-network"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "bitflags",
+ "bytes",
+ "derive_more",
+ "either",
+ "erased-serde",
+ "fnv",
+ "fork-tree",
+ "futures 0.1.29",
+ "futures 0.3.1",
+ "futures-timer 0.4.0",
+ "libp2p",
+ "linked-hash-map",
+ "linked_hash_set",
+ "log",
+ "lru",
+ "parity-scale-codec",
+ "parking_lot 0.9.0",
+ "rand 0.7.2",
+ "rustc-hex",
+ "sc-block-builder",
+ "sc-client",
+ "sc-client-api",
+ "sc-peerset",
+ "serde",
+ "serde_json",
+ "slog",
+ "slog_derive",
+ "smallvec 0.6.13",
+ "sp-arithmetic",
+ "sp-blockchain",
+ "sp-consensus",
+ "sp-consensus-babe",
+ "sp-core",
+ "sp-runtime",
+ "tokio-io 0.1.12",
+ "unsigned-varint",
+ "void",
+ "zeroize 1.0.0",
+]
+
+[[package]]
+name = "sc-offchain"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "bytes",
+ "fnv",
+ "futures 0.1.29",
+ "futures 0.3.1",
+ "futures-timer 2.0.2",
+ "hyper 0.12.35",
+ "hyper-rustls",
+ "log",
+ "num_cpus",
+ "parity-scale-codec",
+ "parking_lot 0.9.0",
+ "rand 0.7.2",
+ "sc-client-api",
+ "sc-keystore",
+ "sc-network",
+ "sp-api",
+ "sp-core",
+ "sp-offchain",
+ "sp-runtime",
+ "threadpool",
+]
+
+[[package]]
+name = "sc-peerset"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "futures 0.3.1",
+ "libp2p",
+ "log",
+ "serde_json",
+]
+
+[[package]]
+name = "sc-rpc"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "futures 0.3.1",
+ "hash-db",
+ "jsonrpc-core",
+ "jsonrpc-pubsub",
+ "log",
+ "parity-scale-codec",
+ "parking_lot 0.9.0",
+ "sc-client",
+ "sc-client-api",
+ "sc-executor",
+ "sc-keystore",
+ "sc-rpc-api",
+ "serde_json",
+ "sp-api",
+ "sp-blockchain",
+ "sp-core",
+ "sp-rpc",
+ "sp-runtime",
+ "sp-session",
+ "sp-state-machine",
+ "sp-transaction-pool-api",
+ "sp-version",
+]
+
+[[package]]
 name = "sc-rpc-api"
 version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
 dependencies = [
  "derive_more",
  "futures 0.3.1",
@@ -3652,45 +4248,157 @@ dependencies = [
  "parking_lot 0.9.0",
  "serde",
  "serde_json",
+ "sp-core",
+ "sp-rpc",
  "sp-transaction-pool-api",
- "sr-version",
- "substrate-primitives",
- "substrate-rpc-primitives",
+ "sp-version",
+]
+
+[[package]]
+name = "sc-rpc-server"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "jsonrpc-core",
+ "jsonrpc-http-server",
+ "jsonrpc-pubsub",
+ "jsonrpc-ws-server",
+ "log",
+ "serde",
+ "serde_json",
+ "sp-runtime",
+]
+
+[[package]]
+name = "sc-service"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "derive_more",
+ "exit-future",
+ "futures 0.1.29",
+ "futures 0.3.1",
+ "grafana-data-source",
+ "lazy_static",
+ "log",
+ "parity-multiaddr 0.5.0",
+ "parity-scale-codec",
+ "parking_lot 0.9.0",
+ "sc-application-crypto",
+ "sc-chain-spec",
+ "sc-client",
+ "sc-client-api",
+ "sc-client-db",
+ "sc-executor",
+ "sc-keystore",
+ "sc-network",
+ "sc-offchain",
+ "sc-rpc",
+ "sc-rpc-server",
+ "sc-telemetry",
+ "sc-tracing",
+ "sc-transaction-pool",
+ "serde",
+ "serde_json",
+ "slog",
+ "sp-api",
+ "sp-blockchain",
+ "sp-consensus",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+ "sp-session",
+ "sp-transaction-pool-api",
+ "sp-transaction-pool-runtime-api",
+ "sysinfo",
+ "target_info",
+ "tokio-executor 0.1.9",
+ "tokio-timer",
+ "tracing",
+]
+
+[[package]]
+name = "sc-state-db"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "log",
+ "parity-scale-codec",
+ "parking_lot 0.9.0",
+ "sp-core",
+]
+
+[[package]]
+name = "sc-telemetry"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "bytes",
+ "futures 0.1.29",
+ "futures 0.3.1",
+ "futures-timer 2.0.2",
+ "libp2p",
+ "log",
+ "parking_lot 0.9.0",
+ "rand 0.7.2",
+ "serde",
+ "slog",
+ "slog-async",
+ "slog-json",
+ "slog-scope",
+ "tokio-io 0.1.12",
+ "void",
+]
+
+[[package]]
+name = "sc-tracing"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "erased-serde",
+ "grafana-data-source",
+ "log",
+ "parking_lot 0.9.0",
+ "sc-telemetry",
+ "serde",
+ "serde_json",
+ "slog",
+ "tracing-core",
 ]
 
 [[package]]
 name = "sc-transaction-graph"
 version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
 dependencies = [
  "derive_more",
  "futures 0.3.1",
  "log",
  "parking_lot 0.9.0",
  "serde",
+ "sp-core",
+ "sp-runtime",
  "sp-transaction-pool-api",
- "sr-primitives",
- "substrate-primitives",
 ]
 
 [[package]]
 name = "sc-transaction-pool"
 version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
 dependencies = [
  "derive_more",
  "futures 0.3.1",
  "log",
  "parity-scale-codec",
  "parking_lot 0.9.0",
+ "sc-client-api",
  "sc-transaction-graph",
+ "sp-api",
  "sp-blockchain",
+ "sp-core",
+ "sp-runtime",
  "sp-transaction-pool-api",
  "sp-transaction-pool-runtime-api",
- "sr-api",
- "sr-primitives",
- "substrate-client-api",
- "substrate-primitives",
 ]
 
 [[package]]
@@ -3959,92 +4667,23 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4bf77cb82ba8453b42b6ae1d692e4cdc92f9a47beaf89a847c8be83f4e328ad3"
 
 [[package]]
-name = "sp-blockchain"
+name = "sp-api"
 version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "derive_more",
- "log",
- "lru",
- "parity-scale-codec",
- "parking_lot 0.9.0",
- "sr-primitives",
- "substrate-block-builder-runtime-api",
- "substrate-consensus-common",
- "substrate-state-machine",
-]
-
-[[package]]
-name = "sp-finality-tracker"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
 dependencies = [
  "parity-scale-codec",
- "sr-std",
- "substrate-inherents",
+ "sp-api-proc-macro",
+ "sp-core",
+ "sp-runtime",
+ "sp-state-machine",
+ "sp-std",
+ "sp-version",
 ]
 
 [[package]]
-name = "sp-timestamp"
+name = "sp-api-proc-macro"
 version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "impl-trait-for-tuples",
- "parity-scale-codec",
- "sr-api",
- "sr-primitives",
- "sr-std",
- "substrate-inherents",
-]
-
-[[package]]
-name = "sp-transaction-pool-api"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "derive_more",
- "futures 0.3.1",
- "log",
- "parity-scale-codec",
- "serde",
- "sr-primitives",
- "substrate-primitives",
-]
-
-[[package]]
-name = "sp-transaction-pool-runtime-api"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "sr-api",
- "sr-primitives",
- "substrate-primitives",
-]
-
-[[package]]
-name = "spin"
-version = "0.5.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6e63cff320ae2c57904679ba7cb63280a3dc4613885beafb148ee7bf9aa9042d"
-
-[[package]]
-name = "sr-api"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "parity-scale-codec",
- "sr-api-proc-macro",
- "sr-primitives",
- "sr-std",
- "sr-version",
- "substrate-primitives",
- "substrate-state-machine",
-]
-
-[[package]]
-name = "sr-api-proc-macro"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
 dependencies = [
  "blake2-rfc",
  "proc-macro-crate",
@@ -4054,80 +4693,474 @@ dependencies = [
 ]
 
 [[package]]
-name = "sr-arithmetic"
+name = "sp-arithmetic"
 version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
 dependencies = [
  "integer-sqrt",
  "num-traits",
  "parity-scale-codec",
  "serde",
- "sr-std",
- "substrate-debug-derive",
+ "sp-debug-derive",
+ "sp-std",
 ]
 
 [[package]]
-name = "sr-io"
+name = "sp-authority-discovery"
 version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "parity-scale-codec",
+ "sc-application-crypto",
+ "sp-api",
+ "sp-runtime",
+ "sp-std",
+]
+
+[[package]]
+name = "sp-authorship"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "parity-scale-codec",
+ "sp-inherents",
+ "sp-std",
+]
+
+[[package]]
+name = "sp-block-builder"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "parity-scale-codec",
+ "sp-api",
+ "sp-inherents",
+ "sp-runtime",
+ "sp-std",
+]
+
+[[package]]
+name = "sp-blockchain"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "derive_more",
+ "log",
+ "lru",
+ "parity-scale-codec",
+ "parking_lot 0.9.0",
+ "sp-block-builder",
+ "sp-consensus",
+ "sp-runtime",
+ "sp-state-machine",
+]
+
+[[package]]
+name = "sp-consensus"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "derive_more",
+ "futures 0.3.1",
+ "futures-timer 0.4.0",
+ "libp2p",
+ "log",
+ "parity-scale-codec",
+ "parking_lot 0.9.0",
+ "sp-core",
+ "sp-inherents",
+ "sp-runtime",
+ "sp-std",
+ "sp-version",
+]
+
+[[package]]
+name = "sp-consensus-aura"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "parity-scale-codec",
+ "sc-application-crypto",
+ "sp-api",
+ "sp-inherents",
+ "sp-runtime",
+ "sp-std",
+ "sp-timestamp",
+]
+
+[[package]]
+name = "sp-consensus-babe"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "parity-scale-codec",
+ "sc-application-crypto",
+ "sc-consensus-slots",
+ "schnorrkel",
+ "sp-api",
+ "sp-inherents",
+ "sp-runtime",
+ "sp-std",
+ "sp-timestamp",
+]
+
+[[package]]
+name = "sp-core"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "base58",
+ "blake2-rfc",
+ "byteorder 1.3.2",
+ "ed25519-dalek",
+ "hash-db",
+ "hash256-std-hasher",
+ "hex",
+ "impl-serde",
+ "lazy_static",
+ "libsecp256k1",
+ "log",
+ "num-traits",
+ "parity-scale-codec",
+ "parking_lot 0.9.0",
+ "primitive-types",
+ "rand 0.7.2",
+ "regex",
+ "rustc-hex",
+ "schnorrkel",
+ "serde",
+ "sha2",
+ "sp-core-storage",
+ "sp-debug-derive",
+ "sp-externalities",
+ "sp-runtime-interface",
+ "sp-std",
+ "substrate-bip39",
+ "tiny-bip39",
+ "tiny-keccak",
+ "twox-hash",
+ "wasmi",
+ "zeroize 1.0.0",
+]
+
+[[package]]
+name = "sp-core-storage"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "impl-serde",
+ "serde",
+ "sp-debug-derive",
+ "sp-std",
+]
+
+[[package]]
+name = "sp-debug-derive"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "proc-macro2 1.0.6",
+ "quote 1.0.2",
+ "syn 1.0.9",
+]
+
+[[package]]
+name = "sp-externalities"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "environmental",
+ "sp-core-storage",
+ "sp-std",
+]
+
+[[package]]
+name = "sp-finality-grandpa"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "parity-scale-codec",
+ "sc-application-crypto",
+ "serde",
+ "sp-api",
+ "sp-runtime",
+ "sp-std",
+]
+
+[[package]]
+name = "sp-finality-tracker"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "parity-scale-codec",
+ "sp-inherents",
+ "sp-std",
+]
+
+[[package]]
+name = "sp-inherents"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "derive_more",
+ "parity-scale-codec",
+ "parking_lot 0.9.0",
+ "sp-core",
+ "sp-std",
+]
+
+[[package]]
+name = "sp-io"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
 dependencies = [
  "hash-db",
  "libsecp256k1",
  "log",
  "parity-scale-codec",
- "sr-std",
- "substrate-externalities",
- "substrate-primitives",
- "substrate-runtime-interface",
- "substrate-state-machine",
- "substrate-trie",
+ "sp-core",
+ "sp-externalities",
+ "sp-runtime-interface",
+ "sp-state-machine",
+ "sp-std",
+ "sp-trie",
 ]
 
 [[package]]
-name = "sr-primitives"
+name = "sp-keyring"
 version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "lazy_static",
+ "sp-core",
+ "sp-runtime",
+ "strum",
+]
+
+[[package]]
+name = "sp-offchain"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "sp-api",
+ "sp-runtime",
+]
+
+[[package]]
+name = "sp-panic-handler"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "backtrace",
+ "log",
+]
+
+[[package]]
+name = "sp-phragmen"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "serde",
+ "sp-runtime",
+ "sp-std",
+]
+
+[[package]]
+name = "sp-rpc"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "serde",
+ "sp-core",
+]
+
+[[package]]
+name = "sp-runtime"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
 dependencies = [
  "impl-trait-for-tuples",
  "log",
  "parity-scale-codec",
  "paste",
  "rand 0.7.2",
+ "sc-application-crypto",
  "serde",
- "sr-arithmetic",
- "sr-io",
- "sr-std",
- "substrate-application-crypto",
- "substrate-inherents",
- "substrate-primitives",
+ "sp-arithmetic",
+ "sp-core",
+ "sp-inherents",
+ "sp-io",
+ "sp-std",
 ]
 
 [[package]]
-name = "sr-staking-primitives"
+name = "sp-runtime-interface"
 version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "environmental",
+ "parity-scale-codec",
+ "primitive-types",
+ "sp-externalities",
+ "sp-runtime-interface-proc-macro",
+ "sp-std",
+ "sp-wasm-interface",
+ "static_assertions",
+]
+
+[[package]]
+name = "sp-runtime-interface-proc-macro"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "Inflector",
+ "proc-macro-crate",
+ "proc-macro2 1.0.6",
+ "quote 1.0.2",
+ "syn 1.0.9",
+]
+
+[[package]]
+name = "sp-sandbox"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
 dependencies = [
  "parity-scale-codec",
- "sr-primitives",
- "sr-std",
+ "sp-core",
+ "sp-io",
+ "sp-std",
 ]
 
 [[package]]
-name = "sr-std"
+name = "sp-serializer"
 version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "serde",
+ "serde_json",
+]
 
 [[package]]
-name = "sr-version"
+name = "sp-session"
 version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "sp-api",
+ "sp-runtime",
+ "sp-std",
+]
+
+[[package]]
+name = "sp-staking"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "parity-scale-codec",
+ "sp-runtime",
+ "sp-std",
+]
+
+[[package]]
+name = "sp-state-machine"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "hash-db",
+ "log",
+ "num-traits",
+ "parity-scale-codec",
+ "parking_lot 0.9.0",
+ "rand 0.7.2",
+ "sp-core",
+ "sp-externalities",
+ "sp-panic-handler",
+ "sp-trie",
+ "trie-db",
+ "trie-root",
+]
+
+[[package]]
+name = "sp-std"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+
+[[package]]
+name = "sp-timestamp"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "impl-trait-for-tuples",
+ "parity-scale-codec",
+ "sp-api",
+ "sp-inherents",
+ "sp-runtime",
+ "sp-std",
+]
+
+[[package]]
+name = "sp-transaction-pool-api"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "derive_more",
+ "futures 0.3.1",
+ "log",
+ "parity-scale-codec",
+ "serde",
+ "sp-core",
+ "sp-runtime",
+]
+
+[[package]]
+name = "sp-transaction-pool-runtime-api"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "sp-api",
+ "sp-core",
+ "sp-runtime",
+]
+
+[[package]]
+name = "sp-trie"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "hash-db",
+ "memory-db",
+ "parity-scale-codec",
+ "sp-core",
+ "sp-std",
+ "trie-db",
+ "trie-root",
+]
+
+[[package]]
+name = "sp-version"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
 dependencies = [
  "impl-serde",
  "parity-scale-codec",
  "serde",
- "sr-primitives",
- "sr-std",
+ "sp-runtime",
+ "sp-std",
 ]
+
+[[package]]
+name = "sp-wasm-interface"
+version = "2.0.0"
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
+dependencies = [
+ "impl-trait-for-tuples",
+ "wasmi",
+]
+
+[[package]]
+name = "spin"
+version = "0.5.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6e63cff320ae2c57904679ba7cb63280a3dc4613885beafb148ee7bf9aa9042d"
 
 [[package]]
 name = "stable_deref_trait"
@@ -4210,39 +5243,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "substrate-application-crypto"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "parity-scale-codec",
- "serde",
- "sr-io",
- "sr-std",
- "substrate-primitives",
-]
-
-[[package]]
-name = "substrate-basic-authorship"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "futures 0.3.1",
- "log",
- "parity-scale-codec",
- "sp-blockchain",
- "sp-transaction-pool-api",
- "sr-primitives",
- "substrate-block-builder",
- "substrate-client",
- "substrate-client-api",
- "substrate-consensus-common",
- "substrate-inherents",
- "substrate-primitives",
- "substrate-telemetry",
- "tokio-executor 0.2.0-alpha.6",
-]
-
-[[package]]
 name = "substrate-bip39"
 version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4255,805 +5255,14 @@ dependencies = [
 ]
 
 [[package]]
-name = "substrate-block-builder"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "parity-scale-codec",
- "sp-blockchain",
- "sr-api",
- "sr-primitives",
- "substrate-block-builder-runtime-api",
- "substrate-primitives",
- "substrate-state-machine",
-]
-
-[[package]]
-name = "substrate-block-builder-runtime-api"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "parity-scale-codec",
- "sr-api",
- "sr-primitives",
- "sr-std",
- "substrate-inherents",
-]
-
-[[package]]
 name = "substrate-build-script-utils"
 version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-
-[[package]]
-name = "substrate-chain-spec"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "impl-trait-for-tuples",
- "serde",
- "serde_json",
- "sr-primitives",
- "substrate-chain-spec-derive",
- "substrate-network",
- "substrate-primitives",
- "substrate-telemetry",
-]
-
-[[package]]
-name = "substrate-chain-spec-derive"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "proc-macro-crate",
- "proc-macro2 1.0.6",
- "quote 1.0.2",
- "syn 1.0.9",
-]
-
-[[package]]
-name = "substrate-cli"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "ansi_term 0.12.1",
- "app_dirs",
- "atty",
- "clap",
- "derive_more",
- "env_logger 0.7.1",
- "fdlimit",
- "futures 0.3.1",
- "futures01",
- "lazy_static",
- "log",
- "names",
- "regex",
- "rpassword",
- "serde_json",
- "sp-blockchain",
- "sr-primitives",
- "structopt",
- "substrate-client-api",
- "substrate-keyring",
- "substrate-network",
- "substrate-panic-handler",
- "substrate-primitives",
- "substrate-service",
- "substrate-state-machine",
- "substrate-telemetry",
- "substrate-tracing",
- "time",
- "tokio",
-]
-
-[[package]]
-name = "substrate-client"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "derive_more",
- "fnv",
- "futures 0.3.1",
- "hash-db",
- "hex-literal",
- "kvdb",
- "log",
- "parity-scale-codec",
- "parking_lot 0.9.0",
- "sp-blockchain",
- "sr-api",
- "sr-primitives",
- "sr-std",
- "sr-version",
- "substrate-block-builder",
- "substrate-client-api",
- "substrate-consensus-common",
- "substrate-executor",
- "substrate-externalities",
- "substrate-inherents",
- "substrate-keyring",
- "substrate-primitives",
- "substrate-state-machine",
- "substrate-telemetry",
- "substrate-trie",
- "tracing",
-]
-
-[[package]]
-name = "substrate-client-api"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "derive_more",
- "fnv",
- "futures 0.3.1",
- "hash-db",
- "hex-literal",
- "kvdb",
- "log",
- "parity-scale-codec",
- "parking_lot 0.9.0",
- "sp-blockchain",
- "sp-transaction-pool-api",
- "sr-api",
- "sr-primitives",
- "sr-std",
- "sr-version",
- "substrate-block-builder",
- "substrate-consensus-common",
- "substrate-executor",
- "substrate-externalities",
- "substrate-inherents",
- "substrate-keyring",
- "substrate-primitives",
- "substrate-state-machine",
- "substrate-telemetry",
- "substrate-trie",
-]
-
-[[package]]
-name = "substrate-client-db"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "hash-db",
- "kvdb",
- "kvdb-memorydb",
- "kvdb-rocksdb",
- "linked-hash-map",
- "log",
- "parity-scale-codec",
- "parking_lot 0.9.0",
- "sp-blockchain",
- "sr-primitives",
- "substrate-client",
- "substrate-client-api",
- "substrate-consensus-common",
- "substrate-executor",
- "substrate-primitives",
- "substrate-state-db",
- "substrate-state-machine",
- "substrate-trie",
-]
-
-[[package]]
-name = "substrate-consensus-aura"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "derive_more",
- "futures 0.1.29",
- "futures 0.3.1",
- "futures-timer 0.4.0",
- "log",
- "parity-scale-codec",
- "parking_lot 0.9.0",
- "sp-blockchain",
- "sp-timestamp",
- "sr-api",
- "sr-io",
- "sr-primitives",
- "sr-version",
- "substrate-application-crypto",
- "substrate-block-builder-runtime-api",
- "substrate-client",
- "substrate-client-api",
- "substrate-consensus-aura-primitives",
- "substrate-consensus-common",
- "substrate-consensus-slots",
- "substrate-inherents",
- "substrate-keystore",
- "substrate-primitives",
- "substrate-telemetry",
-]
-
-[[package]]
-name = "substrate-consensus-aura-primitives"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "parity-scale-codec",
- "sp-timestamp",
- "sr-api",
- "sr-primitives",
- "sr-std",
- "substrate-application-crypto",
- "substrate-inherents",
-]
-
-[[package]]
-name = "substrate-consensus-babe-primitives"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "parity-scale-codec",
- "schnorrkel",
- "sp-timestamp",
- "sr-api",
- "sr-primitives",
- "sr-std",
- "substrate-application-crypto",
- "substrate-consensus-slots",
- "substrate-inherents",
-]
-
-[[package]]
-name = "substrate-consensus-common"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "derive_more",
- "futures 0.3.1",
- "futures-timer 0.4.0",
- "libp2p",
- "log",
- "parity-scale-codec",
- "parking_lot 0.9.0",
- "sr-primitives",
- "sr-std",
- "sr-version",
- "substrate-inherents",
- "substrate-primitives",
-]
-
-[[package]]
-name = "substrate-consensus-slots"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "futures 0.3.1",
- "futures-timer 2.0.2",
- "log",
- "parity-scale-codec",
- "parking_lot 0.9.0",
- "sp-blockchain",
- "sr-primitives",
- "substrate-client-api",
- "substrate-consensus-common",
- "substrate-inherents",
- "substrate-primitives",
- "substrate-telemetry",
-]
-
-[[package]]
-name = "substrate-debug-derive"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "proc-macro2 1.0.6",
- "quote 1.0.2",
- "syn 1.0.9",
-]
-
-[[package]]
-name = "substrate-executor"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "derive_more",
- "lazy_static",
- "libsecp256k1",
- "log",
- "parity-scale-codec",
- "parity-wasm",
- "parking_lot 0.9.0",
- "sr-io",
- "sr-version",
- "substrate-externalities",
- "substrate-panic-handler",
- "substrate-primitives",
- "substrate-runtime-interface",
- "substrate-serializer",
- "substrate-trie",
- "substrate-wasm-interface",
- "wasmi",
-]
-
-[[package]]
-name = "substrate-externalities"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "environmental",
- "sr-std",
- "substrate-primitives-storage",
-]
-
-[[package]]
-name = "substrate-finality-grandpa"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "finality-grandpa",
- "fork-tree",
- "futures 0.1.29",
- "futures 0.3.1",
- "log",
- "parity-scale-codec",
- "parking_lot 0.9.0",
- "rand 0.7.2",
- "serde_json",
- "sp-blockchain",
- "sp-finality-tracker",
- "sr-primitives",
- "substrate-client",
- "substrate-client-api",
- "substrate-consensus-common",
- "substrate-finality-grandpa-primitives",
- "substrate-inherents",
- "substrate-keystore",
- "substrate-network",
- "substrate-primitives",
- "substrate-telemetry",
- "tokio-executor 0.1.9",
- "tokio-timer",
-]
-
-[[package]]
-name = "substrate-finality-grandpa-primitives"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "parity-scale-codec",
- "serde",
- "sr-api",
- "sr-primitives",
- "sr-std",
- "substrate-application-crypto",
-]
-
-[[package]]
-name = "substrate-inherents"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "derive_more",
- "parity-scale-codec",
- "parking_lot 0.9.0",
- "sr-std",
- "substrate-primitives",
-]
-
-[[package]]
-name = "substrate-keyring"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "lazy_static",
- "sr-primitives",
- "strum",
- "substrate-primitives",
-]
-
-[[package]]
-name = "substrate-keystore"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "derive_more",
- "hex",
- "parking_lot 0.9.0",
- "rand 0.7.2",
- "serde_json",
- "substrate-application-crypto",
- "substrate-primitives",
- "subtle 2.2.2",
-]
-
-[[package]]
-name = "substrate-network"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "bitflags",
- "bytes",
- "derive_more",
- "either",
- "erased-serde",
- "fnv",
- "fork-tree",
- "futures 0.1.29",
- "futures 0.3.1",
- "futures-timer 0.4.0",
- "libp2p",
- "linked-hash-map",
- "linked_hash_set",
- "log",
- "lru",
- "parity-scale-codec",
- "parking_lot 0.9.0",
- "rand 0.7.2",
- "rustc-hex",
- "serde",
- "serde_json",
- "slog",
- "slog_derive",
- "smallvec 0.6.13",
- "sp-blockchain",
- "sr-arithmetic",
- "sr-primitives",
- "substrate-block-builder",
- "substrate-client",
- "substrate-client-api",
- "substrate-consensus-babe-primitives",
- "substrate-consensus-common",
- "substrate-peerset",
- "substrate-primitives",
- "tokio-io 0.1.12",
- "unsigned-varint",
- "void",
- "zeroize 1.0.0",
-]
-
-[[package]]
-name = "substrate-offchain"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "bytes",
- "fnv",
- "futures 0.1.29",
- "futures 0.3.1",
- "futures-timer 2.0.2",
- "hyper 0.12.35",
- "hyper-rustls",
- "log",
- "num_cpus",
- "parity-scale-codec",
- "parking_lot 0.9.0",
- "rand 0.7.2",
- "sr-api",
- "sr-primitives",
- "substrate-client-api",
- "substrate-keystore",
- "substrate-network",
- "substrate-offchain-primitives",
- "substrate-primitives",
- "threadpool",
-]
-
-[[package]]
-name = "substrate-offchain-primitives"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "sr-api",
- "sr-primitives",
-]
-
-[[package]]
-name = "substrate-panic-handler"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "backtrace",
- "log",
-]
-
-[[package]]
-name = "substrate-peerset"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "futures 0.3.1",
- "libp2p",
- "log",
- "serde_json",
-]
-
-[[package]]
-name = "substrate-primitives"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "base58",
- "blake2-rfc",
- "byteorder 1.3.2",
- "ed25519-dalek",
- "hash-db",
- "hash256-std-hasher",
- "hex",
- "impl-serde",
- "lazy_static",
- "libsecp256k1",
- "log",
- "num-traits",
- "parity-scale-codec",
- "parking_lot 0.9.0",
- "primitive-types",
- "rand 0.7.2",
- "regex",
- "rustc-hex",
- "schnorrkel",
- "serde",
- "sha2",
- "sr-std",
- "substrate-bip39",
- "substrate-debug-derive",
- "substrate-externalities",
- "substrate-primitives-storage",
- "substrate-runtime-interface",
- "tiny-bip39",
- "tiny-keccak",
- "twox-hash",
- "wasmi",
- "zeroize 1.0.0",
-]
-
-[[package]]
-name = "substrate-primitives-storage"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "impl-serde",
- "serde",
- "sr-std",
- "substrate-debug-derive",
-]
-
-[[package]]
-name = "substrate-rpc"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "futures 0.3.1",
- "hash-db",
- "jsonrpc-core",
- "jsonrpc-pubsub",
- "log",
- "parity-scale-codec",
- "parking_lot 0.9.0",
- "sc-rpc-api",
- "serde_json",
- "sp-blockchain",
- "sp-transaction-pool-api",
- "sr-api",
- "sr-primitives",
- "sr-version",
- "substrate-client",
- "substrate-client-api",
- "substrate-executor",
- "substrate-keystore",
- "substrate-primitives",
- "substrate-rpc-primitives",
- "substrate-session",
- "substrate-state-machine",
-]
-
-[[package]]
-name = "substrate-rpc-primitives"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "serde",
- "substrate-primitives",
-]
-
-[[package]]
-name = "substrate-rpc-servers"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "jsonrpc-core",
- "jsonrpc-http-server",
- "jsonrpc-pubsub",
- "jsonrpc-ws-server",
- "log",
- "serde",
- "serde_json",
- "sr-primitives",
-]
-
-[[package]]
-name = "substrate-runtime-interface"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "environmental",
- "parity-scale-codec",
- "primitive-types",
- "sr-std",
- "static_assertions",
- "substrate-externalities",
- "substrate-runtime-interface-proc-macro",
- "substrate-wasm-interface",
-]
-
-[[package]]
-name = "substrate-runtime-interface-proc-macro"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "Inflector",
- "proc-macro-crate",
- "proc-macro2 1.0.6",
- "quote 1.0.2",
- "syn 1.0.9",
-]
-
-[[package]]
-name = "substrate-serializer"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "substrate-service"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "derive_more",
- "exit-future",
- "futures 0.1.29",
- "futures 0.3.1",
- "grafana-data-source",
- "lazy_static",
- "log",
- "parity-multiaddr 0.5.0",
- "parity-scale-codec",
- "parking_lot 0.9.0",
- "sc-transaction-pool",
- "serde",
- "serde_json",
- "slog",
- "sp-blockchain",
- "sp-transaction-pool-api",
- "sp-transaction-pool-runtime-api",
- "sr-api",
- "sr-io",
- "sr-primitives",
- "substrate-application-crypto",
- "substrate-chain-spec",
- "substrate-client",
- "substrate-client-api",
- "substrate-client-db",
- "substrate-consensus-common",
- "substrate-executor",
- "substrate-keystore",
- "substrate-network",
- "substrate-offchain",
- "substrate-primitives",
- "substrate-rpc",
- "substrate-rpc-servers",
- "substrate-session",
- "substrate-telemetry",
- "substrate-tracing",
- "sysinfo",
- "target_info",
- "tokio-executor 0.1.9",
- "tokio-timer",
- "tracing",
-]
-
-[[package]]
-name = "substrate-session"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "sr-api",
- "sr-primitives",
- "sr-std",
-]
-
-[[package]]
-name = "substrate-state-db"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "log",
- "parity-scale-codec",
- "parking_lot 0.9.0",
- "substrate-primitives",
-]
-
-[[package]]
-name = "substrate-state-machine"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "hash-db",
- "log",
- "num-traits",
- "parity-scale-codec",
- "parking_lot 0.9.0",
- "rand 0.7.2",
- "substrate-externalities",
- "substrate-panic-handler",
- "substrate-primitives",
- "substrate-trie",
- "trie-db",
- "trie-root",
-]
-
-[[package]]
-name = "substrate-telemetry"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "bytes",
- "futures 0.1.29",
- "futures 0.3.1",
- "futures-timer 2.0.2",
- "libp2p",
- "log",
- "parking_lot 0.9.0",
- "rand 0.7.2",
- "serde",
- "slog",
- "slog-async",
- "slog-json",
- "slog-scope",
- "tokio-io 0.1.12",
- "void",
-]
-
-[[package]]
-name = "substrate-tracing"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "erased-serde",
- "grafana-data-source",
- "log",
- "parking_lot 0.9.0",
- "serde",
- "serde_json",
- "slog",
- "substrate-telemetry",
- "tracing-core",
-]
-
-[[package]]
-name = "substrate-trie"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "hash-db",
- "memory-db",
- "parity-scale-codec",
- "sr-std",
- "substrate-primitives",
- "trie-db",
- "trie-root",
-]
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
 
 [[package]]
 name = "substrate-wasm-builder-runner"
 version = "1.0.4"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-
-[[package]]
-name = "substrate-wasm-interface"
-version = "2.0.0"
-source = "git+https://github.com/blockxlabs/substrate#b41085293e28b699702519879a73349a1ddcc439"
-dependencies = [
- "impl-trait-for-tuples",
- "wasmi",
-]
+source = "git+https://github.com/blockxlabs/substrate#fc6914cdb8c322cea8a4591bbf9566dd23bfd143"
 
 [[package]]
 name = "subtle"

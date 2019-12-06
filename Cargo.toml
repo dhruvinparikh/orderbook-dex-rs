@@ -41,6 +41,9 @@ substrate-client = { package="sc-client", git = "https://github.com/blockxlabs/s
 runtime = { package = "dna-runtime", path = "node/runtime" }
 sp-runtime = {git = "https://github.com/blockxlabs/substrate", branch = "master" }
 basic-authorship = { package = "sc-basic-authority", git = "https://github.com/blockxlabs/substrate", branch = "master" }
+babe = { package = "pallet-babe", git = "https://github.com/blockxlabs/substrate", default-features = false }
+babe-primitives = { package = "sp-consensus-babe", git = "https://github.com/blockxlabs/substrate", default-features = false }
+im-online = { package = "pallet-im-online", git = "https://github.com/blockxlabs/substrate" }
 
 [build-dependencies]
 vergen = "3.0.4"

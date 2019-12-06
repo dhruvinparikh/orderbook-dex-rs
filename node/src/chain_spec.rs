@@ -1,9 +1,10 @@
 use crate::fixtures::*;
-use aura_primitives::sr25519::AuthorityId as AuraId;
+use babe_primitives::AuthorityId as BabeId;
+use im_online::sr25519::AuthorityId as ImOnlineId;
 use grandpa_primitives::AuthorityId as GrandpaId;
 use primitives::{sr25519, Pair, Public};
 use runtime::{
-    AccountId, AuraConfig, BalancesConfig, GenesisConfig, GrandpaConfig, IndicesConfig, Signature,
+    AccountId, BabeConfig, BalancesConfig, GenesisConfig, GrandpaConfig, IndicesConfig, Signature,
     SudoConfig, SystemConfig,
     WASM_BINARY,
 };
@@ -58,9 +59,11 @@ where
     AccountPublic::from(get_from_seed::<TPublic>(seed)).into_account()
 }
 
-/// Helper function to generate an authority key for Aura
-pub fn get_authority_keys_from_seed(s: &str) -> (AuraId, GrandpaId) {
-    (get_from_seed::<AuraId>(s), get_from_seed::<GrandpaId>(s))
+/// Helper function to generate an authority key for Babe
+pub fn get_authority_keys_from_seed(s: &str) -> (BabeId,ImOnlineId, GrandpaId) {
+    (get_from_seed::<BabeId>(s),
+    get_from_seed::<ImOnlineId>(s),
+    get_from_seed::<GrandpaId>(s))
 }
 
 impl Alternative {
@@ -165,7 +168,7 @@ impl Alternative {
 }
 
 fn testnet_genesis(
-    initial_authorities: Vec<(AuraId, GrandpaId)>,
+    initial_authorities: Vec<(BabeId,ImOnlineId, GrandpaId)>,
     root_key: AccountId,
     endowed_accounts: Vec<AccountId>,
     _enable_println: bool,
@@ -187,7 +190,7 @@ fn testnet_genesis(
             vesting: vec![],
         }),
         sudo: Some(SudoConfig { key: root_key }),
-        aura: Some(AuraConfig {
+        babe: Some(BabeConfig {
             authorities: initial_authorities.iter().map(|x| (x.0.clone())).collect(),
         }),
         grandpa: Some(GrandpaConfig {

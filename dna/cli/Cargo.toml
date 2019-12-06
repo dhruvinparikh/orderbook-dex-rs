@@ -3,10 +3,11 @@ name = "dna-cli"
 version = "0.1.0"
 authors = ["BlockX Labs <info@blockxlabs.com>"]
 edition = "2018"
-default-run = "dna"
+default-run = "dnachain"
+build = "build.rs"
 
 [[bin]]
-name = "dna"
+name = "dnachain"
 path = "bin/main.rs"
 required-features = ["cli"]
 
@@ -63,10 +64,10 @@ sr-authority-discovery = { package = "paint-authority-discovery", git = "https:/
 
 
 # node-specific dependencies
-node-runtime = { path = "../runtime" }
-node-rpc = { path = "../rpc" }
-node-primitives = { path = "../primitives" }
-node-executor = { path = "../executor" }
+#node-runtime = { path = "../runtime",  package="dna-runtime" }
+#node-rpc = { path = "../rpc", package="dna-rpc" }
+#node-primitives = { path = "../primitives", package="dna-primitives" }
+#node-executor = { path = "../executor", package="dna-executor" }
 
 # CLI-specific dependencies
 tokio = { version = "0.1.22", optional = true }

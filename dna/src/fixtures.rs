@@ -1,3 +1,15 @@
+// Copyright 2019 by Trinkler Software AG (Switzerland).
+// This file is part of the Katal Chain.
+//
+// Katal Chain is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version <http://www.gnu.org/licenses/>.
+//
+// Katal Chain is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
 
 use aura_primitives::sr25519::AuthorityId as AuraId;
 use grandpa_primitives::AuthorityId as GrandpaId;
@@ -11,9 +23,9 @@ pub type Properties = json::map::Map<String, json::Value>;
 
 pub fn get_staging_bootnodes() -> Vec<String> {
     return vec![
-        "/dns4/bootnode-01.dnachain.com/tcp/30333/p2p/bootnodeaddress0"
+        "/dns4/bootnode-01.katalchain.com/tcp/30333/p2p/QmSosxjPRbhCPk4rD9NPTnfmEZ3fkDK3rj9p9CU5HXvFby"
             .to_string(),
-        "/dns4/bootnode-02.dnachain.com/tcp/30333/p2p/bootnodeaddress1"
+        "/dns4/bootnode-02.katalchain.com/tcp/30333/p2p/QmbAVJpXpPuRhJazWm6d9qSK7vGHhH5y5uJHcY4jtuW7Pd"
             .to_string(),
     ];
 }

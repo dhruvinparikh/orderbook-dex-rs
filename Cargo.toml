@@ -1,7 +1,7 @@
 [package]
-name = "dna-chain"
-version = "0.0.1"
-authors = ["BlockxLabs <info@blockxlabs.com>"]
+name = "dnachain"
+version = "0.1.0"
+authors = ["BlockX Labs <info@blockxlabs.com>"]
 build = "dna/build.rs"
 edition = "2018"
 
@@ -35,7 +35,7 @@ network = { package = "sc-network", git = "https://github.com/blockxlabs/substra
 aura = { package = "sc-consensus-aura", git = "https://github.com/blockxlabs/substrate", branch = "master" }
 aura-primitives = { package = "sp-consensus-aura", git = "https://github.com/blockxlabs/substrate", branch = "master" }
 consensus-common = { package = "sp-consensus", git = "https://github.com/blockxlabs/substrate", branch = "master" }
-grandpa = { package = "pallet-grandpa", git = "https://github.com/blockxlabs/substrate", branch = "master" }
+grandpa = { package = "sc-finality-grandpa", git = "https://github.com/blockxlabs/substrate", branch = "master" }
 grandpa-primitives = { package = "sp-finality-grandpa", git = "https://github.com/blockxlabs/substrate", branch = "master" }
 sc-client = {  git = "https://github.com/blockxlabs/substrate", branch = "master" }
 runtime = { package = "dna-runtime", path = "dna/runtime" }

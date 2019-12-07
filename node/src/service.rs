@@ -1,6 +1,5 @@
 //! Service and ServiceFactory implementation. Specialized wrapper over substrate service.
 
-use aura_primitives::sr25519::AuthorityPair as AuraPair;
 use basic_authorship;
 use grandpa::{self, FinalityProofProvider as GrandpaFinalityProofProvider};
 use inherents::InherentDataProviders;
@@ -63,17 +62,24 @@ macro_rules! new_full_start {
                     select_chain,
                 )?;
 
-            let import_queue = aura::import_queue::<_, _, AuraPair, _>(
-                aura::SlotDuration::get_or_compute(&*client)?,
-                Box::new(grandpa_block_import.clone()),
-                Some(Box::new(grandpa_block_import.clone())),
-                None,
-                client,
-                inherent_data_providers.clone(),
-                Some(transaction_pool),
-            )?;
+                let (babe_block_import, babe_link) = babe::block_import(
+                    babe::Config::get_or_compute(&*client)?,
+                    grandpa_block_import,
+                    client.clone(),
+                    client.clone(),
+                )?;
 
-            import_setup = Some((grandpa_block_import, grandpa_link));
+                let import_queue = babe::import_queue(
+                    babe_link.clone(),
+                    babe_block_import.clone(),
+                    Some(Box::new(justification_import)),
+                    None,
+                    client.clone(),
+                    client,
+                    inherent_data_providers.clone(),
+                )?;
+
+                import_setup = Some((babe_block_import, grandpa_link, babe_link));
 
             Ok(import_queue)
         })?;
@@ -98,9 +104,8 @@ pub fn new_full<C: Send + Default + 'static>(
 
     let (builder, mut import_setup, inherent_data_providers) = new_full_start!(config);
 
-    let (block_import, grandpa_link) = import_setup.take().expect(
-        "Link Half and Block Import are present for Full Services or setup failed before. qed",
-    );
+    let (block_import, grandpa_link, babe_link) = import_setup.take()
+                .expect("Link Half and Block Import are present for Full Services or setup failed before. qed");
 
     let service = builder
         .with_network_protocol(|_| Ok(NodeProtocol::new()))?
@@ -120,25 +125,21 @@ pub fn new_full<C: Send + Default + 'static>(
             .select_chain()
             .ok_or(ServiceError::SelectChainRequired)?;
 
-        let can_author_with =
-            consensus_common::CanAuthorWithNativeVersion::new(client.executor().clone());
+        let babe_config = babe::BabeParams {
+                keystore: service.keystore(),
+                client: service.client(),
+                select_chain,
+                env: proposer,
+                block_import,
+                sync_oracle: service.network(),
+                inherent_data_providers: inherent_data_providers.clone(),
+                force_authoring,
+                babe_link,
+            };
 
-        let aura = aura::start_aura::<_, _, _, _, _, AuraPair, _, _, _, _>(
-            aura::SlotDuration::get_or_compute(&*client)?,
-            client,
-            select_chain,
-            block_import,
-            proposer,
-            service.network(),
-            inherent_data_providers.clone(),
-            force_authoring,
-            service.keystore(),
-            can_author_with,
-        )?;
+            let babe = babe::start_babe(babe_config)?;
+            service.spawn_essential_task(babe);
 
-        // the AURA authoring task is considered essential, i.e. if it
-        // fails we take down the service with it.
-        service.spawn_essential_task(aura);
     }
 
     // if the node isn't actively participating in consensus then it doesn't
@@ -235,17 +236,24 @@ pub fn new_light<C: Send + Default + 'static>(
                 let finality_proof_request_builder =
                     finality_proof_import.create_finality_proof_request_builder();
 
-                let import_queue = aura::import_queue::<_, _, AuraPair, ()>(
-                    aura::SlotDuration::get_or_compute(&*client)?,
-                    Box::new(grandpa_block_import),
-                    None,
-                    Some(Box::new(finality_proof_import)),
-                    client,
-                    inherent_data_providers.clone(),
-                    None,
-                )?;
-
-                Ok((import_queue, finality_proof_request_builder))
+                    let (babe_block_import, babe_link) = babe::block_import(
+                        babe::Config::get_or_compute(&*client)?,
+                        grandpa_block_import,
+                        client.clone(),
+                        client.clone(),
+                    )?;
+        
+                    let import_queue = babe::import_queue(
+                        babe_link,
+                        babe_block_import,
+                        None,
+                        Some(Box::new(finality_proof_import)),
+                        client.clone(),
+                        client,
+                        inherent_data_providers.clone(),
+                    )?;
+        
+                    Ok((import_queue, finality_proof_request_builder))
             },
         )?
         .with_network_protocol(|_| Ok(NodeProtocol::new()))?

@@ -4,10 +4,13 @@
 // `construct_runtime!` does a lot of recursion and requires us to increase the limit to 256.
 #![recursion_limit = "256"]
 
+pub mod constants;
+pub mod types;
+pub mod impls;
+
 // Make the WASM binary available.
 #[cfg(feature = "std")]
 include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
-use babe_primitives::AuthorityId as BabeId;
 use im_online::sr25519::{AuthorityId as ImOnlineId};
 use grandpa::fg_primitives;
 use grandpa::AuthorityList as GrandpaAuthorityList;
@@ -79,7 +82,7 @@ pub mod opaque {
 
     impl_opaque_keys! {
         pub struct SessionKeys {
-            pub babe: babe,
+            pub babe: Babe,
             pub im_online: ImOnline,
             pub grandpa: Grandpa,
         }
@@ -160,10 +163,6 @@ impl system::Trait for Runtime {
     type Version = Version;
 }
 
-impl babe::Trait for Runtime {
-    type AuthorityId = BabeId;
-}
-
 impl grandpa::Trait for Runtime {
     type Event = Event;
 }
@@ -189,6 +188,17 @@ impl timestamp::Trait for Runtime {
     type Moment = u64;
     type OnTimestampSet = Babe;
     type MinimumPeriod = MinimumPeriod;
+}
+
+parameter_types! {
+    pub const EpochDuration: u64 = EPOCH_DURATION_IN_SLOTS;
+    pub const ExpectedBlockTime: Moment = MILLISECS_PER_BLOCK;
+}
+
+impl babe::Trait for Runtime {
+    type EpochDuration = EpochDuration;
+    type ExpectedBlockTime = ExpectedBlockTime;
+    type EpochChangeTrigger = babe::ExternalTrigger;
 }
 
 parameter_types! {
@@ -236,6 +246,7 @@ impl im_online::Trait for Runtime {
     type Call = Call;
     type Event = Event;
     type AuthorityId = ImOnlineId;
+
 }
 
 // impl contracts::Trait for Runtime {
@@ -254,19 +265,16 @@ construct_runtime!(
 	{
 		System: system::{Module, Call, Storage, Config, Event},
 		Timestamp: timestamp::{Module, Call, Storage, Inherent},
-        // Aura: aura::{Module, Config<T>, Inherent(Timestamp)},
 		Grandpa: grandpa::{Module, Call, Storage, Config, Event},
 		Indices: indices,
 		Balances: balances::{default, Error},
 		TransactionPayment: transaction_payment::{Module, Storage},
         Sudo: sudo,
         RandomnessCollectiveFlip: randomness_collective_flip::{Module, Call, Storage},
+        ImOnline: im_online::{Module, Call, Storage, Event<T>, ValidateUnsigned, Config<T>},
         // Add Babe here
         Babe: babe::{Module, Call, Storage, Config, Inherent(Timestamp)},
-        // Custom modules
-        // Oracle: oracle::{Module, Call, Storage},
-        // Assets: assets::{Module, Call, Storage},
-        // Contracts: contracts::{Module, Call, Storage},
+        // Custom Modules
         Assets: assets::{Module, Call, Storage},
 	}
 );
@@ -357,13 +365,21 @@ impl_runtime_apis! {
         }
     }
 
-    impl babe_primitives::BabeApi<Block, BabeId> for Runtime {
-        fn slot_duration() -> u64 {
-            Babe::slot_duration()
-        }
-
-        fn authorities() -> Vec<BabeId> {
-            Babe::authorities()
+    impl babe_primitives::BabeApi<Block> for Runtime {
+        fn configuration() -> babe_primitives::BabeConfiguration {
+            // The choice of `c` parameter (where `1 - c` represents the
+            // probability of a slot being empty), is done in accordance to the
+            // slot duration and expected target block time, for safely
+            // resisting network delays of maximum two seconds.
+            // <https://research.web3.foundation/en/latest/polkadot/BABE/Babe/#6-practical-results>
+            babe_primitives::BabeConfiguration {
+                slot_duration: Babe::slot_duration(),
+                epoch_length: EpochDuration::get(),
+                c: PRIMARY_PROBABILITY,
+                genesis_authorities: Babe::authorities(),
+                randomness: Babe::randomness(),
+                secondary_slots: true,
+            }
         }
     }
 

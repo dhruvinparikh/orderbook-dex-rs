@@ -5,8 +5,6 @@ authors = ["Trinkler Software <company@trinkler.software>"]
 edition = "2018"
 
 [dependencies]
-aura = { package = "pallet-aura", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
-aura-primitives = { package = "sp-consensus-aura", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
 balances = { package = "pallet-balances", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
 block-builder-api = { package = "sp-block-builder", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
 codec = { package = "parity-scale-codec", version = "1.0.0", default-features = false, features = ["derive"] }
@@ -42,8 +40,6 @@ wasm-builder-runner = { package = "substrate-wasm-builder-runner", git = "https:
 [features]
 default = ["std"]
 std = [
-	"aura-primitives/std",
-	"aura/std",
 	"babe-primitives/std",
     "babe/std",
 	"balances/std",

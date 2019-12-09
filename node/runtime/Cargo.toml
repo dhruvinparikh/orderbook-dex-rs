@@ -6,6 +6,7 @@ edition = "2018"
 build="build.rs"
 
 [dependencies]
+clear_on_drop = { version = "0.2.3", features = ["no_cc"] }
 balances = { package = "pallet-balances", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
 block-builder-api = { package = "sp-block-builder", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
 codec = { package = "parity-scale-codec", version = "1.0.0", default-features = false, features = ["derive"] }
@@ -32,7 +33,7 @@ txpool-runtime-api = { package = "sp-transaction-pool-api", git = "https://githu
 version = { package = "sp-version", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
 assets = { package = "dna-assets", path = "../../dna/assets", default-features = false }
 babe = { package = "pallet-babe", git = "https://github.com/blockxlabs/substrate", default-features = false }
-babe-primitives = { package = "sp-consensus-babe", git = "https://github.com/blockxlabs/substrate", default-features = false }
+babe-primitives = { package = "sp-consensus-babe", git = "https://github.com/paritytech/substrate", default-features = false }
 im-online = { package = "pallet-im-online", git = "https://github.com/blockxlabs/substrate" }
 
 [build-dependencies]

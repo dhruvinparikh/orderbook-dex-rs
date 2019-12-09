@@ -35,7 +35,7 @@ pub enum Alternative {
     // "properties": {
     //     "ss58Format": 7,
     //     "tokenDecimals": 9,
-    //     "tokenSymbol": "XTL"
+    //     "tokenSymbol": "DNA"
     //   },
     StagingTestnet,
     /// Hosted testnet with unified genesis block and non-standard Validators.

@@ -22,5 +22,4 @@ rls*.log
 *.rej
 **/wip/*.stderr
 .local
-Cargo.lock
-/node/runtime/Cargo.lock
+*/Cargo.locknode/runtime/Cargo.lock

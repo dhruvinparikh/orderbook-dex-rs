@@ -1,8 +1,9 @@
 [package]
 name = "dna-runtime"
 version = "0.0.1"
-authors = ["Trinkler Software <company@trinkler.software>"]
+authors = ["BlocKX Labs <info@blockxlabs.info>"]
 edition = "2018"
+build="build.rs"
 
 [dependencies]
 balances = { package = "pallet-balances", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }

@@ -33,7 +33,7 @@ txpool = { package = "sc-transaction-pool", git = "https://github.com/blockxlabs
 txpool-api = { package = "sp-transaction-pool-api", git = "https://github.com/blockxlabs/substrate", branch = "master" }
 network = { package = "sc-network", git = "https://github.com/blockxlabs/substrate", branch = "master" }
 consensus-common = { package = "sp-consensus", git = "https://github.com/blockxlabs/substrate", branch = "master" }
-grandpa = { package = "sc-finality-grandpa", git = "https://github.com/blockxlabs/substrate", branch = "master" }
+grandpa = { package = "pallet-grandpa", git = "https://github.com/blockxlabs/substrate", branch = "master" }
 grandpa-primitives = { package = "sp-finality-grandpa", git = "https://github.com/blockxlabs/substrate", branch = "master" }
 substrate-client = { package="sc-client", git = "https://github.com/blockxlabs/substrate", branch = "master" }
 runtime = { package = "dna-runtime", path = "node/runtime" }
@@ -46,3 +46,5 @@ im-online = { package = "pallet-im-online", git = "https://github.com/blockxlabs
 [build-dependencies]
 vergen = "3.0.4"
 build-script-utils = { package = "substrate-build-script-utils", git = "https://github.com/blockxlabs/substrate", branch = "master" }
+substrate-cli = {package="sc-cli" ,git = "https://github.com/blockxlabs/substrate", branch = "master" }
+structopt = "0.3.3"

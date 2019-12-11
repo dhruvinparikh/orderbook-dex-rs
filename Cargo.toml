@@ -1,7 +1,7 @@
 [package]
 name = "dna-chain"
 version = "0.0.1"
-authors = ["BlockxLabs <info@blockxlabs.com>"]
+authors = ["BlockX Labs <info@blockxlabs.com>"]
 build = "node/build.rs"
 edition = "2018"
 
@@ -13,7 +13,7 @@ path = "node/src/main.rs"
 # Used for fixtures
 hex-literal = "0.2.1"
 serde_json = "1.0.41"
-substrate-telemetry = { git = "https://github.com/blockxlabs/substrate", branch = "master" }
+substrate-telemetry = {package="sc-telemetry", git = "https://github.com/blockxlabs/substrate", branch = "master" }
 # Used for node
 futures = "0.3.1"
 futures01 = { package = "futures", version = "0.1.29" }
@@ -23,24 +23,24 @@ tokio = "0.1.22"
 parking_lot = "0.9.0"
 codec = { package = "parity-scale-codec", version = "1.0.0" }
 trie-root = "0.15.2"
-sr-io = { git = "https://github.com/blockxlabs/substrate", branch = "master" }
-substrate-cli = { git = "https://github.com/blockxlabs/substrate", branch = "master" }
-primitives = { package = "substrate-primitives", git = "https://github.com/blockxlabs/substrate", branch = "master" }
-substrate-executor = { git = "https://github.com/blockxlabs/substrate", branch = "master" }
-substrate-service = { git = "https://github.com/blockxlabs/substrate", branch = "master" }
-inherents = { package = "substrate-inherents", git = "https://github.com/blockxlabs/substrate", branch = "master" }
+sr-io = { package="sp-io", git = "https://github.com/blockxlabs/substrate", branch = "master" }
+substrate-cli = {package="sc-cli" ,git = "https://github.com/blockxlabs/substrate", branch = "master" }
+primitives = { package = "sp-core", git = "https://github.com/blockxlabs/substrate", branch = "master" }
+substrate-executor = {package="sc-executor", git = "https://github.com/blockxlabs/substrate", branch = "master" }
+substrate-service = {package="sc-service", git = "https://github.com/blockxlabs/substrate", branch = "master" }
+inherents = { package = "sp-inherents", git = "https://github.com/blockxlabs/substrate", branch = "master" }
 txpool = { package = "sc-transaction-pool", git = "https://github.com/blockxlabs/substrate", branch = "master" }
 txpool-api = { package = "sp-transaction-pool-api", git = "https://github.com/blockxlabs/substrate", branch = "master" }
-network = { package = "substrate-network", git = "https://github.com/blockxlabs/substrate", branch = "master" }
-aura = { package = "substrate-consensus-aura", git = "https://github.com/blockxlabs/substrate", branch = "master" }
-aura-primitives = { package = "substrate-consensus-aura-primitives", git = "https://github.com/blockxlabs/substrate", branch = "master" }
-consensus-common = { package = "substrate-consensus-common", git = "https://github.com/blockxlabs/substrate", branch = "master" }
-grandpa = { package = "substrate-finality-grandpa", git = "https://github.com/blockxlabs/substrate", branch = "master" }
-grandpa-primitives = { package = "substrate-finality-grandpa-primitives", git = "https://github.com/blockxlabs/substrate", branch = "master" }
-substrate-client = {  git = "https://github.com/blockxlabs/substrate", branch = "master" }
+network = { package = "sc-network", git = "https://github.com/blockxlabs/substrate", branch = "master" }
+aura = { package = "sc-consensus-aura", git = "https://github.com/blockxlabs/substrate", branch = "master" }
+aura-primitives = { package = "sp-consensus-aura", git = "https://github.com/blockxlabs/substrate", branch = "master" }
+consensus-common = { package = "sp-consensus", git = "https://github.com/blockxlabs/substrate", branch = "master" }
+grandpa = { package = "sc-finality-grandpa", git = "https://github.com/blockxlabs/substrate", branch = "master" }
+grandpa-primitives = { package = "sp-finality-grandpa", git = "https://github.com/blockxlabs/substrate", branch = "master" }
+substrate-client = { package="sc-client", git = "https://github.com/blockxlabs/substrate", branch = "master" }
 runtime = { package = "dna-runtime", path = "node/runtime" }
-sr-primitives = { git = "https://github.com/blockxlabs/substrate", branch = "master" }
-basic-authorship = { package = "substrate-basic-authorship", git = "https://github.com/blockxlabs/substrate", branch = "master" }
+sp-runtime = {git = "https://github.com/blockxlabs/substrate", branch = "master" }
+basic-authorship = { package = "sc-basic-authority", git = "https://github.com/blockxlabs/substrate", branch = "master" }
 
 [build-dependencies]
 vergen = "3.0.4"

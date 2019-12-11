@@ -8,9 +8,9 @@ edition = "2018"
 serde = { version = "1.0.101", optional = true }
 codec = { package = "parity-scale-codec", version = "1.0.0", default-features = false }
 # We need the H256 of this module
-primitives = { package = "substrate-primitives", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
+primitives = { package = "sp-core", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
 # Needed for various traits.
-sr-primitives = { git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
+sp-runtime = {git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
 # Needed for type-safe access to storage DB.
 support = { package = "frame-support", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
 # `system` module provides us with all sorts of useful stuff and macros depend on it being around.
@@ -19,8 +19,8 @@ system = { package = "frame-system", git = "https://github.com/blockxlabs/substr
 structures = { package = "dna-structures", path = "../structures", default-features = false }
 
 [dev-dependencies]
-rstd = { package = "sr-std", git = "https://github.com/blockxlabs/substrate", branch = "master" }
-runtime-io = { package = "sr-io", git = "https://github.com/blockxlabs/substrate", branch = "master" }
+rstd = { package = "sp-std", git = "https://github.com/blockxlabs/substrate", branch = "master" }
+runtime-io = { package = "sp-io", git = "https://github.com/blockxlabs/substrate", branch = "master" }
 
 [features]
 default = ["std"]
@@ -28,7 +28,7 @@ std = [
   "serde",
   "codec/std",
   "primitives/std",
-  "sr-primitives/std",
+  "sp-runtime/std",
   "support/std",
   "system/std",
   "structures/std",

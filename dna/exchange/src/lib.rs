@@ -17,6 +17,12 @@ pub struct Test {
     pub realnumber: u8
 }
 
+decl_storage! {
+    trait Store for Module<T: Trait> as Exchange {
+        MyBool get(my_bool_getter): bool;
+	}
+}
+
 decl_module! {
 pub struct Module<T: Trait> for enum Call where origin: T::Origin
 {
@@ -29,7 +35,7 @@ pub struct Module<T: Trait> for enum Call where origin: T::Origin
         // Ensure we have a signed message, and derive the sender's account id from the signature
         let sender = ensure_signed(origin)?;
        
-        Self::create_order(number, orderId, realnumber)
+        Self::create_order(number, orderId,realnumber)
     
 }
 pub fn offer(
@@ -41,7 +47,7 @@ pub fn offer(
     // Ensure we have a signed message, and derive the sender's account id from the signature
     let sender = ensure_signed(origin)?;
    
-    Self::create_order(number, orderId, realnumber)
+    Self::create_order(number, orderId,realnumber)
 
 }
 
@@ -54,7 +60,7 @@ pub fn matchOffer(
     // Ensure we have a signed message, and derive the sender's account id from the signature
     let sender = ensure_signed(origin)?;
    
-    Self::create_order(number, orderId, realnumber)
+    Self::create_order(number, orderId,realnumber)
 
 }
 }

@@ -32,6 +32,31 @@ pub struct Module<T: Trait> for enum Call where origin: T::Origin
         Self::create_order(number, orderId, realnumber)
     
 }
+pub fn offer(
+    origin,
+    number: u8,
+    orderId: u8,
+    realnumber: u8
+) -> Result {
+    // Ensure we have a signed message, and derive the sender's account id from the signature
+    let sender = ensure_signed(origin)?;
+   
+    Self::create_order(number, orderId, realnumber)
+
+}
+
+pub fn matchOffer(
+    origin,
+    number: u8,
+    orderId: u8,
+    realnumber: u8
+) -> Result {
+    // Ensure we have a signed message, and derive the sender's account id from the signature
+    let sender = ensure_signed(origin)?;
+   
+    Self::create_order(number, orderId, realnumber)
+
+}
 }
 }
 

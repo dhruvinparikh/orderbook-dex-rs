@@ -288,11 +288,23 @@ dependencies = [
 ]
 
 [[package]]
+name = "dna-meta-exchange"
+version = "0.1.0"
+dependencies = [
+ "frame-support",
+ "frame-system",
+ "parity-scale-codec",
+ "sp-runtime",
+ "sp-std",
+]
+
+[[package]]
 name = "dna-runtime"
 version = "0.0.1"
 dependencies = [
  "dna-assets",
  "dna-exchange",
+ "dna-meta-exchange",
  "frame-executive",
  "frame-support",
  "frame-system",

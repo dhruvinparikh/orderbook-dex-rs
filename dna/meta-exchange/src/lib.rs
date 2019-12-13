@@ -1,5 +1,4 @@
 //! The Metaverse substrate module. This can be compiled with `#[no_std]`, ready for Wasm.
-
 use rstd::vec::Vec;
 #[cfg(feature = "std")]
 use serde_derive::{Serialize, Deserialize};
@@ -10,10 +9,13 @@ use support::{
     traits::{ReservableCurrency, Currency}, dispatch::Result
 };
 use sr_primitives::traits::Hash;
+use sr_primitives::RuntimeDebug;
+#[macro_use]
+extern crate alloc;
 
 /// Order params.
 #[cfg_attr(feature = "std", derive(Serialize, Deserialize, Debug))]
-#[derive(Encode, Decode, Clone, PartialEq, Eq)]
+#[derive(Encode, Decode, Clone, PartialEq, Eq, RuntimeDebug)]
 pub struct Order<Balance,AccountId> {
     pub model: Vec<u8>,
     pub objective: Vec<u8>,
@@ -23,7 +25,7 @@ pub struct Order<Balance,AccountId> {
 
 /// Offer message.
 #[cfg_attr(feature = "std", derive(Serialize, Deserialize, Debug))]
-#[derive(Encode, Decode, Clone, PartialEq, Eq)]
+#[derive(Encode, Decode, Clone, PartialEq, Eq, RuntimeDebug)]
 pub struct Offer<Balance,AccountId> {
     pub order: Order<Balance,AccountId>,
     pub sender: AccountId,
@@ -31,7 +33,7 @@ pub struct Offer<Balance,AccountId> {
 
 /// Demand message.
 #[cfg_attr(feature = "std", derive(Serialize, Deserialize, Debug))]
-#[derive(Encode, Decode, Clone, PartialEq, Eq)]
+#[derive(Encode, Decode, Clone, PartialEq, Eq, RuntimeDebug)]
 pub struct Demand<Balance,AccountId> {
     pub order: Order<Balance,AccountId>,
     pub sender: AccountId, 
@@ -39,7 +41,7 @@ pub struct Demand<Balance,AccountId> {
 
 /// Liability descriptive parameters.
 #[cfg_attr(feature = "std", derive(Serialize, Deserialize, Debug))]
-#[derive(Encode, Decode, Clone, PartialEq, Eq, Debug)]
+#[derive(Encode, Decode, Clone, PartialEq, Eq, RuntimeDebug)]
 pub struct Liability<Balance,AccountId> {
     pub order: Order<Balance,AccountId>,
     pub promisee: AccountId,

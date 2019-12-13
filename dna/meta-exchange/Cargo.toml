@@ -23,4 +23,6 @@ std = [
     "support/std",
     "system/std",
     "sr-primitives/std",
+    "rstd/std",
+    "codec/std"
 ]

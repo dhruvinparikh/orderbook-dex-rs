@@ -1,0 +1,26 @@
+[package]
+name = "dna-meta-exchange"
+version = "0.1.0"
+authors = ["BlockX Labs info@blockxlabs.com"]
+edition = "2018"
+
+[dependencies]
+serde_derive = { version = "1.0.102", optional = true }
+rstd = { package = "sp-std", git = "https://github.com/blockxlabs/substrate", branch = "master" }
+codec = { package = "parity-scale-codec", version = "1.0.0", default-features = false }
+# `system` module provides us with all sorts of useful stuff and macros depend on it being around.
+system = { package = "frame-system", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
+# Needed for type-safe access to storage DB.
+support = { package = "frame-support", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
+sr-primitives = {package="sp-runtime", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
+
+[dev-dependencies]
+
+[features]
+default = ["std"]
+std = [
+    "serde_derive",
+    "support/std",
+    "system/std",
+    "sr-primitives/std",
+]

@@ -33,6 +33,7 @@ txpool-runtime-api = { package = "sp-transaction-pool-api", git = "https://githu
 version = { package = "sp-version", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
 assets = { package = "dna-assets", path = "../../dna/assets", default-features = false }
 exchange = {package="dna-exchange", path="../../dna/exchange", default-features = false}
+metaexchange = {package="dna-meta-exchange", path="../../dna/meta-exchange", default-features = false}
 
 [build-dependencies]
 wasm-builder-runner = { package = "substrate-wasm-builder-runner", git = "https://github.com/blockxlabs/substrate", branch = "master", version = "1.0.4" }

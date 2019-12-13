@@ -241,6 +241,13 @@ impl assets::Trait for Runtime {}
 
 impl exchange::Trait for Runtime {}
 
+impl metaexchange:: Trait for Runtime {
+      /// Native token as processing currency.
+      type Currency = Balances;
+      /// The uniquitous event type.
+      type Event = Event;
+}
+
 construct_runtime!(
 	pub enum Runtime where
 		Block = Block,
@@ -263,6 +270,7 @@ construct_runtime!(
         // Contracts: contracts::{Module, Call, Storage},
         Assets: assets::{Module, Call, Storage},
         Exchange: exchange::{Module, Call},
+        Metaexchange: metaexchange::{Module, Call, Storage, Event<T>},
 	}
 );
 

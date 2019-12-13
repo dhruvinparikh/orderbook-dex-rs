@@ -1,3 +1,4 @@
+#![cfg_attr(not(feature = "std"), no_std)]
 //! The Metaverse substrate module. This can be compiled with `#[no_std]`, ready for Wasm.
 use rstd::vec::Vec;
 #[cfg(feature = "std")]

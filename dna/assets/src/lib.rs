@@ -2,6 +2,7 @@
 // The above line is needed to compile the Wasm binaries.
 
 // Importing crates declared in the cargo.toml file.
+use rstd::vec::Vec;
 use codec::{Decode, Encode};
 use primitives::H256;
 use structures::Real;
@@ -18,12 +19,17 @@ use transfer::*;
 // This module's configuration trait.
 pub trait Trait: system::Trait {}
 
+pub struct Listing {
+    name: Vec<u8>,
+    description: Vec<u8>
+  }
+
 // This module's storage items.
 decl_storage! {
     trait Store for Module<T: Trait> as AssetsStorage {
         pub Balances get(fn balances): map (u32, H256) => Real;
         pub TotalSupply get(fn total_supply): map u32 => Real;
-        pub Tokens get(fn tokens): map u32 => Real;
+        pub Tokens get(fn tokens): map u32 => (Vec<u8>,Vec<u8>);
     }
 }
 
@@ -40,9 +46,9 @@ decl_module! {
             Ok(())
         }
 
-        pub fn dispatch_mint(origin, to_address: H256, asset_id: u32, amount: Real, name: u32) -> Result {
+        pub fn dispatch_mint(origin, to_address: H256, asset_id: u32, amount: Real, name: Vec<u8>, description: Vec<u8>) -> Result {
             // Call corresponding internal function.
-            Self::mint(to_address, asset_id, amount, name)?;
+            Self::mint(to_address, asset_id, amount, name, description)?;
 
             // Return Ok if successful.
             Ok(())

@@ -7,6 +7,7 @@ edition = "2018"
 [dependencies]
 serde = { version = "1.0.101", optional = true }
 codec = { package = "parity-scale-codec", version = "1.0.0", default-features = false }
+rstd = { package = "sp-std", git = "https://github.com/blockxlabs/substrate", branch = "master", default-features = false }
 # We need the H256 of this module
 primitives = { package = "sp-core", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
 # Needed for various traits.
@@ -32,4 +33,5 @@ std = [
   "support/std",
   "system/std",
   "structures/std",
+  "rstd/std"
 ]

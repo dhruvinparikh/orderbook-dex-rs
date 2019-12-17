@@ -664,6 +664,7 @@ dependencies = [
  "parity-scale-codec 1.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-core 2.0.0 (git+https://github.com/blockxlabs/substrate)",
  "sp-runtime 2.0.0 (git+https://github.com/blockxlabs/substrate)",
+ "sp-std 2.0.0 (git+https://github.com/blockxlabs/substrate)",
 ]
 
 [[package]]

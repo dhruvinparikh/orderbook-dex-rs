@@ -9,7 +9,7 @@ build="build.rs"
 clear_on_drop = { version = "0.2.3", features = ["no_cc"] }
 balances = { package = "pallet-balances", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
 block-builder-api = { package = "sp-block-builder", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
-codec = { package = "parity-scale-codec", version = "1.0.0", default-features = false, features = ["derive"] }
+codec = { package = "parity-scale-codec", default-features = false, version = "1.0.0", features = ["derive"] }
 executive = { package = "frame-executive", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
 grandpa = { package = "pallet-grandpa", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
 indices = { package = "pallet-indices", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
@@ -29,11 +29,11 @@ support = { package = "frame-support", git = "https://github.com/blockxlabs/subs
 system = { package = "frame-system", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
 timestamp = { package = "pallet-timestamp", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
 transaction-payment = { package = "pallet-transaction-payment", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
-txpool-runtime-api = { package = "sp-transaction-pool-api", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
+txpool-runtime-api = { package = "sp-transaction-pool", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
 version = { package = "sp-version", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
 assets = { package = "dna-assets", path = "../../dna/assets", default-features = false }
-babe = { package = "pallet-babe", git = "https://github.com/blockxlabs/substrate", default-features = false }
-babe-primitives = { package = "sp-consensus-babe", git = "https://github.com/paritytech/substrate", default-features = false }
+babe = { package = "pallet-babe", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
+babe-primitives = { package = "sp-consensus-babe", git = "https://github.com/paritytech/substrate", default-features = false, branch = "master" }
 im-online = { package = "pallet-im-online", git = "https://github.com/blockxlabs/substrate" }
 
 [build-dependencies]

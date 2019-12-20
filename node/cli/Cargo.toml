@@ -1,0 +1,86 @@
+[package]
+name = "node-cli"
+version = "0.14.0"
+authors = ["Blockx Labs"]
+description = "BlockX Labs node implementation in Rust & Substrate."
+build = "build.rs"
+edition = "2018"
+default-run = "robonomics"
+
+[[bin]]
+name = "robonomics"
+path = "bin/main.rs"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+# third-party dependencies
+futures01 = "0.1.29"
+futures = { version = "0.3.1", features = ["compat"] }
+hex-literal = "0.2.1"
+serde_json = "1.0"
+log = "0.4.8"
+structopt = "0.3.3"
+jsonrpc-core = "13.2.0"
+
+# primitives
+node-primitives = { git = "https://github.com/paritytech/substrate", default-features = false }
+authority-discovery-primitives = { package = "sp-authority-discovery", git = "https://github.com/paritytech/substrate" }
+babe-primitives = { package = "sp-consensus-babe", git = "https://github.com/paritytech/substrate" }
+grandpa-primitives = { package = "sp-finality-grandpa", git = "https://github.com/paritytech/substrate" }
+primitives = { package = "sp-core", git = "https://github.com/paritytech/substrate" }
+sp-runtime = { git = "https://github.com/paritytech/substrate" }
+
+# core dependencies
+client = { package = "sc-client", git = "https://github.com/paritytech/substrate" }
+inherents = { package = "sp-inherents", git = "https://github.com/paritytech/substrate" }
+txpool = { package = "sc-transaction-pool", git = "https://github.com/paritytech/substrate" }
+txpool-api = { package = "sp-transaction-pool", git = "https://github.com/paritytech/substrate" }
+network = { package = "sc-network", git = "https://github.com/paritytech/substrate" }
+babe = { package = "sc-consensus-babe", git = "https://github.com/paritytech/substrate" }
+grandpa = { package = "sc-finality-grandpa", git = "https://github.com/paritytech/substrate" }
+basic-authorship = { package = "sc-basic-authority", git = "https://github.com/paritytech/substrate" }
+authority-discovery = { package = "sc-authority-discovery", git = "https://github.com/paritytech/substrate" }
+sc-service = { git = "https://github.com/paritytech/substrate" }
+telemetry = { package = "sc-telemetry", git = "https://github.com/paritytech/substrate" }
+keystore = { package = "sc-keystore", git = "https://github.com/paritytech/substrate" }
+consensus-common = { package = "sp-consensus", git = "https://github.com/paritytech/substrate" }
+
+# frame dependencies
+im-online = { package = "pallet-im-online", git = "https://github.com/paritytech/substrate" }
+
+# node-specific dependencies
+node-runtime = { path = "../runtime" }
+node-executor = { path = "../executor" }
+executor = { package = "sc-executor", git = "https://github.com/paritytech/substrate" }
+node-rpc = { package = "sc-rpc", git = "https://github.com/paritytech/substrate" }
+
+# CLI-specific dependencies
+tokio = { version = "0.1.22", optional = true }
+exit-future = { version = "0.1.4", optional = true }
+sc-cli = { git = "https://github.com/paritytech/substrate", optional = true }
+ctrlc = { version = "3.0", features = ["termination"], optional = true }
+
+[build-dependencies]
+sc-cli = { git = "https://github.com/paritytech/substrate", optional = true }
+build-script-utils = { package = "substrate-build-script-utils", git = "https://github.com/paritytech/substrate" }
+structopt = "0.3.3"
+vergen = "3.0.4"
+
+[features]
+default = ["cli"]
+cli = [
+    "sc-cli",
+    "tokio",
+    "exit-future",
+    "ctrlc",
+    "sc-service/rocksdb",
+]
+## Enable ROS integration: exports to ROS topics and services for Robonomics communication.
+# To build with it install ROS (http://wiki.ros.org/melodic/Installation) before.
+# It also require roscore service to be launched.
+# ros = [
+#     "substrate-ros-api",
+#     "robonomics-ros-api",
+# ]

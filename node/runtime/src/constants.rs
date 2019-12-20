@@ -2,16 +2,15 @@
 
 /// Money matters.
 pub mod currency {
-    use crate::types::Balance;
+    use node_primitives::Balance;
 
-    pub const COASE: Balance = 1_000;
-    pub const GLUSHKOV: Balance = 1_000 * COASE;
-    pub const DNA: Balance = 1_000 * GLUSHKOV;
+    pub const MILLIDNA: Balance = 1_000;
+    pub const DNA: Balance = 1_000 * MILLIDNA;
 }
 
 /// Time.
 pub mod time {
-    use crate::types::{Moment, BlockNumber};
+    use node_primitives::{Moment, BlockNumber};
 
     /// Since BABE is probabilistic this is the average expected block time that
     /// we are targetting. Blocks will be produced at a minimum duration defined

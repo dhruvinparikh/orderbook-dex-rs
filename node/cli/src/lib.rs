@@ -22,7 +22,7 @@ pub fn run<I, T, E>(args: I, exit: E, version: VersionInfo) -> error::Result<()>
 {
     type Config<A, B> = Configuration<(), A, B>;
 
-    match parse_and_prepare::<NoCustom, NoCustom, _>(&version, "airalab-robonomics", args) {
+    match parse_and_prepare::<NoCustom, NoCustom, _>(&version, "Metaverse-DNA-by-Blockx-Labs", args) {
         ParseAndPrepare::Run(cmd) => cmd.run(load_spec, exit,
         |exit, _cli_args, _custom_args, config: Config<_, _>| {
             info!("{}", version.name);

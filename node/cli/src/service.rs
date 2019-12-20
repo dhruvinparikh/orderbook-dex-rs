@@ -15,7 +15,7 @@ use network::construct_simple_protocol;
 use inherents::InherentDataProviders;
 
 construct_simple_protocol! {
-    /// Robonomics protocol attachment for substrate.
+    /// DNA protocol attachment for substrate.
     pub struct NodeProtocol where Block = Block { }
 }
 
@@ -229,34 +229,6 @@ macro_rules! new_full {
                 )?;
             },
         }
-
-        //#[cfg(feature = "ros")]
-        // {
-        //     let (api, subs) = ros_robonomics::start_api(
-        //         service.client(),
-        //         service.transaction_pool(),
-        //         babe_key
-        //     );
-        //     service.spawn_task(api.unit_error().boxed().compat());
-
-        //     let system_info = ros_rpc::system::SystemInfo {
-        //         chain_name: chain_spec.name().into(),
-        //         impl_name: impl_name.into(),
-        //         impl_version: impl_version.into(),
-        //         properties: chain_spec.properties(),
-        //     };
-
-        //     let (srvs, pubs)= ros_rpc::traits::start_services(
-        //         system_info,
-        //         service.network(),
-        //         service.client(),
-        //         service.transaction_pool()
-        //     );
-        //     service.spawn_task(pubs.unit_error().boxed().compat());
-
-        //     let on_exit = service.on_exit().then(move |_| { let _ = subs; let _ = srvs; Ok(()) });
-        //     service.spawn_task(on_exit);
-        // }
 
         Ok((service, inherent_data_providers))
     }}

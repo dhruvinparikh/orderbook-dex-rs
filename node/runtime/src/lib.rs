@@ -49,8 +49,8 @@ include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 
 /// This runtime version.
 pub const VERSION: RuntimeVersion = RuntimeVersion {
-    spec_name: create_runtime_str!("robonomics"),
-    impl_name: create_runtime_str!("robonomics-airalab"),
+    spec_name: create_runtime_str!("dnachain"),
+    impl_name: create_runtime_str!("Metaverse-DNA-BlockX-Labs"),
     authoring_version: 1,
     // Per convention: if the runtime behavior changes, increment spec_version
     // and set impl_version to equal spec_version. If only runtime
@@ -291,25 +291,7 @@ impl offences::Trait for Runtime {
     type OnOffenceHandler = Staking;
 }
 
-// impl liability::Trait for Runtime {
-//     type Technics = liability::technics::PureIPFS;
-//     type Economics = liability::economics::Communism;
-//     type Liability = liability::signed::SignedLiability<
-//         Self::Technics,
-//         Self::Economics,
-//         <Signature as Verify>::Signer,
-//         Signature,
-//     >;
-//     type Event = Event;
-// }
-
-// impl provider::Trait for Runtime {
-//     type Call = Call;
-//     type Event = Event;
-//     type Account = AccountId;
-//     type SubmitTransaction = TransactionSubmitter<(), Runtime, UncheckedExtrinsic>;
-// }
-// impl assets::Trait for Runtime {}
+impl assets::Trait for Runtime {}
 
 impl system::offchain::CreateTransaction<Runtime, UncheckedExtrinsic> for Runtime {
     type Public = <Signature as traits::Verify>::Signer;
@@ -369,14 +351,8 @@ construct_runtime!(
         Grandpa: grandpa::{Module, Call, Storage, Config, Event},
         ImOnline: im_online::{Module, Call, Storage, Event<T>, ValidateUnsigned, Config<T>},
         AuthorityDiscovery: authority_discovery::{Module, Call, Config},
-
-        // Robonomics Network modules.
-        // Liability: liability::{Module, Call, Storage, Event, ValidateUnsigned},
-        // Provider: provider::{Module, Call, Storage, Event<T>},
-
-        // Sudo. Usable initially.
         Sudo: sudo,
-        // Assets: assets::{Module, Call, Storage},
+        Assets: assets::{Module, Call, Storage},
     }
 );
 

@@ -2,20 +2,20 @@ use super::*;
 
 // This function burns tokens of a given asset and from a specific address.
 impl<T: Trait> Module<T> {
-    pub fn burn(from_address: H256, asset_id: u32, amount: Real) -> Result {
+    pub fn burn(from_address: H256, asset_id: u32, amount: Real) -> DispatchResult {
         // Checking that amount is non-negative.
         if amount < Real::from(0) {
-            return Err("Amount can't be negative.");
+             Err("Amount can't be negative.")?
         }
 
         // Checking that from_address and asset_id exists.
         if !<Self as Store>::Balances::exists((asset_id, from_address)) {
-            return Err("From_address doesn't exist at given Asset_ID.");
+             Err("From_address doesn't exist at given Asset_ID.")?
         }
 
         // Checking that from_address has enough balance.
         if amount > <Self as Store>::Balances::get((asset_id, from_address)) {
-            return Err("From_address doesn't have enough balance.");
+             Err("From_address doesn't have enough balance.")?
         }
 
         // Decreasing supply.

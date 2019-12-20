@@ -5,10 +5,10 @@ authors = ["Blockx Labs"]
 description = "BlockX Labs node implementation in Rust & Substrate."
 build = "build.rs"
 edition = "2018"
-default-run = "robonomics"
+default-run = "dnachain"
 
 [[bin]]
-name = "robonomics"
+name = "dnachain"
 path = "bin/main.rs"
 
 [lib]
@@ -77,10 +77,3 @@ cli = [
     "ctrlc",
     "sc-service/rocksdb",
 ]
-## Enable ROS integration: exports to ROS topics and services for Robonomics communication.
-# To build with it install ROS (http://wiki.ros.org/melodic/Installation) before.
-# It also require roscore service to be launched.
-# ros = [
-#     "substrate-ros-api",
-#     "robonomics-ros-api",
-# ]

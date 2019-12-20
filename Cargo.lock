@@ -2489,6 +2489,7 @@ dependencies = [
 name = "node-runtime"
 version = "0.1.0"
 dependencies = [
+ "dna-assets 0.1.0",
  "frame-executive 2.0.0 (git+https://github.com/blockxlabs/substrate)",
  "frame-support 2.0.0 (git+https://github.com/blockxlabs/substrate)",
  "frame-system 2.0.0 (git+https://github.com/blockxlabs/substrate)",

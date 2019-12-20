@@ -8,7 +8,7 @@
 use codec::{Decode, Encode};
 use primitives::H256;
 use structures::Real;
-use support::{decl_module, decl_storage, dispatch::Result, StorageMap};
+use support::{decl_module, decl_storage,decl_error, dispatch::DispatchResult, StorageMap};
 
 // Importing the rest of the files in this crate.
 mod burn;
@@ -35,7 +35,7 @@ decl_module! {
     // The module declaration.
     pub struct Module<T: Trait> for enum Call where origin: T::Origin {
 
-        pub fn dispatch_transfer(origin,from_address: H256, to_address: H256, asset_id: u32, amount: Real) -> Result {
+        pub fn dispatch_transfer(origin,from_address: H256, to_address: H256, asset_id: u32, amount: Real) -> DispatchResult {
             // Call corresponding internal function.
             Self::transfer(from_address, to_address, asset_id, amount)?;
 
@@ -43,7 +43,7 @@ decl_module! {
             Ok(())
         }
 
-        pub fn dispatch_mint(origin, to_address: H256, asset_id: u32, amount: Real, name: u32) -> Result {
+        pub fn dispatch_mint(origin, to_address: H256, asset_id: u32, amount: Real, name: u32) -> DispatchResult {
             // Call corresponding internal function.
             Self::mint(to_address, asset_id, amount, name)?;
 
@@ -51,7 +51,7 @@ decl_module! {
             Ok(())
         }
 
-        pub fn dispatch_burn(origin,from_address: H256, asset_id: u32, amount: Real) -> Result {
+        pub fn dispatch_burn(origin,from_address: H256, asset_id: u32, amount: Real) -> DispatchResult {
             // Call corresponding internal function.
             Self::burn(from_address, asset_id, amount)?;
 

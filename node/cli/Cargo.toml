@@ -1,6 +1,6 @@
 [package]
 name = "node-cli"
-version = "0.14.0"
+version = "0.1.0"
 authors = ["Blockx Labs"]
 description = "BlockX Labs node implementation in Rust & Substrate."
 build = "build.rs"
@@ -25,46 +25,46 @@ structopt = "0.3.3"
 jsonrpc-core = "13.2.0"
 
 # primitives
-node-primitives = { git = "https://github.com/paritytech/substrate", default-features = false }
-authority-discovery-primitives = { package = "sp-authority-discovery", git = "https://github.com/paritytech/substrate" }
-babe-primitives = { package = "sp-consensus-babe", git = "https://github.com/paritytech/substrate" }
-grandpa-primitives = { package = "sp-finality-grandpa", git = "https://github.com/paritytech/substrate" }
-primitives = { package = "sp-core", git = "https://github.com/paritytech/substrate" }
-sp-runtime = { git = "https://github.com/paritytech/substrate" }
+node-primitives = { git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
+authority-discovery-primitives = { package = "sp-authority-discovery", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
+babe-primitives = { package = "sp-consensus-babe", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
+grandpa-primitives = { package = "sp-finality-grandpa", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
+primitives = { package = "sp-core", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
+sp-runtime = { git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
 
 # core dependencies
-client = { package = "sc-client", git = "https://github.com/paritytech/substrate" }
-inherents = { package = "sp-inherents", git = "https://github.com/paritytech/substrate" }
-txpool = { package = "sc-transaction-pool", git = "https://github.com/paritytech/substrate" }
-txpool-api = { package = "sp-transaction-pool", git = "https://github.com/paritytech/substrate" }
-network = { package = "sc-network", git = "https://github.com/paritytech/substrate" }
-babe = { package = "sc-consensus-babe", git = "https://github.com/paritytech/substrate" }
-grandpa = { package = "sc-finality-grandpa", git = "https://github.com/paritytech/substrate" }
-basic-authorship = { package = "sc-basic-authority", git = "https://github.com/paritytech/substrate" }
-authority-discovery = { package = "sc-authority-discovery", git = "https://github.com/paritytech/substrate" }
-sc-service = { git = "https://github.com/paritytech/substrate" }
-telemetry = { package = "sc-telemetry", git = "https://github.com/paritytech/substrate" }
-keystore = { package = "sc-keystore", git = "https://github.com/paritytech/substrate" }
-consensus-common = { package = "sp-consensus", git = "https://github.com/paritytech/substrate" }
+client = { package = "sc-client", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
+inherents = { package = "sp-inherents", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
+txpool = { package = "sc-transaction-pool", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
+txpool-api = { package = "sp-transaction-pool", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
+network = { package = "sc-network", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
+babe = { package = "sc-consensus-babe", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
+grandpa = { package = "sc-finality-grandpa", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
+basic-authorship = { package = "sc-basic-authority", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
+authority-discovery = { package = "sc-authority-discovery", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
+sc-service = { git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
+telemetry = { package = "sc-telemetry", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
+keystore = { package = "sc-keystore", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
+consensus-common = { package = "sp-consensus", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
 
 # frame dependencies
-im-online = { package = "pallet-im-online", git = "https://github.com/paritytech/substrate" }
+im-online = { package = "pallet-im-online", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
 
 # node-specific dependencies
 node-runtime = { path = "../runtime" }
 node-executor = { path = "../executor" }
-executor = { package = "sc-executor", git = "https://github.com/paritytech/substrate" }
-node-rpc = { package = "sc-rpc", git = "https://github.com/paritytech/substrate" }
+executor = { package = "sc-executor", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
+node-rpc = { package = "sc-rpc", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
 
 # CLI-specific dependencies
 tokio = { version = "0.1.22", optional = true }
 exit-future = { version = "0.1.4", optional = true }
-sc-cli = { git = "https://github.com/paritytech/substrate", optional = true }
+sc-cli = { git = "https://github.com/blockxlabs/substrate", optional = true, default-features = false, branch = "master" }
 ctrlc = { version = "3.0", features = ["termination"], optional = true }
 
 [build-dependencies]
-sc-cli = { git = "https://github.com/paritytech/substrate", optional = true }
-build-script-utils = { package = "substrate-build-script-utils", git = "https://github.com/paritytech/substrate" }
+sc-cli = { git = "https://github.com/blockxlabs/substrate", optional = true, default-features = false, branch = "master" }
+build-script-utils = { package = "substrate-build-script-utils", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
 structopt = "0.3.3"
 vergen = "3.0.4"
 

@@ -309,6 +309,7 @@ impl offences::Trait for Runtime {
 //     type Account = AccountId;
 //     type SubmitTransaction = TransactionSubmitter<(), Runtime, UncheckedExtrinsic>;
 // }
+// impl assets::Trait for Runtime {}
 
 impl system::offchain::CreateTransaction<Runtime, UncheckedExtrinsic> for Runtime {
     type Public = <Signature as traits::Verify>::Signer;
@@ -375,6 +376,7 @@ construct_runtime!(
 
         // Sudo. Usable initially.
         Sudo: sudo,
+        // Assets: assets::{Module, Call, Storage},
     }
 );
 

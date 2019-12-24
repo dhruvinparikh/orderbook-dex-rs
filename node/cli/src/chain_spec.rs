@@ -210,7 +210,7 @@ fn dna_config_genesis() -> GenesisConfig {
 
 
 //    info!( "Hello --------------------------------------------------");
-);
+
     testnet_genesis(
         initial_authorities,
         Some(endowed_accounts),

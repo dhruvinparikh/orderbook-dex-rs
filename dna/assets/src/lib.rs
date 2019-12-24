@@ -1,16 +1,3 @@
-// Copyright 2019 by Trinkler Software AG (Switzerland).
-// This file is part of the Katal Chain.
-//
-// Katal Chain is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version <http://www.gnu.org/licenses/>.
-//
-// Katal Chain is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-
 //! # Assets module
 //!
 
@@ -21,7 +8,7 @@
 use codec::{Decode, Encode};
 use primitives::H256;
 use structures::Real;
-use support::{decl_module, decl_storage, dispatch::Result, StorageMap};
+use support::{decl_module, decl_storage,decl_error, dispatch::DispatchResult, StorageMap};
 
 // Importing the rest of the files in this crate.
 mod burn;
@@ -48,7 +35,7 @@ decl_module! {
     // The module declaration.
     pub struct Module<T: Trait> for enum Call where origin: T::Origin {
 
-        pub fn dispatch_transfer(origin,from_address: H256, to_address: H256, asset_id: u32, amount: Real) -> Result {
+        pub fn dispatch_transfer(origin,from_address: H256, to_address: H256, asset_id: u32, amount: Real) -> DispatchResult {
             // Call corresponding internal function.
             Self::transfer(from_address, to_address, asset_id, amount)?;
 
@@ -56,7 +43,7 @@ decl_module! {
             Ok(())
         }
 
-        pub fn dispatch_mint(origin, to_address: H256, asset_id: u32, amount: Real, name: u32) -> Result {
+        pub fn dispatch_mint(origin, to_address: H256, asset_id: u32, amount: Real, name: u32) -> DispatchResult {
             // Call corresponding internal function.
             Self::mint(to_address, asset_id, amount, name)?;
 
@@ -64,7 +51,7 @@ decl_module! {
             Ok(())
         }
 
-        pub fn dispatch_burn(origin,from_address: H256, asset_id: u32, amount: Real) -> Result {
+        pub fn dispatch_burn(origin,from_address: H256, asset_id: u32, amount: Real) -> DispatchResult {
             // Call corresponding internal function.
             Self::burn(from_address, asset_id, amount)?;
 

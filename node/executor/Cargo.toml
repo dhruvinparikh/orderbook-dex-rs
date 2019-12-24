@@ -1,0 +1,9 @@
+[package]
+name = "node-executor"
+version = "0.14.0"
+authors = ["BlockX Labs"]
+edition = "2018"
+
+[dependencies]
+sc-executor = { git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
+node-runtime = { path = "../runtime" }

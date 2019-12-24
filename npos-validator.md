@@ -33,3 +33,16 @@ staking: Some(StakingConfig {
             ..Default::default()
         })
 ```
+
+# Running Chain First Time
+
+## Number of Validators
+Configure No of Validators to be 2 for generation of blocks and 3 for finalization.
+
+## Set Keys
+In `chain_spec.rs` you have Initial Authorities defined. Add them to your Node's keystore.
+
+## Start Validators
+Run validators as depicted above and it should start generating and finalizing blocks.
+
+

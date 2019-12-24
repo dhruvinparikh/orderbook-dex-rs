@@ -1,39 +1,27 @@
-// Copyright 2019 by Trinkler Software AG (Switzerland).
-// This file is part of the Katal Chain.
-//
-// Katal Chain is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version <http://www.gnu.org/licenses/>.
-//
-// Katal Chain is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
 
 use super::*;
 
 // This function transfers tokens of a given asset from one address to another. If the recipient address doesn't exist, it is created.
 impl<T: Trait> Module<T> {
-    pub fn transfer(from_address: H256, to_address: H256, asset_id: u32, amount: Real) -> Result {
+    pub fn transfer(from_address: H256, to_address: H256, asset_id: u32, amount: Real) -> DispatchResult {
         // Checking that amount is non-negative.
         if amount < Real::from(0) {
-            return Err("Amount can't be negative.");
+             Err("Amount can't be negative.")?
         }
 
         // Checking that from_address and to_address are different.
         if from_address == to_address {
-            return Err("From_address and to_address can't be equal.");
+             Err("From_address and to_address can't be equal.")?
         }
 
         // Checking that from_address and asset_id exists.
         if !<Self as Store>::Balances::exists((asset_id, from_address)) {
-            return Err("From_address doesn't exist at given Asset_ID.");
+             Err("From_address doesn't exist at given Asset_ID.")?
         }
 
         // Checking that from_address has enough balance.
         if amount > <Self as Store>::Balances::get((asset_id, from_address)) {
-            return Err("From_address doesn't have enough balance.");
+             Err("From_address doesn't have enough balance.")?
         }
 
         // Deducting amount from from_address.

@@ -14,6 +14,7 @@ use node_runtime::constants::currency::*;
 use node_primitives::{AccountId, Balance, Signature};
 use telemetry::TelemetryEndpoints;
 use hex_literal::hex;
+use log::info;
 
 const STAGING_TELEMETRY_URL: &str = "wss://telemetry.polkadot.io/submit/";
 
@@ -164,8 +165,8 @@ pub fn testnet_genesis(
         }),
         staking: Some(StakingConfig {
             current_era: 0,
-            validator_count: 10,
-            minimum_validator_count: 3,
+            validator_count: 3,
+            minimum_validator_count: 2,
             stakers: initial_authorities.iter().map(|x| {
                 (x.0.clone(), x.1.clone(), STASH, StakerStatus::Validator)
             }).collect(),
@@ -194,37 +195,38 @@ pub fn testnet_genesis(
 // DNA Testnet config for testing and development
 fn dna_config_genesis() -> GenesisConfig {
     let initial_authorities: Vec<(AccountId, AccountId, GrandpaId, BabeId, ImOnlineId, AuthorityDiscoveryId)> = vec![(
-        hex!["58cdc7ef880c80e8475170f206381d2cb13a87c209452fc6d8a1e14186d61b28"].into(),
-        hex!["58cdc7ef880c80e8475170f206381d2cb13a87c209452fc6d8a1e14186d61b28"].into(),
-        hex!["daf0535a46d8187446471bf619ea9104bda443366c526bf6f2cd4e9a1fcf5dd7"].unchecked_into(),
-        hex!["36cced69f5f1f07856ff0daac944c52e286e10184e52be76ca9377bd0406d90b"].unchecked_into(),
-        hex!["80de51e4432ed5e37b6438f499f3ec017f9577a37e68cb32d6c6a07540c36909"].unchecked_into(),
-        hex!["80de51e4432ed5e37b6438f499f3ec017f9577a37e68cb32d6c6a07540c36909"].unchecked_into(),
-    )];
+        hex!["702078e8037ac21bd9dd872cf4dd87ad9c63172d24f66139ad5891412b95674f"].into(),
+        hex!["702078e8037ac21bd9dd872cf4dd87ad9c63172d24f66139ad5891412b95674f"].into(),
+        hex!["833c7b8896ef66f70c0ceb079e9c13772d1cdea271248ebfe0587a7fbc2ffef9"].unchecked_into(),
+        hex!["8e74d42e90c1d6fa1f6bf332a0ae79e896d84fbb189160bba6e79cdbccc0224f"].unchecked_into(),
+        hex!["9cfa107b702bed0e9a608dffdf9fc5b96a6a059677d393d244e8f53e79ad9e3f"].unchecked_into(),
+        hex!["1c9d3d4c3079a047f83f2ddf671d76c415381cedb0b2806752b66b7dbf6d3c76"].unchecked_into(),
+    ),];
 
     let endowed_accounts: Vec<AccountId> = vec![
-        // 5Cakru1BpXPiezeD2LRZh3pJamHcbX9yZ13KLBxuqdTpgnYF
-        hex!["16eb796bee0c857db3d646ee7070252707aec0c7d82b2eda856632f6a2306a58"].into(),
+        // 5EbisDGXTdMScRusn6vBZ9B5QASm5LMRCVkERjRnUpz6bpi4
+        hex!["702078e8037ac21bd9dd872cf4dd87ad9c63172d24f66139ad5891412b95674f"].into(),
     ];
 
+
+//    info!( "Hello --------------------------------------------------");
+);
     testnet_genesis(
         initial_authorities,
         Some(endowed_accounts),
     )
 }
 
+// pub fn dna_testnet_config() -> ChainSpec {
+//     ChainSpec::from_json_bytes(&include_bytes!("../res/spec.dna.json")[..]).unwrap()
+// }
+
 /// testnet config.
 pub fn dna_testnet_config() -> ChainSpec {
     let boot_nodes = vec![
         // validator-01
-        "/ip4/51.15.132.76/tcp/30363/p2p/QmRg7aTH3ZBbcxmXfMn4CgEEBcnJzeC6UewFco7Dxh2M84".into(),
-        // validator-02
-        "/ip4/188.127.249.219/tcp/30363/p2p/QmYp26uKLyDesPzCS5Y3w44NUKZmDz87F3ywJkhHhh9SUf".into(),
-        // validator-03
-        "/ip4/167.71.148.38/tcp/30363/p2p/Qmep2VYsMfiBQnTMHVk6AddygMysiK379VP48hKZCoWtWT".into(),
-        // akru
-        "/ip4/95.216.202.55/tcp/30363/p2p/QmPrm3QaNv4Ls2DdAmsS1AoEbbYGrtqiyjxAVdc6mjEY5N".into(),
-    ];
+        "/ip4/192.168.1.201/tcp/3033/p2p/QmW7EaC6puS4QRLhXZSTZUY2zgSfV2mDnaDxLmZQxs73Xm".into(),
+        ];
     ChainSpec::from_genesis(
         "DNA",
         "dna_testnet",

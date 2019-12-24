@@ -352,6 +352,7 @@ construct_runtime!(
         ImOnline: im_online::{Module, Call, Storage, Event<T>, ValidateUnsigned, Config<T>},
         AuthorityDiscovery: authority_discovery::{Module, Call, Config},
         Sudo: sudo,
+        // Custom modules
         Assets: assets::{Module, Call, Storage},
     }
 );

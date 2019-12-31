@@ -6,11 +6,11 @@
 
 pub mod constants;
 pub mod impls;
-
+use primitives::u32_trait::{_1, _2, _3, _4, _5};
 use sp_std::prelude::*;
 use primitives::OpaqueMetadata;
 use support::{construct_runtime, parameter_types, traits::Randomness, weights::Weight,};
-use sp_runtime::{ApplyExtrinsicResult, generic, create_runtime_str,};
+use sp_runtime::{ApplyExtrinsicResult, generic, create_runtime_str,Permill,};
 use sp_runtime::curve::PiecewiseLinear;
 use sp_runtime::transaction_validity::TransactionValidity;
 use sp_runtime::traits::{
@@ -322,6 +322,47 @@ impl system::offchain::CreateTransaction<Runtime, UncheckedExtrinsic> for Runtim
     }
 }
 
+parameter_types! {
+	pub const ProposalBond: Permill = Permill::from_percent(5);
+	// KUSAMA: This value is 20x of that expected for mainnet
+	pub const ProposalBondMinimum: Balance = 2_000 * DOLLARS;
+	// KUSAMA: This value is 1/4 of that expected for mainnet
+	pub const SpendPeriod: BlockNumber = 6 * DAYS;
+	// KUSAMA: No burn - let's try to put it to use!
+	pub const Burn: Permill = Permill::from_percent(0);
+}
+
+impl treasury::Trait for Runtime {
+	type Currency = Balances;
+	type ApproveOrigin = collective::EnsureProportionAtLeast<_3, _5, AccountId, CouncilCollective>;
+	type RejectOrigin = collective::EnsureProportionMoreThan<_1, _2, AccountId, CouncilCollective>;
+	type Event = Event;
+	type ProposalRejection = Treasury;
+	type ProposalBond = ProposalBond;
+	type ProposalBondMinimum = ProposalBondMinimum;
+	type SpendPeriod = SpendPeriod;
+	type Burn = Burn;
+}
+parameter_types! {
+	// KUSAMA: can be probably be reduced for mainnet
+	// Minimum 100 bytes/KSM deposited (1 CENT/byte)
+	pub const BasicDeposit: Balance = 1000 * DOLLARS;       // 258 bytes on-chain
+	pub const FieldDeposit: Balance = 250 * DOLLARS;        // 66 bytes on-chain
+	pub const SubAccountDeposit: Balance = 200 * DOLLARS;   // 53 bytes on-chain
+	pub const MaximumSubAccounts: u32 = 100;
+}
+impl identity::Trait for Runtime {
+	type Event = Event;
+	type Currency = Balances;
+	type Slashed = Treasury;
+	type BasicDeposit = BasicDeposit;
+	type FieldDeposit = FieldDeposit;
+	type SubAccountDeposit = SubAccountDeposit;
+	type MaximumSubAccounts = MaximumSubAccounts;
+	type RegistrarOrigin = collective::EnsureProportionMoreThan<_1, _2, AccountId, CouncilCollective>;
+	type ForceOrigin = collective::EnsureProportionMoreThan<_1, _2, AccountId, CouncilCollective>;
+}
+
 construct_runtime!(
     pub enum Runtime where
         Block = Block,
@@ -341,6 +382,10 @@ construct_runtime!(
         // Randomness.
         RandomnessCollectiveFlip: randomness_collective_flip::{Module, Call, Storage},
 
+        // Governance stuff; uncallable initially.
+		Council: collective::<Instance1>::{Module, Call, Storage, Origin<T>, Event<T>, Config<T>},
+		Treasury: treasury::{Module, Call, Storage, Event<T>},
+
         // PoS consensus modules.
         Session: session::{Module, Call, Storage, Event, Config<T>},
         Authorship: authorship::{Module, Call, Storage, Inherent},
@@ -356,6 +401,13 @@ construct_runtime!(
         Assets: assets::{Module, Call, Storage},
     }
 );
+
+type CouncilCollective = collective::Instance1;
+impl collective::Trait<CouncilCollective> for Runtime {
+	type Origin = Origin;
+	type Proposal = Call;
+	type Event = Event;
+}
 
 /// The type used as a helper for interpreting the sender of transactions.
 pub type Context = system::ChainContext<Runtime>;

@@ -2602,6 +2602,7 @@ dependencies = [
  "pallet-authorship 2.0.0 (git+https://github.com/blockxlabs/substrate)",
  "pallet-babe 2.0.0 (git+https://github.com/blockxlabs/substrate)",
  "pallet-balances 2.0.0 (git+https://github.com/blockxlabs/substrate)",
+ "pallet-collective 2.0.0 (git+https://github.com/paritytech/substrate?branch=polkadot-master)",
  "pallet-finality-tracker 2.0.0 (git+https://github.com/blockxlabs/substrate)",
  "pallet-grandpa 2.0.0 (git+https://github.com/blockxlabs/substrate)",
  "pallet-identity 2.0.0 (git+https://github.com/paritytech/substrate?branch=polkadot-master)",
@@ -2616,6 +2617,7 @@ dependencies = [
  "pallet-timestamp 2.0.0 (git+https://github.com/blockxlabs/substrate)",
  "pallet-transaction-payment 2.0.0 (git+https://github.com/blockxlabs/substrate)",
  "pallet-transaction-payment-rpc-runtime-api 2.0.0 (git+https://github.com/blockxlabs/substrate)",
+ "pallet-treasury 2.0.0 (git+https://github.com/paritytech/substrate?branch=polkadot-master)",
  "pallet-utility 2.0.0 (git+https://github.com/blockxlabs/substrate)",
  "parity-scale-codec 1.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde 1.0.104 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -2810,6 +2812,34 @@ dependencies = [
  "serde 1.0.104 (registry+https://github.com/rust-lang/crates.io-index)",
  "sp-runtime 2.0.0 (git+https://github.com/blockxlabs/substrate)",
  "sp-std 2.0.0 (git+https://github.com/blockxlabs/substrate)",
+]
+
+[[package]]
+name = "pallet-balances"
+version = "2.0.0"
+source = "git+https://github.com/paritytech/substrate?branch=polkadot-master#dacb199f89049d68376c03ffed3130e591276ef8"
+dependencies = [
+ "frame-support 2.0.0 (git+https://github.com/paritytech/substrate?branch=polkadot-master)",
+ "frame-system 2.0.0 (git+https://github.com/paritytech/substrate?branch=polkadot-master)",
+ "parity-scale-codec 1.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "safe-mix 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 2.0.0 (git+https://github.com/paritytech/substrate?branch=polkadot-master)",
+ "sp-std 2.0.0 (git+https://github.com/paritytech/substrate?branch=polkadot-master)",
+]
+
+[[package]]
+name = "pallet-collective"
+version = "2.0.0"
+source = "git+https://github.com/paritytech/substrate?branch=polkadot-master#dacb199f89049d68376c03ffed3130e591276ef8"
+dependencies = [
+ "frame-support 2.0.0 (git+https://github.com/paritytech/substrate?branch=polkadot-master)",
+ "frame-system 2.0.0 (git+https://github.com/paritytech/substrate?branch=polkadot-master)",
+ "parity-scale-codec 1.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "safe-mix 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-core 2.0.0 (git+https://github.com/paritytech/substrate?branch=polkadot-master)",
+ "sp-io 2.0.0 (git+https://github.com/paritytech/substrate?branch=polkadot-master)",
+ "sp-runtime 2.0.0 (git+https://github.com/paritytech/substrate?branch=polkadot-master)",
+ "sp-std 2.0.0 (git+https://github.com/paritytech/substrate?branch=polkadot-master)",
 ]
 
 [[package]]
@@ -3029,6 +3059,19 @@ dependencies = [
  "sp-api 2.0.0 (git+https://github.com/blockxlabs/substrate)",
  "sp-runtime 2.0.0 (git+https://github.com/blockxlabs/substrate)",
  "sp-std 2.0.0 (git+https://github.com/blockxlabs/substrate)",
+]
+
+[[package]]
+name = "pallet-treasury"
+version = "2.0.0"
+source = "git+https://github.com/paritytech/substrate?branch=polkadot-master#dacb199f89049d68376c03ffed3130e591276ef8"
+dependencies = [
+ "frame-support 2.0.0 (git+https://github.com/paritytech/substrate?branch=polkadot-master)",
+ "frame-system 2.0.0 (git+https://github.com/paritytech/substrate?branch=polkadot-master)",
+ "pallet-balances 2.0.0 (git+https://github.com/paritytech/substrate?branch=polkadot-master)",
+ "parity-scale-codec 1.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sp-runtime 2.0.0 (git+https://github.com/paritytech/substrate?branch=polkadot-master)",
+ "sp-std 2.0.0 (git+https://github.com/paritytech/substrate?branch=polkadot-master)",
 ]
 
 [[package]]
@@ -5898,7 +5941,7 @@ name = "twox-hash"
 version = "1.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "rand 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "rand 0.3.23 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6616,6 +6659,8 @@ dependencies = [
 "checksum pallet-authorship 2.0.0 (git+https://github.com/blockxlabs/substrate)" = "<none>"
 "checksum pallet-babe 2.0.0 (git+https://github.com/blockxlabs/substrate)" = "<none>"
 "checksum pallet-balances 2.0.0 (git+https://github.com/blockxlabs/substrate)" = "<none>"
+"checksum pallet-balances 2.0.0 (git+https://github.com/paritytech/substrate?branch=polkadot-master)" = "<none>"
+"checksum pallet-collective 2.0.0 (git+https://github.com/paritytech/substrate?branch=polkadot-master)" = "<none>"
 "checksum pallet-finality-tracker 2.0.0 (git+https://github.com/blockxlabs/substrate)" = "<none>"
 "checksum pallet-grandpa 2.0.0 (git+https://github.com/blockxlabs/substrate)" = "<none>"
 "checksum pallet-identity 2.0.0 (git+https://github.com/paritytech/substrate?branch=polkadot-master)" = "<none>"
@@ -6630,6 +6675,7 @@ dependencies = [
 "checksum pallet-timestamp 2.0.0 (git+https://github.com/blockxlabs/substrate)" = "<none>"
 "checksum pallet-transaction-payment 2.0.0 (git+https://github.com/blockxlabs/substrate)" = "<none>"
 "checksum pallet-transaction-payment-rpc-runtime-api 2.0.0 (git+https://github.com/blockxlabs/substrate)" = "<none>"
+"checksum pallet-treasury 2.0.0 (git+https://github.com/paritytech/substrate?branch=polkadot-master)" = "<none>"
 "checksum pallet-utility 2.0.0 (git+https://github.com/blockxlabs/substrate)" = "<none>"
 "checksum parity-bytes 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)" = "0c276d76c5333b8c2579e02d49a06733a55b8282d2d9b13e8d53b6406bd7e30a"
 "checksum parity-multiaddr 0.5.0 (registry+https://github.com/rust-lang/crates.io-index)" = "045b3c7af871285146300da35b1932bb6e4639b66c7c98e85d06a32cbc4e8fa7"

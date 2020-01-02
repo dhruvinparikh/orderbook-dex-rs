@@ -148,7 +148,7 @@ impl indices::Trait for Runtime {
 
 parameter_types! {
     pub const ExistentialDeposit: Balance = 1 * MILLIDNA;
-    pub const TransferFee: Balance = 1 * MILLIDNA;
+    pub const TransferFee: Balance = 0_1 * MILLIDNA;
     pub const CreationFee: Balance = 1 * MILLIDNA;
 }
 
@@ -170,9 +170,9 @@ impl balances::Trait for Runtime {
 
 parameter_types! {
     pub const TransactionBaseFee: Balance = 1 * MILLIDNA;
-    pub const TransactionByteFee: Balance = 50 * MILLIDNA;
+    pub const TransactionByteFee: Balance = 0 * MILLIDNA;
     // setting this to zero will disable the weight fee.
-    pub const WeightFeeCoefficient: Balance = 1_000;
+    pub const WeightFeeCoefficient: Balance = 0;
     // for a sane configuration, this should always be less than `AvailableBlockRatio`.
     pub const TargetBlockFullness: Perbill = Perbill::from_percent(25);
 }

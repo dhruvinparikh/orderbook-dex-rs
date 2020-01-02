@@ -6,6 +6,7 @@ pub mod currency {
 
     pub const MILLIDNA: Balance = 1_000;
     pub const DNA: Balance = 1_000 * MILLIDNA;
+    pub const DOLLARS: Balance = DNA / 100;
 }
 
 /// Time.

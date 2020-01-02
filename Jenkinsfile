@@ -19,14 +19,14 @@ options {
                 sh 'cargo test'
             }
         }
-        stage('Master Build') {
-            when {
-                branch 'master'
-            }
-            steps {
-                sh 'docker build -t dnatest -f ./scripts/Docker/Dockerfile'
-            }
-        }
+        // stage('Master Build') {
+        //     when {
+        //         branch 'master'
+        //     }
+        //     steps {
+        //         sh 'docker build -t dnatest -f ./scripts/Docker/Dockerfile'
+        //     }
+        // }
     }
     post {
         success {

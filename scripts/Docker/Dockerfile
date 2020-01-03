@@ -24,6 +24,7 @@ RUN apt-get update && \
 
 # add Metaverse DNA binary to docker image
 COPY dnachain /usr/local/bin
+COPY build-spec.dna.json /apps/
 
 USER dnachain
 

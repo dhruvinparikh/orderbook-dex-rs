@@ -10,8 +10,6 @@ async function main () {
 
   // Create the API and wait until ready
   const api = await ApiRx.create({provider}).toPromise();
-  const address = "5ChnoXHLockcTcB1v6JMTa7H6cJZ7zFwPqBDHT6K8df4fc2N";
-
   // Retrieve the chain & node information information via rpc calls
   const [chain, nodeName, nodeVersion] = await Promise.all([
     api.rpc.system.chain(),
@@ -23,8 +21,6 @@ async function main () {
 
   // Create an instance of the keyring
   const keyring = new Keyring({ type: 'sr25519' });
-  const nonce = await api.query.system.accountNonce(address);
-
   // Add ACC2 to our keyring (with the known mnemonic for the account)
   const ACC2 = keyring.addFromMnemonic(toMnemonics);
 

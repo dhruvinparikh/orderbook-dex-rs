@@ -3,4 +3,10 @@
 path=$(pwd)
 
 cd $path/scripts/transfer && npm install && cd $path
-node $path/scripts/transfer/bulk-transfer.js
+if [ $# -eq 0 ]
+then
+node $path/scripts/transfer/bulk-transfer.js 
+else
+node $path/scripts/transfer/bulk-transfer.js $1 $2
+fi
+

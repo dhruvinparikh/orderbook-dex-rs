@@ -47,8 +47,7 @@ async function getSignTransaction(data) {
 
 async function main() {
   const address = "5ChnoXHLockcTcB1v6JMTa7H6cJZ7zFwPqBDHT6K8df4fc2N";
-
-  const url = "ws://127.0.0.1:9944";
+  const url = process.argv[3] || "ws://127.0.0.1:9944";
   const seedWords =
     "grace require cluster fringe insane pulse slab orient palm spot shaft soda";
   const keypairType = "sr25519";

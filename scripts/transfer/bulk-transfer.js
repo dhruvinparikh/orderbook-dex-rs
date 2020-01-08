@@ -97,7 +97,6 @@ async function main() {
     amount
   } = await getArg();
   const api = await getApi(url);
-  console.log("---", masterAccountURI);
   const accountPair = await getAccountPair(keypairType, masterAccountURI);
   const { address } = accountPair;
   const testAccURIs = Object.keys(testAccounts).map(x => x);

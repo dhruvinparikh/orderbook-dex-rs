@@ -1,5 +1,5 @@
 {
-  "name": "dna-simple-transfer",
+  "name": "dna-transfer",
   "version": "1.0.0",
   "description": "Javascript code for simple transfer",
   "main": "index.js",
@@ -8,6 +8,7 @@
   "dependencies": {
     "@polkadot/api": "^0.99.1",
     "@polkadot/keyring": "^1.7.1",
-    "async": "^3.1.0"
+    "async": "^3.1.0",
+    "commander": "^4.1.0"
   }
 }

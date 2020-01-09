@@ -5,7 +5,7 @@ set -e
 if [ "$1" == "--env" -a "$2" == "production" ]; then
 echo "Stoping all production validator nodes"
 # stop all validator nodes
-pm2 stop /dnachain/pm2process.yml --env production
+~/.yarn/bin/pm2 stop /dnachain/pm2process.yml --env production
 else
 echo "Stoping all development validator nodes"
 # start all validator nodes

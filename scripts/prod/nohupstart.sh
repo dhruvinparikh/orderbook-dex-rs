@@ -11,4 +11,7 @@ nohup /dnachain/scripts/start/node2.sh > /dnachain/logs/validator-node-2.log 2>&
 echo "Starting externalized node"
 # start all externalized nodes
 nohup /dnachain/startExternalizedNode.sh > /dnachain/logs/externalized-node.log 2>&1 &
+
+echo "Starting telemetry node"
+# start telemetry node
 nohup /dnachain/startTelemetryNode.sh > /dnachain/logs/telemetry-node.log 2>&1 &

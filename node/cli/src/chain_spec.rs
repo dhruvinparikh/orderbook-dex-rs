@@ -165,8 +165,8 @@ pub fn testnet_genesis(
         }),
         staking: Some(StakingConfig {
             current_era: 0,
-            validator_count: 3,
-            minimum_validator_count: 2,
+            validator_count: 6,
+            minimum_validator_count: 1,
             stakers: initial_authorities.iter().map(|x| {
                 (x.0.clone(), x.1.clone(), STASH, StakerStatus::Validator)
             }).collect(),
@@ -243,7 +243,8 @@ fn dna_config_genesis() -> GenesisConfig {
 pub fn dna_testnet_config() -> ChainSpec {
     let boot_nodes = vec![
         // validator-01
-        "/ip4/192.168.1.201/tcp/3033/p2p/QmW7EaC6puS4QRLhXZSTZUY2zgSfV2mDnaDxLmZQxs73Xm".into(),
+        "/ip4/192.168.1.201/tcp/3033/p2p/Qmece3bstSKgRomhPcAWswQMUFT3GRL5XpCuy8bFDggrwV".into(),
+        "/ip4/192.168.1.201/tcp/3034/p2p/Qma6H1VuzGMgyx5nXzqhkkwpgSchbFz72ENVwVwwAfUrSG".into()
         ];
     ChainSpec::from_genesis(
         "DNA",

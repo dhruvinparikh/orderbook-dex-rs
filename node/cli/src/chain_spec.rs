@@ -166,7 +166,7 @@ pub fn testnet_genesis(
         staking: Some(StakingConfig {
             current_era: 0,
             validator_count: 6,
-            minimum_validator_count: 1,
+            minimum_validator_count: 2,
             stakers: initial_authorities.iter().map(|x| {
                 (x.0.clone(), x.1.clone(), STASH, StakerStatus::Validator)
             }).collect(),

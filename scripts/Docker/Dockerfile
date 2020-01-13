@@ -25,13 +25,13 @@ RUN apt-get update && \
 # add Metaverse DNA binary to docker image
 # COPY dnachain /usr/local/bin
 COPY /home/robot/.jenkins/workspace/Metaverse-dna-master_master/dnachain /usr/local/bin
-COPY build-spec.dna.json /apps/
+# COPY build-spec.dna.json /apps/
 
-USER dnachain
+# USER dnachain
 
 # check if executable works in this container
-RUN which dnachain
-RUN /usr/local/bin/dnachain --version
+# RUN which dnachain
+# RUN /usr/local/bin/dnachain --version
 
 EXPOSE 30333 9933 9944
 VOLUME ["/dnachain"]

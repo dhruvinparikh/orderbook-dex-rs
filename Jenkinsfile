@@ -25,8 +25,6 @@ pipeline {
             }
             steps {
                 sh 'docker build -t dnatest -f "./scripts/Docker/Dockerfile" "."'
-            }
-            steps {
                 sh 'docker push dnatest'
             }
         }

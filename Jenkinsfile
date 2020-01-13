@@ -1,32 +1,32 @@
 pipeline {
-agent { dockerfile true }
+agent any
 options {
       timeout(time:2, unit: 'HOURS')
-    }
-    stages {
-        //     stage('Build the WebAssembly binary') {
-        //     steps {
-        //         sh './scripts/build.sh'
-        //     }
-        // }
-        // stage('Build all native code') {
-        //     steps {
-        //         sh 'cargo build --release --jobs 8'
-        //     }
-        // }
-        // stage('Test') {
-        //     steps {
-        //         sh 'cargo test'
-        //     }
-        // }
-        stage('Master Build') {
-            when {
-                branch 'master'
-            }
-            steps {
-                sh 'docker build -t dnatest -f ./scripts/Docker/Dockerfile .'
-            }
+}
+stages {
+    //     stage('Build the WebAssembly binary') {
+    //     steps {
+    //         sh './scripts/build.sh'
+    //     }
+    // }
+    // stage('Build all native code') {
+    //     steps {
+    //         sh 'cargo build --release --jobs 8'
+    //     }
+    // }
+    // stage('Test') {
+    //     steps {
+    //         sh 'cargo test'
+    //     }
+    // }
+    stage('Master Build') {
+        when {
+            branch 'master'
         }
+        steps {
+            sh 'docker build -t dnatest -f "./scripts/Docker/Dockerfile" "."'
+        }
+     }
     }
     post {
         success {

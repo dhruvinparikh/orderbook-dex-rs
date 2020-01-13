@@ -24,7 +24,7 @@ options {
                 branch 'master'
             }
             steps {
-                sh 'docker build -t dnatest -f ./scripts/Docker/Dockerfile'
+                sh 'docker build -t dnatest -f ./scripts/Docker/Dockerfile .'
             }
         }
     }

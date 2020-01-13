@@ -1,8 +1,4 @@
 pipeline {
-    environment {
-    registry = "blockxdna/dnatest"
-    dockerImage = ''
-  }
     agent any
     options {
         timeout(time:2, unit: 'HOURS')
@@ -27,18 +23,11 @@ pipeline {
             when {
                 branch 'master'
             }
-            // steps {
-                // sh 'docker build -t dnatest -f "./scripts/Docker/Dockerfile" "."'
-            // }
             steps {
-                script {
-                    dockerImage = docker.build registry + ":$BUILD_NUMBER"
-                }
-                script {
-                    docker.withRegistry('') {
-                    dockerImage.push()
-                }
+                sh 'docker build -t dnatest -f "./scripts/Docker/Dockerfile" "."'
             }
+            steps {
+                sh 'docker push dnatest'
             }
         }
     }

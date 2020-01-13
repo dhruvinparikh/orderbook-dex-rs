@@ -25,7 +25,7 @@ pipeline {
             }
             steps {
                 sh 'docker build -t dnatest -f "./scripts/Docker/Dockerfile" "."'
-                sh 'docker tag dnatest:${env.BUILD_NUMBER} docker.io/blockxdna/dnatest'
+                sh 'docker tag dnatest:${BUILD_NUMBER} docker.io/blockxdna/dnatest'
                 sh 'docker push docker.io/blockxdna/dnatest'
             }
         }

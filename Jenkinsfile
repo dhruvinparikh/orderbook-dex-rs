@@ -27,11 +27,11 @@ pipeline {
                 sh 'curl -O http://192.168.1.254:5000/dnachain'
                 sh 'docker build -t dnachain -f "./scripts/Docker/Dockerfile" "."'
                 sh 'docker tag dnachain docker.io/blockxdna/dnachain:node-0.0.${BUILD_NUMBER}'
-                sh 'docker tag dnachain docker.io/blockxdna/dnachain:node-latest'
+                sh 'docker tag dnachain docker.io/blockxdna/dnachain:latest'
                 sh 'docker push docker.io/blockxdna/dnachain:node-0.0.${BUILD_NUMBER}'
-                sh 'docker push docker.io/blockxdna/dnachain:node-latest'
+                sh 'docker push docker.io/blockxdna/dnachain:latest'
                 sh 'docker rmi -f blockxdna/dnachain:node-0.0.${BUILD_NUMBER}'
-                sh 'docker rmi -f blockxdna/dnachain:node-latest'
+                sh 'docker rmi -f blockxdna/dnachain:latest'
             }
         }
     }

@@ -34,13 +34,11 @@ pipeline {
                 script {
                     dockerImage = docker.build registry + ":$BUILD_NUMBER"
                 }
-            }
-            steps{
                 script {
                     docker.withRegistry('') {
                     dockerImage.push()
-                    }
                 }
+            }
             }
         }
     }

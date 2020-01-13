@@ -30,6 +30,8 @@ pipeline {
                 sh 'docker tag dnachain docker.io/blockxdna/dnachain:node-latest'
                 sh 'docker push docker.io/blockxdna/dnachain:node-0.0.${BUILD_NUMBER}'
                 sh 'docker push docker.io/blockxdna/dnachain:node-latest'
+                sh 'docker rmi -f dnachain:node-0.0.${BUILD_NUMBER}'
+                sh 'docker rmi -f dnachain:node-latest'
             }
         }
     }

@@ -1,5 +1,5 @@
 pipeline {
-agent any
+agent { dockerfile true }
 options {
       timeout(time:2, unit: 'HOURS')
     }

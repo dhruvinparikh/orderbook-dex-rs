@@ -25,7 +25,7 @@ pipeline {
             }
             steps {
                 sh 'docker build -t dnatest -f "./scripts/Docker/Dockerfile" "."'
-                sh 'docker push dnatest'
+                sh 'docker push registry.hub.docker.com/blockxdna/dnatest'
             }
         }
     }

@@ -9,11 +9,11 @@ pipeline {
                 sh 'cargo build --release --jobs 8'
             }
         }
-        stage('Test') {
-            steps {
-                sh 'cargo test'
-            }
-        }
+        // stage('Test') {
+        //     steps {
+        //         sh 'cargo test'
+        //     }
+        // }
         stage('Master Build') {
             when {
                 branch 'master'

@@ -1,0 +1,41 @@
+apps:
+  - script    : /dnachain/scripts/start/node0.sh --env production
+    name      : 'DNA-Validator0'
+    instances : 1
+    log_file  : /dnachain/logs/validator-node-0.log
+    env :
+        NODE_ENV : development
+    env_production:
+      NODE_ENV: production
+  - script    : /dnachain/scripts/start/node1.sh --env production
+    name      : 'DNA-Validator1'
+    instances : 1
+    log_file  : /dnachain/logs/validator-node-1.log
+    env :
+        NODE_ENV : development
+    env_production:
+      NODE_ENV: production
+  - script    : /dnachain/scripts/start/node2.sh --env production
+    name      : 'DNA-Validator2'
+    instances : 1
+    log_file  : /dnachain/logs/validator-node-2.log
+    env :
+        NODE_ENV : development
+    env_production:
+      NODE_ENV: production
+  - script    : /dnachain/scripts/start/startExternalizedNode.sh --env production
+    name      : 'Externalized node'
+    instances : 1
+    log_file  : /dnachain/logs/externalized-node.log
+    env :
+        NODE_ENV : development
+    env_production:
+      NODE_ENV: production
+  - script    : /dnachain/scripts/start/startTelemetryNode.sh --env production
+    name      : 'Telemetry node'
+    instances : 1
+    log_file  : /dnachain/logs/telemetry-node.log
+    env :
+        NODE_ENV : development
+    env_production:
+      NODE_ENV: production    

@@ -4,27 +4,21 @@ pipeline {
         timeout(time:2, unit: 'HOURS')
     }
     stages {
-        //     stage('Build the WebAssembly binary') {
-        //     steps {
-        //         sh './scripts/build.sh'
-        //     }
-        // }
-        // stage('Build all native code') {
-        //     steps {
-        //         sh 'cargo build --release --jobs 8'
-        //     }
-        // }
-        // stage('Test') {
-        //     steps {
-        //         sh 'cargo test'
-        //     }
-        // }
+        stage('Build all native code') {
+            steps {
+                sh 'cargo build --release --jobs 8'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh 'cargo test'
+            }
+        }
         stage('Master Build') {
             when {
                 branch 'master'
             }
             steps {
-                sh 'curl -O http://192.168.1.254:5000/dnachain'
                 sh 'docker build -t dnachain -f "./scripts/Docker/Dockerfile" "."'
                 sh 'docker tag dnachain docker.io/blockxdna/dnachain:node-0.0.${BUILD_NUMBER}'
                 sh 'docker tag dnachain docker.io/blockxdna/dnachain:latest'

@@ -4,7 +4,7 @@ pipeline {
         timeout(time:2, unit: 'HOURS')
     }
     stages {
-        stage('Build all native code') {
+        // stage('Build all native code') {
         //     steps {
         //         sh 'cargo build --release --jobs 8'
         //     }

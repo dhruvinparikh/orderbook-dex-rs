@@ -235,27 +235,27 @@ fn dna_config_genesis() -> GenesisConfig {
     )
 }
 
-// pub fn dna_testnet_config() -> ChainSpec {
-//     ChainSpec::from_json_bytes(&include_bytes!("../res/spec.dna.json")[..]).unwrap()
-// }
+pub fn dna_testnet_config() -> ChainSpec {
+    ChainSpec::from_json_bytes(&include_bytes!("../res/spec.dna.json")[..]).unwrap()
+}
 
 /// testnet config.
-pub fn dna_testnet_config() -> ChainSpec {
-    let boot_nodes = vec![
-        // validator-01
-        "/ip4/192.168.1.201/tcp/3033/p2p/QmW7EaC6puS4QRLhXZSTZUY2zgSfV2mDnaDxLmZQxs73Xm".into(),
-        ];
-    ChainSpec::from_genesis(
-        "DNA",
-        "dna_testnet",
-        dna_config_genesis,
-        boot_nodes,
-        Some(TelemetryEndpoints::new(vec![(STAGING_TELEMETRY_URL.to_string(), 0)])),
-        Some(DNA_PROTOCOL_ID),
-        Some(serde_json::from_str(DNA_PROPERTIES).unwrap()),
-        Default::default(),
-    )
-}
+// pub fn dna_testnet_config() -> ChainSpec {
+//     let boot_nodes = vec![
+//         // validator-01
+//         "/ip4/192.168.1.201/tcp/3033/p2p/QmW7EaC6puS4QRLhXZSTZUY2zgSfV2mDnaDxLmZQxs73Xm".into(),
+//         ];
+//     ChainSpec::from_genesis(
+//         "DNA",
+//         "dna_testnet",
+//         dna_config_genesis,
+//         boot_nodes,
+//         Some(TelemetryEndpoints::new(vec![(STAGING_TELEMETRY_URL.to_string(), 0)])),
+//         Some(DNA_PROTOCOL_ID),
+//         Some(serde_json::from_str(DNA_PROPERTIES).unwrap()),
+//         Default::default(),
+//     )
+// }
 
 fn development_config_genesis() -> GenesisConfig {
     testnet_genesis(
@@ -286,6 +286,7 @@ fn local_testnet_genesis() -> GenesisConfig {
             get_authority_keys_from_seed("Alice"),
             get_authority_keys_from_seed("Bob"),
         ],
+        get_account_id_from_seed::<sr25519::Public>("Alice"),
         None,
     )
 }

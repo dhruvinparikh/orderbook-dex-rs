@@ -19,7 +19,7 @@ pipeline {
                 branch 'master'
             }
             steps {
-                sh 'cp ./target/debug/dnachain .'
+                sh 'cp ./target/release/dnachain .'
                 sh 'docker build -t dnachain -f "./scripts/Docker/Dockerfile" "."'
                 sh 'docker tag dnachain docker.io/blockxdna/dnachain:node-0.0.${BUILD_NUMBER}'
                 sh 'docker tag dnachain docker.io/blockxdna/dnachain:latest'

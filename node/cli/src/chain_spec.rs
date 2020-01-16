@@ -286,8 +286,8 @@ fn local_testnet_genesis() -> GenesisConfig {
             get_authority_keys_from_seed("Alice"),
             get_authority_keys_from_seed("Bob"),
         ],
-        get_account_id_from_seed::<sr25519::Public>("Alice"),
-        None,
+        Some(vec!
+            [get_account_id_from_seed::<sr25519::Public>("Alice")]),
     )
 }
 

@@ -7,7 +7,7 @@ kspath=/dnachain/metaverse-keystore/keystore2
 acc=acc2
 mkdir -p /dnachain/chain/$acc/chains/dna_testnet/keystore
 cp $kspath/* /dnachain/chain/$acc/chains/dna_testnet/keystore/
-dnachain --node-key a4143e437a33299676f104135d7bd4b5f0570c0c999d6f9c78a062e65b063161 --validator --ws-port 9946 --port 3035 --bootnodes /ip4/142.93.151.164/tcp/3033/p2p/Qmece3bstSKgRomhPcAWswQMUFT3GRL5XpCuy8bFDggrwV -d /dnachain/chain/$acc --telemetry-url ws://localhost:8000/submit
+dnachain --node-key a4143e437a33299676f104135d7bd4b5f0570c0c999d6f9c78a062e65b063161 --validator --ws-port 9946 --port 3035 --bootnodes /ip4/142.93.151.164/tcp/3033/p2p/Qmece3bstSKgRomhPcAWswQMUFT3GRL5XpCuy8bFDggrwV /ip4/142.93.151.164/tcp/3034/p2p/QmTBup8mUZcNkytxTgz1xWxQNPFQFh5Gnwjdy19D1BPqpd -d /dnachain/chain/$acc --telemetry-url ws://localhost:8000/submit
 else
 path=$(pwd)
 mkdir -p /tmp/chain/acc2/chains/dna_testnet/keystore

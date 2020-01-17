@@ -16,7 +16,7 @@ use telemetry::TelemetryEndpoints;
 use hex_literal::hex;
 use log::info;
 
-const STAGING_TELEMETRY_URL: &str = "wss://telemetry.polkadot.io/submit/";
+const STAGING_TELEMETRY_URL: &str = "ws://telemetry.mvsdna.com:8000/submit";
 
 // TODO: Remove if not needed
 const DNA_PROTOCOL_ID: &str = "dna"; // we dont need this
@@ -166,7 +166,7 @@ pub fn testnet_genesis(
         staking: Some(StakingConfig {
             current_era: 0,
             validator_count: 3,
-            minimum_validator_count: 2,
+            minimum_validator_count: 1,
             stakers: initial_authorities.iter().map(|x| {
                 (x.0.clone(), x.1.clone(), STASH, StakerStatus::Validator)
             }).collect(),

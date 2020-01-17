@@ -1,0 +1,41 @@
+apps:
+  - script    : ./scripts/start/node0.sh
+    name      : 'DNA-Validator0'
+    instances : 1
+    log_file  : ./logs/validator-node-0.log
+    env :
+        NODE_ENV : development
+    env_production:
+      NODE_ENV: production
+  - script    : ./scripts/start/node1.sh
+    name      : 'DNA-Validator1'
+    instances : 1
+    log_file  : ./logs/validator-node-1.log
+    env :
+        NODE_ENV : development
+    env_production:
+      NODE_ENV: production
+  - script    : ./scripts/start/node2.sh
+    name      : 'DNA-Validator2'
+    instances : 1
+    log_file  : ./logs/validator-node-2.log
+    env :
+        NODE_ENV : development
+    env_production:
+      NODE_ENV: production
+  - script    : ./scripts/start/startExternalizedNode.sh
+    name      : 'Externalized node'
+    instances : 1
+    log_file  : ./logs/externalized-node.log
+    env :
+        NODE_ENV : development
+    env_production:
+      NODE_ENV: production
+  - script    : ./scripts/start/startTelemetryNode.sh
+    name      : 'Telemetry node'
+    instances : 1
+    log_file  : ./logs/telemetry-node.log
+    env :
+        NODE_ENV : development
+    env_production:
+      NODE_ENV: production    

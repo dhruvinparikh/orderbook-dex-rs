@@ -23,3 +23,8 @@ rls*.log
 **/wip/*.stderr
 .local
 */Cargo.locknode/runtime/Cargo.lock
+yarn.lock
+package-lock.json
+node_modules
+dnachain
+logs

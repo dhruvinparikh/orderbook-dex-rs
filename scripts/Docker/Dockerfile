@@ -20,17 +20,19 @@ RUN apt-get update && \
 	apt-get clean && \
 	find /var/lib/apt/lists/ -type f -not -name lock -delete; \
 # add user
-	useradd -m -u 1000 -U -s /bin/sh -d /dna dna
+	useradd -m -u 1000 -U -s /bin/sh -d /dnachain dnachain
 
 # add Metaverse DNA binary to docker image
-COPY ./target/release/dnachain /usr/local/bin
+COPY dnachain /usr/local/bin/
+RUN chmod 777 /usr/local/bin/dnachain
 
-USER dna
+USER dnachain
 
 # check if executable works in this container
+# RUN which dnachain
 RUN /usr/local/bin/dnachain --version
 
 EXPOSE 30333 9933 9944
-VOLUME ["/dna"]
+VOLUME ["/dnachain"]
 
 ENTRYPOINT ["/usr/local/bin/dnachain"]

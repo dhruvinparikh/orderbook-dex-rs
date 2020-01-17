@@ -12,5 +12,5 @@ else
 path=$(pwd)
 mkdir -p /tmp/chain/acc2/chains/dna_testnet/keystore
 cp -a $path/../metaverse-keystore/keystore2/ /tmp/chain/acc2/chains/dna_testnet/keystore/
-$path/target/debug/dnachain --node-key a4143e437a33299676f104135d7bd4b5f0570c0c999d6f9c78a062e65b063161 --validator --ws-port 9946 --port 3035 --name "DNA NODE 2" --bootnodes /ip4/127.0.0.1/tcp/3033/p2p/Qmece3bstSKgRomhPcAWswQMUFT3GRL5XpCuy8bFDggrwV /ip4/127.0.0.1/tcp/3034/p2p/QmTBup8mUZcNkytxTgz1xWxQNPFQFh5Gnwjdy19D1BPqpd -d /tmp/chain/acc2 --chain=local --telemetry-url ws://telemetry.mvsdna.com:8000/submit
+$path/target/debug/dnachain --node-key a4143e437a33299676f104135d7bd4b5f0570c0c999d6f9c78a062e65b063161 --validator --ws-port 9946 --port 3035 --name "DNA NODE 2" --bootnodes /ip4/127.0.0.1/tcp/3033/p2p/Qmece3bstSKgRomhPcAWswQMUFT3GRL5XpCuy8bFDggrwV /ip4/127.0.0.1/tcp/3034/p2p/QmTBup8mUZcNkytxTgz1xWxQNPFQFh5Gnwjdy19D1BPqpd -d /tmp/chain/acc2 --chain=dna --telemetry-url ws://telemetry.mvsdna.com:8000/submit
 fi

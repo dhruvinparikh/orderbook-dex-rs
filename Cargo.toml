@@ -5,7 +5,6 @@ members = [
     "node/runtime",
     "node/cli",
     "dna/assets",
-    "dna/structures"
 ]
 
 [profile.release]

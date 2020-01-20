@@ -15,8 +15,6 @@ sp-runtime = {git = "https://github.com/blockxlabs/substrate", default-features 
 support = { package = "frame-support", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
 # `system` module provides us with all sorts of useful stuff and macros depend on it being around.
 system = { package = "frame-system", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
-# Palette specific to this module
-structures = { package = "dna-structures", path = "../structures", default-features = false }
 
 [dev-dependencies]
 rstd = { package = "sp-std", git = "https://github.com/blockxlabs/substrate", branch = "master" }
@@ -31,7 +29,5 @@ std = [
   "sp-runtime/std",
   "support/std",
   "system/std",
-  "structures/std",
   "runtime-io/std",
-#"rstd/std"
 ]

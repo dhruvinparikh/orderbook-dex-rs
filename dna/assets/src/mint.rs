@@ -2,9 +2,9 @@ use super::*;
 
 // This function creates tokens of a given asset and deposits them into an address. If the recipient address doesn't exist, it is created.
 impl<T: Trait> Module<T> {
-    pub fn mint(to_address: H256, asset_id: u32, amount: i64, name: u32) -> DispatchResult {
+    pub fn mint(to_address: H256, asset_id: u32, amount: DNAi64, name: u32) -> DispatchResult {
         // Checking that amount is non-negative.
-        if amount < 0 {
+        if amount < DNAi64::from(0) {
              Err("Amount can't be negative.")?
         }
 

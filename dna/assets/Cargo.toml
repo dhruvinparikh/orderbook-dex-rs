@@ -15,6 +15,7 @@ sp-runtime = {git = "https://github.com/blockxlabs/substrate", default-features 
 support = { package = "frame-support", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
 # `system` module provides us with all sorts of useful stuff and macros depend on it being around.
 system = { package = "frame-system", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
+rstd = { package = "sp-std", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
 
 [dev-dependencies]
 rstd = { package = "sp-std", git = "https://github.com/blockxlabs/substrate", branch = "master" }
@@ -30,4 +31,5 @@ std = [
   "support/std",
   "system/std",
   "runtime-io/std",
+  "rstd/std"
 ]

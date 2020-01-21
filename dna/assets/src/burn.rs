@@ -2,9 +2,9 @@ use super::*;
 
 // This function burns tokens of a given asset and from a specific address.
 impl<T: Trait> Module<T> {
-    pub fn burn(from_address: H256, asset_id: u32, amount: i64) -> DispatchResult {
+    pub fn burn(from_address: H256, asset_id: u32, amount: DNAi64) -> DispatchResult {
         // Checking that amount is non-negative.
-        if amount < 0 {
+        if amount < DNAi64::from(0) {
              Err("Amount can't be negative.")?
         }
 
@@ -24,7 +24,7 @@ impl<T: Trait> Module<T> {
 
         // Deducting amount from from_address.
         let new_balance = <Self as Store>::Balances::get((asset_id, from_address)) - amount;
-        if new_balance == 0 {
+        if new_balance == DNAi64::from(0) {
             <Self as Store>::Balances::remove((asset_id, from_address));
         } else {
             <Self as Store>::Balances::insert((asset_id, from_address), new_balance);

@@ -15,9 +15,11 @@ use core::ops::{Add, AddAssign, Sub, SubAssign};
 mod burn;
 mod mint;
 mod transfer;
+mod hello;
 use burn::*;
 use mint::*;
 use transfer::*;
+use hello::*;
 
 /// The scale factor (must be positive).
 const SF: i128 = 1000000000;
@@ -92,6 +94,7 @@ decl_storage! {
         pub Balances get(fn balances): map (u32, H256) => DNAi64;
         pub TotalSupply get(fn total_supply): map u32 => DNAi64;
         pub Tokens get(fn tokens): map u32 => DNAi64;
+        pub TestMap get(fn test_map) : map H256 => H256;
     }
 }
 
@@ -119,6 +122,14 @@ decl_module! {
         pub fn destroy(origin,from_address: H256, asset_id: u32, amount: DNAi64) -> DispatchResult {
             // Call corresponding internal function.
             Self::burn(from_address, asset_id, amount)?;
+
+            // Return Ok if successful.
+            Ok(())
+        }
+
+        pub fn hello_world(origin,from_address: H256) -> DispatchResult {
+            // Call corresponding internal function.
+            Self::hello(from_address)?;
 
             // Return Ok if successful.
             Ok(())

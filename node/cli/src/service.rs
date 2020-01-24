@@ -1,10 +1,11 @@
 //! Service and ServiceFactory implementation. Specialized wrapper over Substrate service.
-
-#![warn(unused_extern_crates)]
-
+#![allow(unused)]
+use std::fmt;
 use std::sync::Arc;
+use std::result::*;
+use babe;
 use client::{self, LongestChain};
-use grandpa::{self, FinalityProofProvider as GrandpaFinalityProofProvider};
+use grandpa::{self, FinalityProofProvider as GrandpaFinalityProofProvider,run_grandpa_observer};
 use node_executor::Executor;
 use node_runtime::{GenesisConfig, RuntimeApi};
 use node_primitives::Block;
@@ -102,8 +103,9 @@ macro_rules! new_full {
             $config.network.sentry_nodes.clone(),
             $config.chain_spec.clone(),
         );
+        // use futures::prelude::*;
         use futures01::sync::mpsc;
-        use network::DhtEvent;
+        use network::{Event,DhtEvent};
         use futures::{
             compat::Stream01CompatExt,
             stream::StreamExt,
@@ -121,13 +123,12 @@ macro_rules! new_full {
         // back-pressure. Authority discovery is triggering one event per authority within the current authority set.
         // This estimates the authority set size to be somewhere below 10000 thereby setting the channel buffer size to
         // 10 000.
-        let (dht_event_tx, dht_event_rx) = mpsc::channel::<DhtEvent>(10_000);
+        // let (dht_event_tx, dht_event_rx) = mpsc::channel::<DhtEvent>(10_000);
 
         let service = builder.with_network_protocol(|_| Ok(crate::service::NodeProtocol::new()))?
             .with_finality_proof_provider(|client, backend|
                 Ok(Arc::new(grandpa::FinalityProofProvider::new(backend, client)) as _)
             )?
-            .with_dht_event_tx(dht_event_tx)?
             .build()?;
 
         let (block_import, grandpa_link, babe_link) = import_setup.take()
@@ -162,18 +163,32 @@ macro_rules! new_full {
             let babe = babe::start_babe(babe_config)?;
             service.spawn_essential_task(babe);
 
-            let future03_dht_event_rx = dht_event_rx.compat()
-                .map(|x| x.expect("<mpsc::channel::Receiver as Stream> never returns an error; qed"))
-                .boxed();
-            let authority_discovery = authority_discovery::AuthorityDiscovery::new(
-                service.client(),
-                service.network(),
-                sentry_nodes,
-                service.keystore(),
-                future03_dht_event_rx,
-            );
-            let future01_authority_discovery = authority_discovery.map(|x| Ok(x)).compat();
-            service.spawn_task(future01_authority_discovery);
+            // let future03_dht_event_rx = dht_event_rx.compat()
+            //     .map(|x| x.expect("<mpsc::channel::Receiver as Stream> never returns an error; qed"))
+            //     .boxed();
+            // let authority_discovery = authority_discovery::AuthorityDiscovery::new(
+            //     service.client(),
+            //     service.network(),
+            //     sentry_nodes,
+            //     service.keystore(),
+            //     future03_dht_event_rx,
+            // );
+            // let future01_authority_discovery = authority_discovery.map(|x| Ok(x)).compat();
+            // service.spawn_task(future01_authority_discovery);
+            let network = service.network();
+			let dht_event_stream = network.event_stream().filter_map(|e| async move { match e {
+				Event::Dht(e) => Some(e),
+				_ => None,
+			}}).boxed();
+			let authority_discovery = authority_discovery::AuthorityDiscovery::new(
+				service.client(),
+				network,
+				sentry_nodes,
+				service.keystore(),
+				dht_event_stream,
+			);
+
+			service.spawn_task(authority_discovery);
         }
 
         // if the node isn't actively participating in consensus then it doesn't
@@ -197,13 +212,14 @@ macro_rules! new_full {
         match (is_authority, disable_grandpa) {
             (false, false) => {
                 // start the lightweight GRANDPA observer
-                service.spawn_task(grandpa::run_grandpa_observer(
+                let cdd = run_grandpa_observer(
                     config,
                     grandpa_link,
                     service.network(),
                     service.on_exit(),
                     service.spawn_task_handle(),
-                )?);
+                ).compat();
+                service.spawn_task(cdd);
             },
             (true, false) => {
                 // start the full GRANDPA voter
@@ -219,7 +235,8 @@ macro_rules! new_full {
                 };
                 // the GRANDPA voter task is considered infallible, i.e.
                 // if it fails we take down the service with it.
-                service.spawn_essential_task(grandpa::run_grandpa_voter(grandpa_config)?);
+                let kkk = grandpa::run_grandpa_voter(grandpa_config).compat();
+                service.spawn_essential_task(kkk);
             },
             (_, true) => {
                 grandpa::setup_disabled_grandpa(

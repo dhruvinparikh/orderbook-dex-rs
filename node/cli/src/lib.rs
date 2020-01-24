@@ -1,13 +1,13 @@
 //! Console line interface.
 
 pub use sc_cli::VersionInfo;
-use tokio::prelude::Future;
-use tokio::runtime::{Builder as RuntimeBuilder, Runtime};
+use tokio::runtime::{Builder as RuntimeBuilder};
 use sc_cli::{parse_and_prepare, NoCustom, ParseAndPrepare};
 use sc_service::{AbstractService, Roles as ServiceRoles, Configuration};
 use sc_cli::{IntoExit, error};
 use log::info;
-
+use futures::{FutureExt, TryFutureExt, channel::oneshot, future::select, compat::Compat};
+use tokio::runtime::Runtime;
 mod chain_spec;
 use chain_spec::load_spec;
 
@@ -24,7 +24,7 @@ pub fn run<I, T, E>(args: I, exit: E, version: VersionInfo) -> error::Result<()>
 
     match parse_and_prepare::<NoCustom, NoCustom, _>(&version, "Metaverse-DNA-by-Blockx-Labs", args) {
         ParseAndPrepare::Run(cmd) => cmd.run(load_spec, exit,
-        |exit, _cli_args, _custom_args, config: Config<_, _>| {
+        |exit, _cli_args, _custom_args, mut config: Config<_, _>| {
             info!("{}", version.name);
             info!("  version {}", config.full_version());
             info!("  by {}, 2018, 2019", version.author);
@@ -32,8 +32,13 @@ pub fn run<I, T, E>(args: I, exit: E, version: VersionInfo) -> error::Result<()>
             info!("Node name: {}", config.name);
             info!("Roles: {:?}", config.roles);
             // TODO: We might ont need
-            let runtime = RuntimeBuilder::new().name_prefix("main-tokio-").build()
-                .map_err(|e| format!("{:?}", e))?;
+            // let runtime = RuntimeBuilder::new().name_prefix("main-tokio-").build()
+            //     .map_err(|e| format!("{:?}", e))?;
+            let runtime = Runtime::new().map_err(|e| format!("{:?}", e))?;
+            config.tasks_executor = {
+                let runtime_handle = runtime.executor();
+                Some(Box::new(move |fut| { runtime_handle.spawn(Compat::new(fut.map(Ok))); }))
+            };
             match config.roles {
                 ServiceRoles::LIGHT => run_until_exit(
                     runtime,
@@ -70,7 +75,6 @@ fn run_until_exit<T, E>(
         T: AbstractService,
         E: IntoExit,
 {
-    use futures::{FutureExt, TryFutureExt, channel::oneshot, future::select, compat::Future01CompatExt};
 
     let (exit_send, exit) = oneshot::channel();
 
@@ -81,24 +85,22 @@ fn run_until_exit<T, E>(
         .compat();
 
     runtime.executor().spawn(future);
-
     // we eagerly drop the service so that the internal exit future is fired,
     // but we need to keep holding a reference to the global telemetry guard
     let _telemetry = service.telemetry();
 
     let service_res = {
-        let exit = e.into_exit();
         let service = service
-            .map_err(|err| error::Error::Service(err))
-            .compat();
-        let select = select(service, exit)
+            .map_err(|err| error::Error::Service(err));
+
+        let select = select(service, e.into_exit())
             .map(|_| Ok(()))
             .compat();
         runtime.block_on(select)
     };
 
     let _ = exit_send.send(());
-
+    use futures01::Future;
     // TODO [andre]: timeout this future #1318
     let _ = runtime.shutdown_on_idle().wait();
 

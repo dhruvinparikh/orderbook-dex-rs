@@ -40,7 +40,7 @@ txpool-api = { package = "sp-transaction-pool", git = "https://github.com/blockx
 network = { package = "sc-network", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
 babe = { package = "sc-consensus-babe", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
 grandpa = { package = "sc-finality-grandpa", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
-basic-authorship = { package = "sc-basic-authority", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
+basic-authorship = { package = "sc-basic-authorship", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
 authority-discovery = { package = "sc-authority-discovery", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
 sc-service = { git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
 telemetry = { package = "sc-telemetry", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }

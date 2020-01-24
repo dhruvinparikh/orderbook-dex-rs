@@ -15,6 +15,23 @@ use sc_service::{
 use network::construct_simple_protocol;
 use inherents::InherentDataProviders;
 
+use futures::{
+	FutureExt, TryFutureExt,
+	task::{Spawn, SpawnError, FutureObj},
+	compat::Future01CompatExt,
+};
+/// Wrap a futures01 executor as a futures03 spawn.
+#[derive(Clone)]
+pub struct WrappedExecutor<T>(pub T);
+
+impl<T> Spawn for WrappedExecutor<T>
+	where T: futures01::future::Executor<Box<dyn futures01::Future<Item=(),Error=()> + Send + 'static>>
+{
+	fn spawn_obj(&self, future: FutureObj<'static, ()>) -> Result<(), SpawnError> {
+		self.0.execute(Box::new(future.map(Ok).compat()))
+			.map_err(|_| SpawnError::shutdown())
+	}
+}
 construct_simple_protocol! {
     /// DNA protocol attachment for substrate.
     pub struct NodeProtocol where Block = Block { }
@@ -104,13 +121,10 @@ macro_rules! new_full {
             $config.chain_spec.clone(),
         );
         // use futures::prelude::*;
-        use futures01::sync::mpsc;
+        // use futures01::sync::mpsc;
         use network::{Event,DhtEvent};
-        use futures::{
-            compat::Stream01CompatExt,
-            stream::StreamExt,
-            future::{FutureExt, TryFutureExt},
-        };
+        // use sc_network::Event;
+	use futures::stream::StreamExt;
 
         // sentry nodes announce themselves as authorities to the network
         // and should run the same protocols authorities do, but it should
@@ -187,7 +201,6 @@ macro_rules! new_full {
 				service.keystore(),
 				dht_event_stream,
 			);
-
 			service.spawn_task(authority_discovery);
         }
 
@@ -218,8 +231,8 @@ macro_rules! new_full {
                     service.network(),
                     service.on_exit(),
                     service.spawn_task_handle(),
-                ).compat();
-                service.spawn_task(cdd);
+                );
+                //service.spawn_essential_task(cdd);
             },
             (true, false) => {
                 // start the full GRANDPA voter
@@ -235,8 +248,8 @@ macro_rules! new_full {
                 };
                 // the GRANDPA voter task is considered infallible, i.e.
                 // if it fails we take down the service with it.
-                let kkk = grandpa::run_grandpa_voter(grandpa_config).compat();
-                service.spawn_essential_task(kkk);
+                let voter = grandpa::run_grandpa_voter(grandpa_config)?.compat().map(drop);
+                service.spawn_essential_task(voter);
             },
             (_, true) => {
                 grandpa::setup_disabled_grandpa(

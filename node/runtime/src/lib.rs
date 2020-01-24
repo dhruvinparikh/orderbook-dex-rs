@@ -10,12 +10,18 @@ pub mod impls;
 use sp_std::prelude::*;
 use primitives::OpaqueMetadata;
 use support::{construct_runtime, parameter_types, traits::Randomness, weights::Weight,};
-use sp_runtime::{ApplyExtrinsicResult, generic, create_runtime_str,};
-use sp_runtime::curve::PiecewiseLinear;
-use sp_runtime::transaction_validity::TransactionValidity;
-use sp_runtime::traits::{
-    self, BlakeTwo256, Block as BlockT, NumberFor, StaticLookup, Verify,
-    SaturatedConversion, OpaqueKeys,
+// use sp_runtime::traits::{
+//     self, BlakeTwo256, Block as BlockT, NumberFor, StaticLookup, Verify,
+//     SaturatedConversion, OpaqueKeys,
+// };
+
+use sp_runtime::{
+	create_runtime_str, generic, impl_opaque_keys,
+	ApplyExtrinsicResult, Percent, Permill, Perbill, RuntimeDebug,
+	transaction_validity::{TransactionValidity, InvalidTransaction, TransactionValidityError},
+	curve::PiecewiseLinear,
+    traits::{BlakeTwo256, Block as BlockT, StaticLookup, SignedExtension, OpaqueKeys, NumberFor, Verify, SaturatedConversion},
+
 };
 use im_online::sr25519::{AuthorityId as ImOnlineId};
 use authority_discovery_primitives::AuthorityId as AuthorityDiscoveryId;
@@ -38,7 +44,6 @@ use version::NativeVersion;
 #[cfg(any(feature = "std", test))]
 pub use balances::Call as BalancesCall;
 pub use timestamp::Call as TimestampCall;
-pub use sp_runtime::{Permill, Perbill, impl_opaque_keys};
 pub use support::StorageValue;
 pub use staking::StakerStatus;
 pub use system::EventRecord;
@@ -97,9 +102,21 @@ impl system::Trait for Runtime {
     type ModuleToIndex = ModuleToIndex;
 }
 
+parameter_types! {
+	// One storage item; value is size 4+4+16+32 bytes = 56 bytes.
+	pub const MultisigDepositBase: Balance = 300 * MILLIDNA;
+	// Additional storage item size of 32 bytes.
+	pub const MultisigDepositFactor: Balance = 50 * MILLIDNA;
+	pub const MaxSignatories: u16 = 100;
+}
+
 impl utility::Trait for Runtime {
     type Event = Event;
     type Call = Call;
+    type Currency = Balances;
+	type MultisigDepositBase = MultisigDepositBase;
+	type MultisigDepositFactor = MultisigDepositFactor;
+	type MaxSignatories = MaxSignatories;
 }
 
 parameter_types! {
@@ -156,7 +173,7 @@ impl balances::Trait for Runtime {
     /// The type for recording an account's balance.
     type Balance = Balance;
     /// What to do if an account's free balance gets zeroed.
-    type OnFreeBalanceZero = (Staking, Session);
+    type OnFreeBalanceZero = Staking;
     /// What to do if a new account is created.
     type OnNewAccount = Indices;
     /// The uniquitous event type.
@@ -166,6 +183,8 @@ impl balances::Trait for Runtime {
     type ExistentialDeposit = ExistentialDeposit;
     type TransferFee = TransferFee;
     type CreationFee = CreationFee;
+    type OnReapAccount = System;
+
 }
 
 parameter_types! {
@@ -200,14 +219,15 @@ parameter_types! {
 }
 
 impl session::Trait for Runtime {
-    type OnSessionEnding = Staking;
+    type SessionManager = Staking;
     type SessionHandler = <SessionKeys as OpaqueKeys>::KeyTypeIdProviders;
     type ShouldEndSession = Babe;
+    // type OnSessionEnding = Staking; removed due to not needed as per kusama's lib.rs
     type Event = Event;
     type Keys = SessionKeys;
     type ValidatorId = <Self as system::Trait>::AccountId;
     type ValidatorIdOf = staking::StashOf<Self>;
-    type SelectInitialValidators = Staking;
+    // type SelectInitialValidators = Staking;
     type DisabledValidatorsThreshold = DisabledValidatorsThreshold;
 }
 
@@ -293,69 +313,75 @@ impl offences::Trait for Runtime {
 
 impl assets::Trait for Runtime {}
 
-impl system::offchain::CreateTransaction<Runtime, UncheckedExtrinsic> for Runtime {
-    type Public = <Signature as traits::Verify>::Signer;
-    type Signature = Signature;
+// removed due ot make it look like kusama/lib.rs
+// impl system::offchain::CreateTransaction<Runtime, UncheckedExtrinsic> for Runtime {
+//     type Public = <Signature as traits::Verify>::Signer;
+//     type Signature = Signature;
 
-    fn create_transaction<F: system::offchain::Signer<Self::Public, Self::Signature>>(
-        call: Call,
-        public: Self::Public,
-        account: AccountId,
-        index: Index,
-    ) -> Option<(Call, <UncheckedExtrinsic as traits::Extrinsic>::SignaturePayload)> {
-        let period = 1 << 8;
-        let current_block = System::block_number().saturated_into::<u64>();
-        let tip = 0;
-        let extra: SignedExtra = (
-            system::CheckVersion::<Runtime>::new(),
-            system::CheckGenesis::<Runtime>::new(),
-            system::CheckEra::<Runtime>::from(generic::Era::mortal(period, current_block)),
-            system::CheckNonce::<Runtime>::from(index),
-            system::CheckWeight::<Runtime>::new(),
-            transaction_payment::ChargeTransactionPayment::<Runtime>::from(tip),
-        );
-        let raw_payload = SignedPayload::new(call, extra).ok()?;
-        let signature = F::sign(public, &raw_payload)?;
-        let address = Indices::unlookup(account);
-        let (call, extra, _) = raw_payload.deconstruct();
-        Some((call, (address, signature, extra)))
-    }
-}
+//     fn create_transaction<F: system::offchain::Signer<Self::Public, Self::Signature>>(
+//         call: Call,
+//         public: Self::Public,
+//         account: AccountId,
+//         index: Index,
+//     ) -> Option<(Call, <UncheckedExtrinsic as traits::Extrinsic>::SignaturePayload)> {
+//         let period = 1 << 8;
+//         let current_block = System::block_number().saturated_into::<u64>();
+//         let tip = 0;
+//         let extra: SignedExtra = (
+//             system::CheckVersion::<Runtime>::new(),
+//             system::CheckGenesis::<Runtime>::new(),
+//             system::CheckEra::<Runtime>::from(generic::Era::mortal(period, current_block)),
+//             system::CheckNonce::<Runtime>::from(index),
+//             system::CheckWeight::<Runtime>::new(),
+//             transaction_payment::ChargeTransactionPayment::<Runtime>::from(tip),
+//         );
+//         let raw_payload = SignedPayload::new(call, extra).ok()?;
+//         let signature = F::sign(public, &raw_payload)?;
+//         let address = Indices::unlookup(account);
+//         let (call, extra, _) = raw_payload.deconstruct();
+//         Some((call, (address, signature, extra)))
+//     }
+// }
 
-construct_runtime!(
+construct_runtime! {
     pub enum Runtime where
         Block = Block,
         NodeBlock = node_primitives::Block,
         UncheckedExtrinsic = UncheckedExtrinsic
     {
-        // Basic stuff.
-        System: system::{Module, Call, Storage, Config, Event},
-        Timestamp: timestamp::{Module, Call, Storage, Inherent},
-        Utility: utility::{Module, Call, Event},
+        // Basic stuff; balances is uncallable initially.
+		System: system::{Module, Call, Storage, Config, Event},
+		RandomnessCollectiveFlip: randomness_collective_flip::{Module, Storage},
 
-        // Native currency and accounts.
-        Indices: indices,
-        Balances: balances::{default, Error},
-        TransactionPayment: transaction_payment::{Module, Storage},
+		// Must be before session.
+		Babe: babe::{Module, Call, Storage, Config, Inherent(Timestamp)},
 
-        // Randomness.
-        RandomnessCollectiveFlip: randomness_collective_flip::{Module, Call, Storage},
+		Timestamp: timestamp::{Module, Call, Storage, Inherent},
+		Indices: indices,
+		Balances: balances::{Module, Call, Storage, Config<T>, Event<T>},
+		TransactionPayment: transaction_payment::{Module, Storage},
 
-        // PoS consensus modules.
-        Session: session::{Module, Call, Storage, Event, Config<T>},
-        Authorship: authorship::{Module, Call, Storage, Inherent},
-        Staking: staking::{default, OfflineWorker},
-        Offences: offences::{Module, Call, Storage, Event},
-        Babe: babe::{Module, Call, Storage, Config, Inherent(Timestamp)},
-        FinalityTracker: finality_tracker::{Module, Call, Inherent},
-        Grandpa: grandpa::{Module, Call, Storage, Config, Event},
-        ImOnline: im_online::{Module, Call, Storage, Event<T>, ValidateUnsigned, Config<T>},
-        AuthorityDiscovery: authority_discovery::{Module, Call, Config},
-        Sudo: sudo,
+		// Consensus support.
+		Authorship: authorship::{Module, Call, Storage},
+		Staking: staking,
+		Offences: offences::{Module, Call, Storage, Event},
+		Session: session::{Module, Call, Storage, Event, Config<T>},
+		FinalityTracker: finality_tracker::{Module, Call, Inherent},
+		Grandpa: grandpa::{Module, Call, Storage, Config, Event},
+		ImOnline: im_online::{Module, Call, Storage, Event<T>, ValidateUnsigned, Config<T>},
+		AuthorityDiscovery: authority_discovery::{Module, Call, Config},
+
+
+		Utility: utility::{Module, Call, Storage, Event<T>},
+
         // Custom modules
-        Assets: assets::{Module, Call, Storage},
+        // Assets: assets::{Module, Call, Storage, Event<T>},
+
+        Sudo: sudo,
+        // Assets: assets::{Module, Call, Storage, Event<T>},
+
     }
-);
+}
 
 /// The type used as a helper for interpreting the sender of transactions.
 pub type Context = system::ChainContext<Runtime>;
@@ -395,7 +421,7 @@ pub type CheckedExtrinsic = generic::CheckedExtrinsic<AccountId, Call, SignedExt
 pub type Executive = executive::Executive<Runtime, Block, Context, Runtime, AllModules>;
 
 // Implement our runtime API endpoints. This is just a bunch of proxying.
-impl_runtime_apis! {
+sp_api::impl_runtime_apis! {
     impl sp_api::Core<Block> for Runtime {
         fn version() -> RuntimeVersion {
             VERSION
@@ -445,9 +471,9 @@ impl_runtime_apis! {
     }
 
     impl offchain_primitives::OffchainWorkerApi<Block> for Runtime {
-        fn offchain_worker(number: NumberFor<Block>) {
-            Executive::offchain_worker(number)
-        }
+        fn offchain_worker(header: &<Block as BlockT>::Header) {
+			Executive::offchain_worker(header)
+		}
     }
 
     impl fg_primitives::GrandpaApi<Block> for Runtime {

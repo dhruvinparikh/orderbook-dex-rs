@@ -100,6 +100,11 @@ impl system::Trait for Runtime {
 impl utility::Trait for Runtime {
     type Event = Event;
     type Call = Call;
+    type Currency = Balances;
+    type MultisigDepositFactor = ();
+    type MaxSignatories= ();
+    type MultisigDepositBase = ();
+
 }
 
 parameter_types! {
@@ -331,7 +336,7 @@ construct_runtime!(
         // Basic stuff.
         System: system::{Module, Call, Storage, Config, Event},
         Timestamp: timestamp::{Module, Call, Storage, Inherent},
-        Utility: utility::{Module, Call, Event},
+        Utility: utility::{Module, Call, Event<T>},
 
         // Native currency and accounts.
         Indices: indices,

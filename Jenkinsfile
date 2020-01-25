@@ -6,6 +6,8 @@ pipeline {
     stages {
         stage('Build all native code') {
             steps {
+                sh 'rm Cargo.lock'
+                sh 'cargo clean'
                 sh 'cargo build --release --jobs 8'
             }
         }

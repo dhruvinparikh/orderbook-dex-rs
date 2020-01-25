@@ -95,7 +95,7 @@
         ]
       },
       "staking": {
-        "validatorCount": 6,
+        "validatorCount": 23,
         "minimumValidatorCount": 2,
         "invulnerables": [
           "5EbisDGXTdMScRusn6vBZ9B5QASm5LMRCVkERjRnUpz6bpi4",

@@ -25,46 +25,46 @@ structopt = "0.3.3"
 jsonrpc-core = "13.2.0"
 
 # primitives
-node-primitives = { git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
-authority-discovery-primitives = { package = "sp-authority-discovery", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
-babe-primitives = { package = "sp-consensus-babe", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
-grandpa-primitives = { package = "sp-finality-grandpa", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
-primitives = { package = "sp-core", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
-sp-runtime = { git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
+node-primitives = { git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-5" }
+authority-discovery-primitives = { package = "sp-authority-discovery", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-5" }
+babe-primitives = { package = "sp-consensus-babe", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-5" }
+grandpa-primitives = { package = "sp-finality-grandpa", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-5" }
+primitives = { package = "sp-core", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-5" }
+sp-runtime = { git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-5" }
 
 # core dependencies
-client = { package = "sc-client", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
-inherents = { package = "sp-inherents", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
-txpool = { package = "sc-transaction-pool", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
-txpool-api = { package = "sp-transaction-pool", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
-network = { package = "sc-network", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
-babe = { package = "sc-consensus-babe", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
-grandpa = { package = "sc-finality-grandpa", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
-basic-authorship = { package = "sc-basic-authority", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
-authority-discovery = { package = "sc-authority-discovery", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
-sc-service = { git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
-telemetry = { package = "sc-telemetry", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
-keystore = { package = "sc-keystore", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
-consensus-common = { package = "sp-consensus", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
+client = { package = "sc-client", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-5" }
+inherents = { package = "sp-inherents", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-5" }
+txpool = { package = "sc-transaction-pool", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-5" }
+txpool-api = { package = "sp-transaction-pool", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-5" }
+network = { package = "sc-network", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-5" }
+babe = { package = "sc-consensus-babe", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-5" }
+grandpa = { package = "sc-finality-grandpa", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-5" }
+basic-authorship = { package = "sc-basic-authority", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-5" }
+authority-discovery = { package = "sc-authority-discovery", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-5" }
+sc-service = { git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-5" }
+telemetry = { package = "sc-telemetry", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-5" }
+keystore = { package = "sc-keystore", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-5" }
+consensus-common = { package = "sp-consensus", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-5" }
 
 # frame dependencies
-im-online = { package = "pallet-im-online", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
+im-online = { package = "pallet-im-online", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-5" }
 
 # node-specific dependencies
 node-runtime = { path = "../runtime" }
 node-executor = { path = "../executor" }
-executor = { package = "sc-executor", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
-node-rpc = { package = "sc-rpc", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
+executor = { package = "sc-executor", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-5" }
+node-rpc = { package = "sc-rpc", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-5" }
 
 # CLI-specific dependencies
 tokio = { version = "0.1.22", optional = true }
 exit-future = { version = "0.1.4", optional = true }
-sc-cli = { git = "https://github.com/blockxlabs/substrate", optional = true, default-features = false, branch = "master" }
+sc-cli = { git = "https://github.com/blockxlabs/substrate", optional = true, default-features = false, branch = "blockx-dev-5" }
 ctrlc = { version = "3.0", features = ["termination"], optional = true }
 
 [build-dependencies]
-sc-cli = { git = "https://github.com/blockxlabs/substrate", optional = true, default-features = false, branch = "master" }
-build-script-utils = { package = "substrate-build-script-utils", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "master" }
+sc-cli = { git = "https://github.com/blockxlabs/substrate", optional = true, default-features = false, branch = "blockx-dev-5" }
+build-script-utils = { package = "substrate-build-script-utils", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-5" }
 structopt = "0.3.3"
 vergen = "3.0.4"
 

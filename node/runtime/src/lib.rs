@@ -114,9 +114,10 @@ impl utility::Trait for Runtime {
     type Event = Event;
     type Call = Call;
     type Currency = Balances;
-	type MultisigDepositBase = MultisigDepositBase;
-	type MultisigDepositFactor = MultisigDepositFactor;
-	type MaxSignatories = MaxSignatories;
+    type MultisigDepositFactor = ();
+    type MaxSignatories= ();
+    type MultisigDepositBase = ();
+
 }
 
 parameter_types! {
@@ -349,31 +350,30 @@ construct_runtime! {
         NodeBlock = node_primitives::Block,
         UncheckedExtrinsic = UncheckedExtrinsic
     {
-        // Basic stuff; balances is uncallable initially.
-		System: system::{Module, Call, Storage, Config, Event},
-		RandomnessCollectiveFlip: randomness_collective_flip::{Module, Storage},
+        // Basic stuff.
+        System: system::{Module, Call, Storage, Config, Event},
+        Timestamp: timestamp::{Module, Call, Storage, Inherent},
+        Utility: utility::{Module, Call, Event<T>},
 
-		// Must be before session.
-		Babe: babe::{Module, Call, Storage, Config, Inherent(Timestamp)},
+        // Native currency and accounts.
+        Indices: indices,
+        Balances: balances::{default, Error},
+        TransactionPayment: transaction_payment::{Module, Storage},
 
-		Timestamp: timestamp::{Module, Call, Storage, Inherent},
-		Indices: indices,
-		Balances: balances::{Module, Call, Storage, Config<T>, Event<T>},
-		TransactionPayment: transaction_payment::{Module, Storage},
+        // Randomness.
+        RandomnessCollectiveFlip: randomness_collective_flip::{Module, Call, Storage},
 
-		// Consensus support.
-		Authorship: authorship::{Module, Call, Storage},
-		Staking: staking,
-		Offences: offences::{Module, Call, Storage, Event},
-		Session: session::{Module, Call, Storage, Event, Config<T>},
-		FinalityTracker: finality_tracker::{Module, Call, Inherent},
-		Grandpa: grandpa::{Module, Call, Storage, Config, Event},
-		ImOnline: im_online::{Module, Call, Storage, Event<T>, ValidateUnsigned, Config<T>},
-		AuthorityDiscovery: authority_discovery::{Module, Call, Config},
-
-
-		Utility: utility::{Module, Call, Storage, Event<T>},
-
+        // PoS consensus modules.
+        Session: session::{Module, Call, Storage, Event, Config<T>},
+        Authorship: authorship::{Module, Call, Storage, Inherent},
+        Staking: staking::{default, OfflineWorker},
+        Offences: offences::{Module, Call, Storage, Event},
+        Babe: babe::{Module, Call, Storage, Config, Inherent(Timestamp)},
+        FinalityTracker: finality_tracker::{Module, Call, Inherent},
+        Grandpa: grandpa::{Module, Call, Storage, Config, Event},
+        ImOnline: im_online::{Module, Call, Storage, Event<T>, ValidateUnsigned, Config<T>},
+        AuthorityDiscovery: authority_discovery::{Module, Call, Config},
+        Sudo: sudo,
         // Custom modules
         // Assets: assets::{Module, Call, Storage, Event<T>},
 

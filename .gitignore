@@ -22,9 +22,12 @@ rls*.log
 *.rej
 **/wip/*.stderr
 .local
-*/Cargo.locknode/runtime/Cargo.lock
+*/Cargo.lock
+Cargo.lock
+node/runtime/Cargo.lock
 yarn.lock
 package-lock.json
 node_modules
-dnachain
+dnachain*
 logs
+.maintain

@@ -53,7 +53,6 @@ transaction-payment = { package = "pallet-transaction-payment", git = "https://g
 transaction-payment-rpc-runtime-api = { package = "pallet-transaction-payment-rpc-runtime-api", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-5" }
 treasury = { package = "pallet-treasury", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-5" }
 
-
 assets = { package = "dna-assets", path = "../../dna/assets", default-features = false }
 
 [build-dependencies]
@@ -101,4 +100,5 @@ std = [
     "sp-transaction-pool/std",
     "inherents/std",
     "collective/std",
+    "treasury/std"
 ]

@@ -9,8 +9,8 @@ pub mod impls;
 
 use sp_std::prelude::*;
 use primitives::OpaqueMetadata;
-use primitives::u32_trait::{_1, _2, _3, _5};
-use support::{construct_runtime, parameter_types, traits::Randomness, weights::Weight,};
+use primitives::u32_trait::{_1, _2,_4, _3, _5};
+use support::{construct_runtime, parameter_types, traits::{SplitTwoWays, Randomness,Currency,OnUnbalanced,Imbalance}, weights::Weight,};
 use sp_runtime::{ApplyExtrinsicResult, generic, create_runtime_str,};
 use sp_runtime::curve::PiecewiseLinear;
 use sp_runtime::transaction_validity::TransactionValidity;
@@ -34,6 +34,7 @@ use node_primitives::{
 use version::RuntimeVersion;
 #[cfg(feature = "std")]
 use version::NativeVersion;
+// use crate::sp_api_hidden_includes_construct_runtime::hidden_include::traits::Imbalance;
 
 // A few exports that help ease life for downstream crates.
 #[cfg(any(feature = "std", test))]
@@ -183,9 +184,42 @@ parameter_types! {
     pub const TargetBlockFullness: Perbill = Perbill::from_percent(25);
 }
 
+pub type NegativeImbalance<T> = <balances::Module<T> as Currency<<T as system::Trait>::AccountId>>::NegativeImbalance;
+
+/// Logic for the author to get a portion of fees.
+pub struct ToAuthor<R>(sp_std::marker::PhantomData<R>);
+
+impl<R> OnUnbalanced<NegativeImbalance<R>> for ToAuthor<R>
+where
+	R: balances::Trait + authorship::Trait,
+	<R as system::Trait>::AccountId: From<AccountId>,
+	<R as system::Trait>::AccountId: Into<AccountId>,
+	<R as system::Trait>::Event: From<balances::RawEvent<
+		<R as system::Trait>::AccountId,
+		<R as balances::Trait>::Balance,
+		balances::DefaultInstance>
+	>,
+{
+	fn on_nonzero_unbalanced(amount: NegativeImbalance<R>) {
+        let numeric_amount = amount.peek();
+		let author = <authorship::Module<R>>::author();
+		<balances::Module<R>>::resolve_creating(&<authorship::Module<R>>::author(), amount);
+		<system::Module<R>>::deposit_event(balances::RawEvent::Deposit(author, numeric_amount));
+	}
+}
+
+/// Splits fees 80/20 between treasury and block author.
+pub type DealWithFees = SplitTwoWays<
+	Balance,
+	NegativeImbalance<Runtime>,
+	_4, Treasury,   // 4 parts (80%) goes to the treasury.
+	_1, ToAuthor<Runtime>,   // 1 part (20%) goes to the block author.
+>;
+
+
 impl transaction_payment::Trait for Runtime {
     type Currency = Balances;
-    type OnTransactionPayment = ();
+	type OnTransactionPayment = DealWithFees;
     type TransactionBaseFee = TransactionBaseFee;
     type TransactionByteFee = TransactionByteFee;
     type WeightToFee = LinearWeightToFee<WeightFeeCoefficient>;

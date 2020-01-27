@@ -7,7 +7,7 @@
 // Importing crates declared in the cargo.toml file.
 use codec::{Decode, Encode};
 use primitives::H256;
-use support::{decl_module, decl_storage,decl_error, dispatch::DispatchResult, StorageMap};
+use support::{decl_module, decl_storage, dispatch::DispatchResult, StorageMap};
 use rstd::prelude::*;
 use core::ops::{Add, AddAssign, Sub, SubAssign};
 
@@ -15,17 +15,9 @@ use core::ops::{Add, AddAssign, Sub, SubAssign};
 mod burn;
 mod mint;
 mod transfer;
-use burn::*;
-use mint::*;
-use transfer::*;
 
 /// The scale factor (must be positive).
 const SF: i128 = 1000000000;
-
-// The maximum and minimum values supported by i64, as a i128. They are used for over/underflow
-// checks in multiplication and division.
-const MAX: i128 = i64::max_value() as i128;
-const MIN: i128 = i64::min_value() as i128;
 
 /// This struct implements the DNAi64 data type. It is a tuple containing a single Option of
 /// an i64.
@@ -100,7 +92,7 @@ decl_module! {
     // The module declaration.
     pub struct Module<T: Trait> for enum Call where origin: T::Origin {
 
-        pub fn deposit(origin,from_address: H256, to_address: H256, asset_id: u32, amount: DNAi64) -> DispatchResult {
+        pub fn deposit(_origin,from_address: H256, to_address: H256, asset_id: u32, amount: DNAi64) -> DispatchResult {
             // Call corresponding internal function.
             Self::transfer(from_address, to_address, asset_id, amount)?;
 
@@ -108,7 +100,7 @@ decl_module! {
             Ok(())
         }
 
-        pub fn issue(origin, to_address: H256, asset_id: u32, amount: DNAi64, name: u32) -> DispatchResult {
+        pub fn issue(_origin, to_address: H256, asset_id: u32, amount: DNAi64, name: u32) -> DispatchResult {
             // Call corresponding internal function.
             Self::mint(to_address, asset_id, amount, name)?;
 
@@ -116,7 +108,7 @@ decl_module! {
             Ok(())
         }
 
-        pub fn destroy(origin,from_address: H256, asset_id: u32, amount: DNAi64) -> DispatchResult {
+        pub fn destroy(_origin,from_address: H256, asset_id: u32, amount: DNAi64) -> DispatchResult {
             // Call corresponding internal function.
             Self::burn(from_address, asset_id, amount)?;
 

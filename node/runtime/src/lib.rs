@@ -9,12 +9,13 @@ pub mod impls;
 
 use sp_std::prelude::*;
 use primitives::OpaqueMetadata;
+use primitives::u32_trait::{_1, _2, _3, _5};
 use support::{construct_runtime, parameter_types, traits::Randomness, weights::Weight,};
 use sp_runtime::{ApplyExtrinsicResult, generic, create_runtime_str,};
 use sp_runtime::curve::PiecewiseLinear;
 use sp_runtime::transaction_validity::TransactionValidity;
 use sp_runtime::traits::{
-    self, BlakeTwo256, Block as BlockT, NumberFor, StaticLookup, Verify,
+    self, BlakeTwo256, Block as BlockT, NumberFor, StaticLookup,
     SaturatedConversion, OpaqueKeys,
 };
 use im_online::sr25519::{AuthorityId as ImOnlineId};
@@ -152,9 +153,9 @@ impl indices::Trait for Runtime {
 }
 
 parameter_types! {
-    pub const ExistentialDeposit: Balance = 1 * MILLIDNA;
-    pub const TransferFee: Balance = 0_1 * MILLIDNA;
-    pub const CreationFee: Balance = 1 * MILLIDNA;
+    pub const ExistentialDeposit: Balance = 1 * CENTS;
+    pub const TransferFee: Balance = 0_1 * CENTS;
+    pub const CreationFee: Balance = 1 * CENTS;
 }
 
 impl balances::Trait for Runtime {
@@ -174,8 +175,8 @@ impl balances::Trait for Runtime {
 }
 
 parameter_types! {
-    pub const TransactionBaseFee: Balance = 1 * MILLIDNA;
-    pub const TransactionByteFee: Balance = 0 * MILLIDNA;
+    pub const TransactionBaseFee: Balance = 1 * CENTS;
+    pub const TransactionByteFee: Balance = 0 * CENTS;
     // setting this to zero will disable the weight fee.
     pub const WeightFeeCoefficient: Balance = 0;
     // for a sane configuration, this should always be less than `AvailableBlockRatio`.
@@ -239,12 +240,31 @@ parameter_types! {
     pub const RewardCurve: &'static PiecewiseLinear<'static> = &REWARD_CURVE;
 }
 
+parameter_types! {
+	pub const ProposalBond: Permill = Permill::from_percent(5);
+	pub const ProposalBondMinimum: Balance = 20 * DOLLARS;
+	pub const SpendPeriod: BlockNumber = 6 * DAYS;
+	pub const Burn: Permill = Permill::from_percent(0);
+}
+
+impl treasury::Trait for Runtime {
+	type Currency = Balances;
+	type ApproveOrigin = collective::EnsureProportionAtLeast<_3, _5, AccountId, CouncilCollective>;
+	type RejectOrigin = collective::EnsureProportionMoreThan<_1, _2, AccountId, CouncilCollective>;
+	type Event = Event;
+	type ProposalRejection = Treasury;
+	type ProposalBond = ProposalBond;
+	type ProposalBondMinimum = ProposalBondMinimum;
+	type SpendPeriod = SpendPeriod;
+	type Burn = Burn;
+}
+
 impl staking::Trait for Runtime {
     type Currency = Balances;
     type Time = Timestamp;
     type CurrencyToVote = CurrencyToVoteHandler;
     type Event = Event;
-    type Slash = ();
+    type Slash = Treasury;
     type Reward = ();
     type RewardRemainder = ();
     type SlashDeferDuration = SlashDeferDuration;
@@ -327,6 +347,15 @@ impl system::offchain::CreateTransaction<Runtime, UncheckedExtrinsic> for Runtim
     }
 }
 
+parameter_types! {
+	pub const CandidacyBond: Balance = 1 * DOLLARS;
+	pub const VotingBond: Balance = 5 * CENTS;
+	/// Daily council elections.
+	pub const TermDuration: BlockNumber = 24 * HOURS;
+	pub const DesiredMembers: u32 = 13;
+	pub const DesiredRunnersUp: u32 = 7;
+}
+
 construct_runtime!(
     pub enum Runtime where
         Block = Block,
@@ -357,10 +386,22 @@ construct_runtime!(
         ImOnline: im_online::{Module, Call, Storage, Event<T>, ValidateUnsigned, Config<T>},
         AuthorityDiscovery: authority_discovery::{Module, Call, Config},
         Sudo: sudo,
+
+        // GOvernance stuff; uncallable initiallly
+        Council: collective::<Instance1>::{Module, Call, Storage, Origin<T>, Event<T>, Config<T>},
+        Treasury: treasury::{Module, Call, Storage, Event<T>},
+
         // Custom modules
         Assets: assets::{Module, Call, Storage},
     }
 );
+
+type CouncilCollective = collective::Instance1;
+impl collective::Trait<CouncilCollective> for Runtime {
+	type Origin = Origin;
+	type Proposal = Call;
+	type Event = Event;
+}
 
 /// The type used as a helper for interpreting the sender of transactions.
 pub type Context = system::ChainContext<Runtime>;

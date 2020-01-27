@@ -3,9 +3,10 @@
 /// Money matters.
 pub mod currency {
     use node_primitives::Balance;
-
-    pub const MILLIDNA: Balance = 1_000;
-    pub const DNA: Balance = 1_000 * MILLIDNA;
+	pub const DNA: Balance = 1_000_000_000_000;
+	pub const DOLLARS: Balance = DNA;
+	pub const CENTS: Balance = DOLLARS / 100;
+	pub const MILLICENTS: Balance = CENTS / 1_000;
 }
 
 /// Time.

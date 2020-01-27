@@ -85,13 +85,13 @@ macro_rules! new_full {
     ($config:expr) => {{
         let (
             name,
-            impl_name,
-            impl_version,
+            _impl_name,
+            _impl_version,
             is_authority,
             force_authoring,
             disable_grandpa,
             sentry_nodes,
-            chain_spec,
+            _chain_spec,
         ) = (
             $config.name.clone(),
             $config.impl_name.clone(),

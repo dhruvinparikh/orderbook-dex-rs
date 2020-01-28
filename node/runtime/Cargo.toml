@@ -57,8 +57,6 @@ identity = { package = "pallet-identity", git = "https://github.com/blockxlabs/s
 elections-phragmen = { package = "pallet-elections-phragmen", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
 membership = { package = "pallet-membership", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
 
-
-
 assets = { package = "dna-assets", path = "../../dna/assets", default-features = false }
 
 [build-dependencies]

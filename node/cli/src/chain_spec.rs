@@ -7,7 +7,7 @@ use primitives::{Pair, Public, sr25519};
 use node_runtime::{
     GenesisConfig, SystemConfig, SessionConfig, BabeConfig, StakingConfig,
     IndicesConfig, ImOnlineConfig, BalancesConfig, GrandpaConfig, SudoConfig,
-    AuthorityDiscoveryConfig,CouncilConfig,
+    AuthorityDiscoveryConfig,CouncilConfig,DemocracyConfig,TechnicalCommitteeConfig,
     SessionKeys, StakerStatus, WASM_BINARY,
 };
 use node_runtime::constants::currency::*;
@@ -171,7 +171,12 @@ pub fn testnet_genesis(
             slash_reward_fraction: Perbill::from_percent(10),
             .. Default::default()
         }),
+        democracy: Some(DemocracyConfig::default()),
         collective_Instance1: Some(CouncilConfig {
+			members: vec![],
+			phantom: Default::default(),
+        }),
+        collective_Instance2: Some(TechnicalCommitteeConfig {
 			members: vec![],
 			phantom: Default::default(),
 		}),

@@ -52,6 +52,9 @@ utility = { package = "pallet-utility", git = "https://github.com/blockxlabs/sub
 transaction-payment = { package = "pallet-transaction-payment", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
 transaction-payment-rpc-runtime-api = { package = "pallet-transaction-payment-rpc-runtime-api", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
 treasury = { package = "pallet-treasury", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
+democracy = { package = "pallet-democracy", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
+
+
 
 assets = { package = "dna-assets", path = "../../dna/assets", default-features = false }
 
@@ -100,5 +103,6 @@ std = [
     "sp-transaction-pool/std",
     "inherents/std",
     "collective/std",
-    "treasury/std"
+    "treasury/std",
+    "democracy/std"
 ]

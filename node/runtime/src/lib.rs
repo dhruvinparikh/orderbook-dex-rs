@@ -474,7 +474,6 @@ construct_runtime!(
         // Basic stuff.
         System: system::{Module, Call, Storage, Config, Event},
         Timestamp: timestamp::{Module, Call, Storage, Inherent},
-        Utility: utility::{Module, Call, Event<T>},
 
         // Native currency and accounts.
         Indices: indices,
@@ -506,9 +505,13 @@ construct_runtime!(
 
         // Custom modules
         Assets: assets::{Module, Call, Storage},
+        
+        // Utility module
+        Utility: utility::{Module, Call, Event<T>},
+
 
 		// Less simple identity module.
-		Identity: identity::{Module, Call, Storage, Event<T>},
+        Identity: identity::{Module, Call, Storage, Event<T>},
     }
 );
 

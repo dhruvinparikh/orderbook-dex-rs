@@ -54,6 +54,8 @@ transaction-payment-rpc-runtime-api = { package = "pallet-transaction-payment-rp
 treasury = { package = "pallet-treasury", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
 democracy = { package = "pallet-democracy", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
 identity = { package = "pallet-identity", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
+elections-phragmen = { package = "pallet-elections-phragmen", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
+membership = { package = "pallet-membership", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
 
 
 
@@ -106,5 +108,7 @@ std = [
     "collective/std",
     "treasury/std",
     "democracy/std",
-    "identity/std"
+    "identity/std",
+    "elections-phragmen/std",
+    "membership/std"
 ]

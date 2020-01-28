@@ -390,6 +390,46 @@ parameter_types! {
 	pub const DesiredRunnersUp: u32 = 7;
 }
 
+parameter_types! {
+	pub const LaunchPeriod: BlockNumber = 7 * DAYS;
+	pub const VotingPeriod: BlockNumber = 7 * DAYS;
+	pub const EmergencyVotingPeriod: BlockNumber = 3 * HOURS;
+	pub const MinimumDeposit: Balance = 1 * DOLLARS;
+	pub const EnactmentPeriod: BlockNumber = 8 * DAYS;
+	pub const CooloffPeriod: BlockNumber = 7 * DAYS;
+	// One cent: $10,000 / MB
+	pub const PreimageByteDeposit: Balance = 10 * MILLICENTS;
+}
+
+impl democracy::Trait for Runtime {
+	type Proposal = Call;
+	type Event = Event;
+	type Currency = Balances;
+	type EnactmentPeriod = EnactmentPeriod;
+	type LaunchPeriod = LaunchPeriod;
+	type VotingPeriod = VotingPeriod;
+	type EmergencyVotingPeriod = EmergencyVotingPeriod;
+	type MinimumDeposit = MinimumDeposit;
+	/// A straight majority of the council can decide what their next motion is.
+	type ExternalOrigin = collective::EnsureProportionAtLeast<_1, _2, AccountId, CouncilCollective>;
+	/// A majority can have the next scheduled referendum be a straight majority-carries vote.
+	type ExternalMajorityOrigin = collective::EnsureProportionAtLeast<_1, _2, AccountId, CouncilCollective>;
+	/// A unanimous council can have the next scheduled referendum be a straight default-carries
+	/// (NTB) vote.
+	type ExternalDefaultOrigin = collective::EnsureProportionAtLeast<_1, _1, AccountId, CouncilCollective>;
+	/// Two thirds of the technical committee can have an ExternalMajority/ExternalDefault vote
+	/// be tabled immediately and with a shorter voting/enactment period.
+	type FastTrackOrigin = collective::EnsureProportionAtLeast<_2, _3, AccountId, TechnicalCollective>;
+	// To cancel a proposal which has been passed, 2/3 of the council must agree to it.
+	type CancellationOrigin = collective::EnsureProportionAtLeast<_2, _3, AccountId, CouncilCollective>;
+	// Any single technical committee member may veto a coming council proposal, however they can
+	// only do it once and it lasts only for the cooloff period.
+	type VetoOrigin = collective::EnsureMember<AccountId, TechnicalCollective>;
+	type CooloffPeriod = CooloffPeriod;
+	type PreimageByteDeposit = PreimageByteDeposit;
+	type Slash = Treasury;
+}
+
 construct_runtime!(
     pub enum Runtime where
         Block = Block,
@@ -422,13 +462,22 @@ construct_runtime!(
         Sudo: sudo,
 
         // GOvernance stuff; uncallable initiallly
+        Democracy: democracy::{Module, Call, Storage, Config, Event<T>},
         Council: collective::<Instance1>::{Module, Call, Storage, Origin<T>, Event<T>, Config<T>},
         Treasury: treasury::{Module, Call, Storage, Event<T>},
+        TechnicalCommittee: collective::<Instance2>::{Module, Call, Storage, Origin<T>, Event<T>, Config<T>},
 
         // Custom modules
         Assets: assets::{Module, Call, Storage},
     }
 );
+
+type TechnicalCollective = collective::Instance2;
+impl collective::Trait<TechnicalCollective> for Runtime {
+	type Origin = Origin;
+	type Proposal = Call;
+	type Event = Event;
+}
 
 type CouncilCollective = collective::Instance1;
 impl collective::Trait<CouncilCollective> for Runtime {

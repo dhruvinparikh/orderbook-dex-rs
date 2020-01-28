@@ -430,6 +430,26 @@ impl democracy::Trait for Runtime {
 	type Slash = Treasury;
 }
 
+parameter_types! {
+	// Minimum 100 bytes/KSM deposited (1 CENT/byte)
+	pub const BasicDeposit: Balance = 10 * DOLLARS;       // 258 bytes on-chain
+	pub const FieldDeposit: Balance = 250 * CENTS;        // 66 bytes on-chain
+	pub const SubAccountDeposit: Balance = 2 * DOLLARS;   // 53 bytes on-chain
+	pub const MaximumSubAccounts: u32 = 100;
+}
+
+impl identity::Trait for Runtime {
+	type Event = Event;
+	type Currency = Balances;
+	type Slashed = Treasury;
+	type BasicDeposit = BasicDeposit;
+	type FieldDeposit = FieldDeposit;
+	type SubAccountDeposit = SubAccountDeposit;
+	type MaximumSubAccounts = MaximumSubAccounts;
+	type RegistrarOrigin = collective::EnsureProportionMoreThan<_1, _2, AccountId, CouncilCollective>;
+	type ForceOrigin = collective::EnsureProportionMoreThan<_1, _2, AccountId, CouncilCollective>;
+}
+
 construct_runtime!(
     pub enum Runtime where
         Block = Block,
@@ -469,6 +489,9 @@ construct_runtime!(
 
         // Custom modules
         Assets: assets::{Module, Call, Storage},
+
+		// Less simple identity module.
+		Identity: identity::{Module, Call, Storage, Event<T>},
     }
 );
 

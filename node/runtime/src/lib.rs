@@ -382,15 +382,6 @@ impl system::offchain::CreateTransaction<Runtime, UncheckedExtrinsic> for Runtim
 }
 
 parameter_types! {
-	pub const CandidacyBond: Balance = 1 * DOLLARS;
-	pub const VotingBond: Balance = 5 * CENTS;
-	/// Daily council elections.
-	pub const TermDuration: BlockNumber = 24 * HOURS;
-	pub const DesiredMembers: u32 = 13;
-	pub const DesiredRunnersUp: u32 = 7;
-}
-
-parameter_types! {
 	pub const LaunchPeriod: BlockNumber = 7 * DAYS;
 	pub const VotingPeriod: BlockNumber = 7 * DAYS;
 	pub const EmergencyVotingPeriod: BlockNumber = 3 * HOURS;
@@ -450,6 +441,30 @@ impl identity::Trait for Runtime {
 	type ForceOrigin = collective::EnsureProportionMoreThan<_1, _2, AccountId, CouncilCollective>;
 }
 
+parameter_types! {
+	pub const CandidacyBond: Balance = 1 * DOLLARS;
+	pub const VotingBond: Balance = 5 * CENTS;
+	/// Daily council elections.
+	pub const TermDuration: BlockNumber = 24 * HOURS;
+	pub const DesiredMembers: u32 = 13;
+	pub const DesiredRunnersUp: u32 = 7;
+}
+
+impl elections_phragmen::Trait for Runtime {
+	type Event = Event;
+	type Currency = Balances;
+	type ChangeMembers = Council;
+	type CurrencyToVote = CurrencyToVoteHandler;
+	type CandidacyBond = CandidacyBond;
+	type VotingBond = VotingBond;
+	type TermDuration = TermDuration;
+	type DesiredMembers = DesiredMembers;
+	type DesiredRunnersUp = DesiredRunnersUp;
+	type LoserCandidate = Treasury;
+	type BadReport = Treasury;
+	type KickedMember = Treasury;
+}
+
 construct_runtime!(
     pub enum Runtime where
         Block = Block,
@@ -481,10 +496,12 @@ construct_runtime!(
         AuthorityDiscovery: authority_discovery::{Module, Call, Config},
         Sudo: sudo,
 
-        // GOvernance stuff; uncallable initiallly
+        // Governance stuff; uncallable initiallly
         Democracy: democracy::{Module, Call, Storage, Config, Event<T>},
         Council: collective::<Instance1>::{Module, Call, Storage, Origin<T>, Event<T>, Config<T>},
         Treasury: treasury::{Module, Call, Storage, Event<T>},
+        ElectionsPhragmen: elections_phragmen::{Module, Call, Storage, Event<T>},
+		TechnicalMembership: membership::<Instance1>::{Module, Call, Storage, Event<T>, Config<T>},
         TechnicalCommittee: collective::<Instance2>::{Module, Call, Storage, Origin<T>, Event<T>, Config<T>},
 
         // Custom modules
@@ -507,6 +524,16 @@ impl collective::Trait<CouncilCollective> for Runtime {
 	type Origin = Origin;
 	type Proposal = Call;
 	type Event = Event;
+}
+
+impl membership::Trait<membership::Instance1> for Runtime {
+	type Event = Event;
+	type AddOrigin = collective::EnsureProportionMoreThan<_1, _2, AccountId, CouncilCollective>;
+	type RemoveOrigin = collective::EnsureProportionMoreThan<_1, _2, AccountId, CouncilCollective>;
+	type SwapOrigin = collective::EnsureProportionMoreThan<_1, _2, AccountId, CouncilCollective>;
+	type ResetOrigin = collective::EnsureProportionMoreThan<_1, _2, AccountId, CouncilCollective>;
+	type MembershipInitialized = TechnicalCommittee;
+	type MembershipChanged = TechnicalCommittee;
 }
 
 /// The type used as a helper for interpreting the sender of transactions.

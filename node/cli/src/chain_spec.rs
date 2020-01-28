@@ -179,7 +179,8 @@ pub fn testnet_genesis(
         collective_Instance2: Some(TechnicalCommitteeConfig {
 			members: vec![],
 			phantom: Default::default(),
-		}),
+        }),
+        membership_Instance1: Some(Default::default()),
         sudo: Some(SudoConfig {
             key: endowed_accounts[0].clone(),
         }),

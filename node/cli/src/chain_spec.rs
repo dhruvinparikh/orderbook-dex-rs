@@ -3,18 +3,17 @@ use babe_primitives::AuthorityId as BabeId;
 use im_online::sr25519::AuthorityId as ImOnlineId;
 use authority_discovery_primitives::AuthorityId as AuthorityDiscoveryId;
 use sp_runtime::{Perbill, traits::{Verify, IdentifyAccount}};
-use primitives::{Pair, Public, crypto::UncheckedInto, sr25519};
+use primitives::{Pair, Public,crypto::UncheckedInto, sr25519};
 use node_runtime::{
     GenesisConfig, SystemConfig, SessionConfig, BabeConfig, StakingConfig,
     IndicesConfig, ImOnlineConfig, BalancesConfig, GrandpaConfig, SudoConfig,
-    AuthorityDiscoveryConfig,
+    AuthorityDiscoveryConfig,CouncilConfig,DemocracyConfig,TechnicalCommitteeConfig,
     SessionKeys, StakerStatus, WASM_BINARY,
 };
 use node_runtime::constants::currency::*;
 use node_primitives::{AccountId, Balance, Signature};
 use telemetry::TelemetryEndpoints;
 use hex_literal::hex;
-use log::info;
 
 const STAGING_TELEMETRY_URL: &str = "ws://telemetry.mvsdna.com:8000/submit";
 
@@ -174,6 +173,16 @@ pub fn testnet_genesis(
             slash_reward_fraction: Perbill::from_percent(10),
             .. Default::default()
         }),
+        democracy: Some(DemocracyConfig::default()),
+        collective_Instance1: Some(CouncilConfig {
+			members: vec![],
+			phantom: Default::default(),
+        }),
+        collective_Instance2: Some(TechnicalCommitteeConfig {
+			members: vec![],
+			phantom: Default::default(),
+        }),
+        membership_Instance1: Some(Default::default()),
         sudo: Some(SudoConfig {
             key: endowed_accounts[0].clone(),
         }),

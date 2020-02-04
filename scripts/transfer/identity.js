@@ -23,7 +23,10 @@ async function getApi(url) {
   const provider = new WsProvider(url);
 
   // Create the API and wait until ready
-  const api = await ApiRx.create({ provider }).toPromise();
+  const api = await ApiRx.create({
+    provider,
+    types: { DNAi64: "Option<i64>" }
+  }).toPromise();
   return api;
 }
 
@@ -40,12 +43,69 @@ async function transfer(data) {
               `Transaction included at blockHash ${status.asFinalized}`
             );
             console.log(`Successful`);
-            resolve({ status: "SUCCESS"});
+            resolve({ status: "SUCCESS" });
             subscription.unsubscribe();
           }
           if (status.isDropped || status.isInvalid || status.isUsurped) {
             console.log(`FAILURE`);
-            resolve({ status: "FAIL"});
+            resolve({ status: "FAIL" });
+          }
+        });
+    } catch (e) {
+      console.log("Error : ", e);
+      reject(e);
+    }
+  });
+}
+async function addRegistar(data) {
+  const { accountPair, registrarAccountPair, api, nonce } = data;
+  const promise = new Promise(async (resolve, reject) => {
+    try {
+      const subscription = await api.tx.sudo
+        .sudo(api.tx.identity.addRegistrar(registrarAccountPair.accountId))
+        .signAndSend(accountPair, nonce)
+        .subscribe(({ events = [], status }) => {
+          if (status.isFinalized) {
+            console.log(
+              `Transaction included at blockHash ${status.asFinalized}`
+            );
+            console.log(`Successful`);
+            resolve({ status: "SUCCESS" });
+            subscription.unsubscribe();
+          }
+          if (status.isDropped || status.isInvalid || status.isUsurped) {
+            console.log(`FAILURE`);
+            resolve({ status: "FAIL" });
+          }
+        });
+    } catch (e) {
+      console.log("Error : ", e);
+      reject(e);
+    }
+  });
+
+  return promise;
+}
+
+async function setIdentity(data) {
+  const { accountPair, api, nonce, info } = data;
+  const promise = new Promise(async (resolve, reject) => {
+    try {
+      const subscription = await api.tx.identity
+        .setIdentity(info)
+        .signAndSend(accountPair, nonce)
+        .subscribe(({ events = [], status }) => {
+          if (status.isFinalized) {
+            console.log(
+              `Transaction included at blockHash ${status.asFinalized}`
+            );
+            console.log(`Successful`);
+            resolve({ status: "SUCCESS" });
+            subscription.unsubscribe();
+          }
+          if (status.isDropped || status.isInvalid || status.isUsurped) {
+            console.log(`FAILURE`);
+            resolve({ status: "FAIL" });
           }
         });
     } catch (e) {
@@ -61,6 +121,10 @@ async function getArg() {
   program
     .version(pkg.version, "-v, --version", "output the version")
     .name(pkg.name)
+    .option(
+      "--sudo-account <string>",
+      "sudo account object {<json-file-path>:<password>}"
+    )
     .option("--url <string>", "websocket provider url")
     .option(
       "--master-account <string>",
@@ -74,6 +138,7 @@ async function getArg() {
   program.parse(process.argv);
   if (
     !program.url ||
+    !program.sudoAccount ||
     !program.masterAccount ||
     !program.registrar ||
     !program.user
@@ -83,6 +148,7 @@ async function getArg() {
   return new Promise(resolve => {
     resolve({
       url: program.url,
+      sudoAccountObj: JSON.parse(program.sudoAccount),
       masterAccountObj: JSON.parse(program.masterAccount),
       registrarObj: JSON.parse(program.registrar),
       userObj: JSON.parse(program.user)
@@ -100,11 +166,18 @@ function getAccountPairFromJSON(accountObj) {
 }
 
 async function main() {
-  const { url, masterAccountObj, registrarObj, userObj } = await getArg();
+  const {
+    url,
+    sudoAccountObj,
+    masterAccountObj,
+    registrarObj,
+    userObj
+  } = await getArg();
   const api = await getApi(url);
   const masterAccountPair = getAccountPairFromJSON(masterAccountObj);
   const registrarAccountPair = getAccountPairFromJSON(registrarObj);
   const userAccountPair = getAccountPairFromJSON(userObj);
+  const sudoAccountPair = getAccountPairFromJSON(sudoAccountObj);
 
   let masterAccountNonce = await api.query.system.accountNonce(
     masterAccountPair.address
@@ -130,49 +203,61 @@ async function main() {
     nonce: masterAccountNonce
   });
   console.log("Done funding user account.", userTx);
-  //   const accountPair = await getAccountPair(keypairType, masterAccountURI);
-  //   const { address } = accountPair;
-  //   const testAccURIs = Object.keys(testAccounts).map(x => x);
-  //   console.log("Funding test accounts");
-  //   let count = 0;
-  //   await async.mapSeries(testAccURIs, async uri => {
-  //     const nonce = await api.query.system.accountNonce(address);
-  //     const { address: to } = await getAccountPair(testAccounts[uri], uri);
-  //     const data = { to, amount, accountPair, id: ++count, api, nonce };
-  //     const signTransaction = await getSignTransaction(data);
-  //     console.log(`to : ${to} STATUS : ${signTransaction.status}`);
-  //   });
-  //   console.log("Done funding test accounts");
-  //   console.log("Starting testing suite");
-  //   count = 0;
-  //   let val = 1000;
-  //   await async.mapSeries(testAccURIs, async uri => {
-  //     const accPair = await getAccountPair(testAccounts[uri], uri);
-  //     const { address: from } = accPair;
-  //     const nonce = await api.query.system.accountNonce(from);
-  //     const randomNum = Math.floor(Math.random() * testAccURIs.length);
-  //     const toUri = testAccURIs[randomNum];
-  //     const { address: to } = await getAccountPair(testAccounts[toUri], toUri);
-  //     const data = {
-  //       to,
-  //       amount: val,
-  //       accountPair: accPair,
-  //       id: ++count,
-  //       api,
-  //       nonce
-  //     };
-  //     const signTransaction = await getSignTransaction(data);
-  //     console.log(
-  //       `from:${from}, to:${to}, ID : ${signTransaction.id} STATUS : ${signTransaction.status}`
-  //     );
-  //   });
-  // const tos = [
-  //   "5GiFdKY55j8EwviqBVi2Jd6MNb6GnZDRZnc2tVSENmEdn1Vw",
-  //   "5CW139xu5PGYjccoJ8aKJRkD8BBRM5cHvLnfVm9Au2NbkTDw",
-  //   "5CW139xu5PGYjccoJ8aKJRkD8BBRM5cHvLnfVm9Au2NbkTDw",
-  //   "5H6W77mdpU31V6vEZeMWcCaz14cKDrjqwFiXDY9ZzNX1w81x",
-  //   "5H6W77mdpU31V6vEZeMWcCaz14cKDrjqwFiXDY9ZzNX1w81x"
-  // ];
+  console.log("Set on-chain identity for registrar");
+  const registrarInfo = {
+    additional: [],
+    display: { Raw: "0x4b555348" },
+    legal: { None: null },
+    web: { None: null },
+    riot: { None: null },
+    email: { None: null },
+    pgpFingerprint: null,
+    image: { None: null },
+    twitter: { None: null }
+  };
+  let registrarAccountNonce = await api.query.system.accountNonce(
+    registrarAccountPair.address
+  );
+  const registrarIdentityTx = await setIdentity({
+    accountPair: registrarAccountPair,
+    api,
+    nonce: registrarAccountNonce,
+    info: registrarInfo
+  });
+  console.log(registrarIdentityTx);
+  console.log("Set on-chain identity for user");
+  const userInfo = {
+    additional: [],
+    display: { Raw: "0x4448525556" },
+    legal: { None: null },
+    web: { None: null },
+    riot: { None: null },
+    email: { None: null },
+    pgpFingerprint: null,
+    image: { None: null },
+    twitter: { None: null }
+  };
+  let userAccountNonce = await api.query.system.accountNonce(
+    userAccountPair.address
+  );
+  const userIdentityTx = await setIdentity({
+    accountPair: userAccountPair,
+    api,
+    nonce: userAccountNonce,
+    info: userInfo
+  });
+  console.log(userIdentityTx);
+  console.log("Make a sudo call to add registrar");
+  let sudoAccountNonce = await api.query.system.accountNonce(
+    sudoAccountPair.address
+  );
+  const addRegistrarTx = await addRegistar({
+    api,
+    nonce: sudoAccountNonce,
+    accountPair: sudoAccountPair,
+    registrarAccountPair
+  });
+  console.log(addRegistrarTx);
   process.exit(0);
 }
 

@@ -276,7 +276,7 @@ async function main() {
     image: { None: null },
     twitter: { None: null }
   };
-  let registrarAccountNonce = await api.query.system.accountNonce(
+  registrarAccountNonce = await api.query.system.accountNonce(
     registrarAccountPair.address
   );
   const registrarIdentityTx = await setIdentity({
@@ -309,7 +309,7 @@ async function main() {
   });
   console.log(userIdentityTx);
   console.log("Make a sudo call to add registrar");
-  let sudoAccountNonce = await api.query.system.accountNonce(
+  sudoAccountNonce = await api.query.system.accountNonce(
     sudoAccountPair.address
   );
   const addRegistrarTx = await addRegistar({

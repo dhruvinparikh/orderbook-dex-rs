@@ -30,7 +30,8 @@ Options:
 Usage: dna-transfer [options]
 
 Options:
-  -v, --version              output the version
+-v, --version              output the version
+  --sudo-account <string>    sudo account object {<json-file-path>:<password>}
   --url <string>             websocket provider url
   --master-account <string>  master account object {<json-file-path>:<password>}
   --registrar <string>       registrar object {<json-file-path>:<password>}
@@ -40,5 +41,5 @@ Options:
 
 ## Example
  ```
- ./scripts/identity.sh  --url ws://127.0.0.1:9944 --master-account '{"/Users/dhruvinparikh/blockx-labs/metaverse-dna/test-accounts/master-account.json":"kush1234"}' --registrar '{"/Users/dhruvinparikh/blockx-labs/metaverse-dna/test-accounts/registrar.json":"kush1234"}' --user '{"/Users/dhruvinparikh/blockx-labs/metaverse-dna/test-accounts/user.json":"kush1234"}'
+ ./scripts/identity.sh  --url ws://127.0.0.1:9944 --sudo-account '{"/Users/dhruvinparikh/blockx-labs/metaverse-dna/test-accounts/sudo-account.json":"kush1234"}' --master-account '{"/Users/dhruvinparikh/blockx-labs/metaverse-dna/test-accounts/master-account.json":"kush1234"}' --registrar '{"/Users/dhruvinparikh/blockx-labs/metaverse-dna/test-accounts/registrar.json":"kush1234"}' --user '{"/Users/dhruvinparikh/blockx-labs/metaverse-dna/test-accounts/user.json":"kush1234"}'
  ```

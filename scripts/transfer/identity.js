@@ -56,6 +56,7 @@ async function transfer(data) {
       reject(e);
     }
   });
+  return promise;
 }
 async function addRegistar(data) {
   const { accountPair, registrarAccountPair, api, nonce } = data;
@@ -93,6 +94,66 @@ async function setIdentity(data) {
     try {
       const subscription = await api.tx.identity
         .setIdentity(info)
+        .signAndSend(accountPair, nonce)
+        .subscribe(({ events = [], status }) => {
+          if (status.isFinalized) {
+            console.log(
+              `Transaction included at blockHash ${status.asFinalized}`
+            );
+            console.log(`Successful`);
+            resolve({ status: "SUCCESS" });
+            subscription.unsubscribe();
+          }
+          if (status.isDropped || status.isInvalid || status.isUsurped) {
+            console.log(`FAILURE`);
+            resolve({ status: "FAIL" });
+          }
+        });
+    } catch (e) {
+      console.log("Error : ", e);
+      reject(e);
+    }
+  });
+
+  return promise;
+}
+
+async function requestJudgement(data) {
+  const { accountPair, api, nonce,reg_index,max_fee } = data;
+  const promise = new Promise(async (resolve, reject) => {
+    try {
+      const subscription = await api.tx.identity
+        .requestJudgement(reg_index,max_fee)
+        .signAndSend(accountPair, nonce)
+        .subscribe(({ events = [], status }) => {
+          if (status.isFinalized) {
+            console.log(
+              `Transaction included at blockHash ${status.asFinalized}`
+            );
+            console.log(`Successful`);
+            resolve({ status: "SUCCESS" });
+            subscription.unsubscribe();
+          }
+          if (status.isDropped || status.isInvalid || status.isUsurped) {
+            console.log(`FAILURE`);
+            resolve({ status: "FAIL" });
+          }
+        });
+    } catch (e) {
+      console.log("Error : ", e);
+      reject(e);
+    }
+  });
+
+  return promise;
+}
+
+async function provideJudgement(data) {
+  const { accountPair, api, nonce,reg_index,userAccountPair,judgement } = data;
+  const promise = new Promise(async (resolve, reject) => {
+    try {
+      const subscription = await api.tx.identity
+        .provideJudgement(reg_index,userAccountPair.address.toString(),judgement)
         .signAndSend(accountPair, nonce)
         .subscribe(({ events = [], status }) => {
           if (status.isFinalized) {
@@ -178,8 +239,8 @@ async function main() {
   const registrarAccountPair = getAccountPairFromJSON(registrarObj);
   const userAccountPair = getAccountPairFromJSON(userObj);
   const sudoAccountPair = getAccountPairFromJSON(sudoAccountObj);
-
-  let masterAccountNonce = await api.query.system.accountNonce(
+  let userAccountNonce,masterAccountNonce,sudoAccountNonce,registrarAccountNonce;
+  masterAccountNonce = await api.query.system.accountNonce(
     masterAccountPair.address
   );
   console.log("Funding registrar account.");
@@ -237,7 +298,7 @@ async function main() {
     image: { None: null },
     twitter: { None: null }
   };
-  let userAccountNonce = await api.query.system.accountNonce(
+  userAccountNonce = await api.query.system.accountNonce(
     userAccountPair.address
   );
   const userIdentityTx = await setIdentity({
@@ -258,6 +319,31 @@ async function main() {
     registrarAccountPair
   });
   console.log(addRegistrarTx);
+  console.log("User is requesting judgement to the registrar");
+  userAccountNonce = await api.query.system.accountNonce(
+    userAccountPair.address
+  );
+  const requestJudgementTx = await requestJudgement({
+    api,
+    nonce: userAccountNonce,
+    accountPair: userAccountPair,
+    reg_index : 0,
+    max_fee : 10
+  });
+  console.log(requestJudgementTx);
+  console.log("Registrar is providing judgement to the user");
+   registrarAccountNonce = await api.query.system.accountNonce(
+    registrarAccountPair.address
+  );
+  const provideJudgementTx = await provideJudgement({
+    api,
+    nonce: registrarAccountNonce,
+    accountPair: registrarAccountPair,
+    reg_index : 0,
+    userAccountPair,
+    judgement : "feepaid" // unknown, feepaid, reasonable, knowngood, outofdate, lowquality, erroneous
+  });
+  console.log(provideJudgementTx);
   process.exit(0);
 }
 

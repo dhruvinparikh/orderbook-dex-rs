@@ -31,3 +31,5 @@ logs
 Cargo.lock
 .maintain
 dnachain*
+credentials.js
+test-accounts

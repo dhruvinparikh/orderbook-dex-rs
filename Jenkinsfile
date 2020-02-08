@@ -22,11 +22,11 @@ pipeline {
             steps {
                 sh 'cp ./target/release/dnachain .'
                 sh 'docker build -t dnachain -f "./scripts/Docker/Dockerfile" "."'
-                sh 'docker tag dnachain docker.io/blockxdna/dnachain:node-0.0.${BUILD_NUMBER}'
+                sh 'docker tag dnachain docker.io/blockxdna/dnachain:node-0.2.${BUILD_NUMBER}'
                 sh 'docker tag dnachain docker.io/blockxdna/dnachain:latest'
-                sh 'docker push docker.io/blockxdna/dnachain:node-0.0.${BUILD_NUMBER}'
+                sh 'docker push docker.io/blockxdna/dnachain:node-0.2.${BUILD_NUMBER}'
                 sh 'docker push docker.io/blockxdna/dnachain:latest'
-                sh 'docker rmi -f blockxdna/dnachain:node-0.0.${BUILD_NUMBER}'
+                sh 'docker rmi -f blockxdna/dnachain:node-0.2.${BUILD_NUMBER}'
                 sh 'docker rmi -f blockxdna/dnachain:latest'
             }
         }

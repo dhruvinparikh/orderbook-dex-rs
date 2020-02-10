@@ -1,6 +1,6 @@
 [package]
 name = "node-runtime"
-version = "0.2.1"
+version = "0.2.2"
 authors = ["BlockX Labs"]
 edition = "2018"
 build = "build.rs"

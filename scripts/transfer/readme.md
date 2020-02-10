@@ -20,7 +20,7 @@ Options:
 ## Example
  ```bash
 $ ./scripts/bulk-transfer.sh  --url ws://127.0.0.1:9944 --master-account '{"/Users/dhruvinparikh/blockx-labs/metaverse-dna/test-accounts/master-account.json":"kush1234"}' --accounts '[{"/Users/dhruvinparikh/blockx-labs/metaverse-dna/test-accounts/acc0.json":"kush1234"},{"/Users/dhruvinparikh/blockx-labs/metaverse-dna/test-accounts/acc1.json":"kush1234"},{"/Users/dhruvinparikh/blockx-labs/metaverse-dna/test-accounts/acc2.json":"kush1234"},{"/Users/dhruvinparikh/blockx-labs/metaverse-dna/test-accounts/acc3.json":"kush1234"},{"/Users/dhruvinparikh/blockx-labs/metaverse-dna/test-accounts/acc4.json":"kush1234"}]'
- ````
+ ```
 
 ## DNA Identity
 

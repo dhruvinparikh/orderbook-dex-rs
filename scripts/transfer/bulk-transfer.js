@@ -24,7 +24,10 @@ async function getApi(url) {
   const provider = new WsProvider(url);
 
   // Create the API and wait until ready
-  const api = await ApiRx.create({ provider }).toPromise();
+  const api = await ApiRx.create({
+    provider,
+    types: { DNAi64: "Option<i64>" }
+  }).toPromise();
   return api;
 }
 
@@ -110,7 +113,7 @@ async function main() {
     const data = {
       to: accountPair.address,
       amount: 10000000,
-      accountPair:masterAccountPair,
+      accountPair: masterAccountPair,
       id: ++count,
       api,
       nonce

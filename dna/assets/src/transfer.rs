@@ -1,43 +1,51 @@
-
 use super::*;
 
 // This function transfers tokens of a given asset from one address to another. If the recipient address doesn't exist, it is created.
 impl<T: Trait> Module<T> {
-    pub fn transfer(from_address: H256, to_address: H256, asset_id: u32, amount: DNAi64) -> DispatchResult {
+    pub fn transfer(
+        _sender: T::AccountId,
+        to_address: T::AccountId,
+        asset_id: u32,
+        amount: DNAi64,
+    ) -> DispatchResult {
+        if !<Self as Store>::Tokens::exists(asset_id) {
+            Err("The asset with given id does not exists.")?
+        }
+
         // Checking that amount is non-negative.
         if amount < DNAi64::from(0) {
-             Err("Amount can't be negative.")?
+            Err("Amount can't be negative.")?
         }
 
-        // Checking that from_address and to_address are different.
-        if from_address == to_address {
-             Err("From_address and to_address can't be equal.")?
-        }
+        // Checking that sender and to_address are different.
+        // _sender == to_address {
+        //     Err("Sender and to_address can't be equal.")?
+        // }
 
         // Checking that from_address and asset_id exists.
-        if !<Self as Store>::Balances::exists((asset_id, from_address)) {
-             Err("From_address doesn't exist at given Asset_ID.")?
+        if !<Self as Store>::Balances::exists((asset_id, _sender.clone())) {
+            Err("Sender doesn't exist at given Asset_ID.")?
         }
 
         // Checking that from_address has enough balance.
-        if amount > <Self as Store>::Balances::get((asset_id, from_address)) {
-             Err("From_address doesn't have enough balance.")?
+        if amount > <Self as Store>::Balances::get((asset_id, _sender.clone())) {
+            Err("Sender doesn't have enough balance.")?
         }
 
         // Deducting amount from from_address.
-        let new_balance = <Self as Store>::Balances::get((asset_id, from_address)) - amount;
+        let new_balance = <Self as Store>::Balances::get((asset_id, _sender.clone())) - amount;
         if new_balance == DNAi64::from(0) {
-            <Self as Store>::Balances::remove((asset_id, from_address));
+            <Self as Store>::Balances::remove((asset_id, _sender.clone()));
         } else {
-            <Self as Store>::Balances::insert((asset_id, from_address), new_balance);
+            <Self as Store>::Balances::insert((asset_id, _sender), new_balance);
         }
 
         // Crediting amount to to_address.
-        if <Self as Store>::Balances::exists((asset_id, to_address)) {
-            let new_balance = <Self as Store>::Balances::get((asset_id, to_address)) + amount;
-            <Self as Store>::Balances::insert((asset_id, to_address), new_balance);
+        if <Self as Store>::Balances::exists((asset_id, to_address.clone())) {
+            let new_balance = <Self as Store>::Balances::get((asset_id, to_address.clone())) + amount;
+            <Self as Store>::Balances::insert((asset_id, to_address.clone()), new_balance);
         } else {
-            <Self as Store>::Balances::insert((asset_id, to_address), amount);
+            <Self as Store>::Balances::insert((asset_id, to_address.clone()), amount);
         }
 
         // Return Ok.

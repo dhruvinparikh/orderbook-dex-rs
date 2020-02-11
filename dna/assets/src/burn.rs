@@ -2,20 +2,33 @@ use super::*;
 
 // This function burns tokens of a given asset and from a specific address.
 impl<T: Trait> Module<T> {
-    pub fn burn(from_address: H256, asset_id: u32, amount: DNAi64) -> DispatchResult {
+    pub fn burn(
+        _sender: T::AccountId,
+        from_address: T::AccountId,
+        asset_id: u32,
+        amount: DNAi64,
+    ) -> DispatchResult {
+        if !<Self as Store>::Tokens::exists(asset_id) {
+            Err("The asset with given id does not exists.")?
+        }
+
+        if _sender != <Self as Store>::OwnerOf::get(asset_id) {
+            Err("Only owner can burn the tokens of an asset.")?
+        }
+
         // Checking that amount is non-negative.
         if amount < DNAi64::from(0) {
-             Err("Amount can't be negative.")?
+            Err("Amount can't be negative.")?
         }
 
         // Checking that from_address and asset_id exists.
-        if !<Self as Store>::Balances::exists((asset_id, from_address)) {
-             Err("From_address doesn't exist at given Asset_ID.")?
+        if !<Self as Store>::Balances::exists((asset_id, from_address.clone())) {
+            Err("From_address doesn't exist at given Asset_ID.")?
         }
 
         // Checking that from_address has enough balance.
-        if amount > <Self as Store>::Balances::get((asset_id, from_address)) {
-             Err("From_address doesn't have enough balance.")?
+        if amount > <Self as Store>::Balances::get((asset_id, from_address.clone())) {
+            Err("From_address doesn't have enough balance.")?
         }
 
         // Decreasing supply.
@@ -23,11 +36,11 @@ impl<T: Trait> Module<T> {
         <Self as Store>::TotalSupply::insert(asset_id, new_supply);
 
         // Deducting amount from from_address.
-        let new_balance = <Self as Store>::Balances::get((asset_id, from_address)) - amount;
+        let new_balance = <Self as Store>::Balances::get((asset_id, from_address.clone())) - amount;
         if new_balance == DNAi64::from(0) {
-            <Self as Store>::Balances::remove((asset_id, from_address));
+            <Self as Store>::Balances::remove((asset_id, from_address.clone()));
         } else {
-            <Self as Store>::Balances::insert((asset_id, from_address), new_balance);
+            <Self as Store>::Balances::insert((asset_id, from_address.clone()), new_balance);
         }
 
         // Return Ok.

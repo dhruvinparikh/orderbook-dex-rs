@@ -38,27 +38,27 @@
         "balances": [
           [
             "5EbisDGXTdMScRusn6vBZ9B5QASm5LMRCVkERjRnUpz6bpi4",
-            1000000
+            10000000000000000000
           ],
           [
             "5ChnoXHLockcTcB1v6JMTa7H6cJZ7zFwPqBDHT6K8df4fc2N",
-            1000000
+            10000000000000000000
           ],
           [
             "5Dcx1ysWu6g9VBgawLN6gbczPeGGX7PxfrdscCuZRCkWAZbr",
-            1000000
+            10000000000000000000
           ],
           [
             "5EbisDGXTdMScRusn6vBZ9B5QASm5LMRCVkERjRnUpz6bpi4",
-            10000000
+            10000000000000000000
           ],
           [
             "5ChnoXHLockcTcB1v6JMTa7H6cJZ7zFwPqBDHT6K8df4fc2N",
-            10000000
+            10000000000000000000
           ],
           [
             "5Dcx1ysWu6g9VBgawLN6gbczPeGGX7PxfrdscCuZRCkWAZbr",
-            10000000
+            10000000000000000000
           ]
         ],
         "vesting": []

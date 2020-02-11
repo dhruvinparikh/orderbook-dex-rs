@@ -2,46 +2,51 @@
 
 #![cfg_attr(not(feature = "std"), no_std)]
 // `construct_runtime!` does a lot of recursion and requires us to increase the limit to 256.
-#![recursion_limit="256"]
+#![recursion_limit = "256"]
 
 pub mod constants;
 pub mod impls;
 
-use sp_std::prelude::*;
-use primitives::OpaqueMetadata;
-use support::{construct_runtime, parameter_types, traits::Randomness, weights::Weight,};
-use sp_runtime::{ApplyExtrinsicResult, generic, create_runtime_str,};
-use sp_runtime::curve::PiecewiseLinear;
-use sp_runtime::transaction_validity::TransactionValidity;
-use sp_runtime::traits::{
-    self, BlakeTwo256, Block as BlockT, NumberFor, StaticLookup, Verify,
-    SaturatedConversion, OpaqueKeys,
-};
-use im_online::sr25519::{AuthorityId as ImOnlineId};
+use crate::constants::{currency::*, time::*};
 use authority_discovery_primitives::AuthorityId as AuthorityDiscoveryId;
-use transaction_payment_rpc_runtime_api::RuntimeDispatchInfo;
-use inherents::{InherentData, CheckInherentsResult};
-use system::offchain::TransactionSubmitter;
 use grandpa::fg_primitives;
 use grandpa::AuthorityList as GrandpaAuthorityList;
-use sp_api::impl_runtime_apis;
+use im_online::sr25519::AuthorityId as ImOnlineId;
 use impls::{CurrencyToVoteHandler, LinearWeightToFee, TargetedFeeAdjustment};
-use crate::constants::{time::*, currency::*};
+use inherents::{CheckInherentsResult, InherentData};
 use node_primitives::{
-    Balance, BlockNumber, Index, Hash, AccountId, AccountIndex, Moment, Signature,
+    AccountId, AccountIndex, Balance, BlockNumber, Hash, Index, Moment, Signature,
 };
-use version::RuntimeVersion;
+use primitives::u32_trait::{_1, _2, _3, _4, _5};
+use primitives::OpaqueMetadata;
+use sp_api::impl_runtime_apis;
+use sp_runtime::curve::PiecewiseLinear;
+use sp_runtime::traits::{
+    self, BlakeTwo256, Block as BlockT, NumberFor, OpaqueKeys, SaturatedConversion, StaticLookup,
+};
+use sp_runtime::transaction_validity::TransactionValidity;
+use sp_runtime::{create_runtime_str, generic, ApplyExtrinsicResult};
+use sp_std::prelude::*;
+use support::{
+    construct_runtime, parameter_types,
+    traits::{Currency, Imbalance, OnUnbalanced, Randomness, SplitTwoWays},
+    weights::Weight,
+};
+use system::offchain::TransactionSubmitter;
+use transaction_payment_rpc_runtime_api::RuntimeDispatchInfo;
 #[cfg(feature = "std")]
 use version::NativeVersion;
+use version::RuntimeVersion;
+// use crate::sp_api_hidden_includes_construct_runtime::hidden_include::traits::Imbalance;
 
 // A few exports that help ease life for downstream crates.
 #[cfg(any(feature = "std", test))]
 pub use balances::Call as BalancesCall;
-pub use timestamp::Call as TimestampCall;
-pub use sp_runtime::{Permill, Perbill, impl_opaque_keys};
-pub use support::StorageValue;
+pub use sp_runtime::{impl_opaque_keys, Perbill, Permill};
 pub use staking::StakerStatus;
+pub use support::StorageValue;
 pub use system::EventRecord;
+pub use timestamp::Call as TimestampCall;
 
 // Make the WASM binary available.
 #[cfg(feature = "std")]
@@ -56,8 +61,8 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
     // and set impl_version to equal spec_version. If only runtime
     // implementation changes and behavior does not, then leave spec_version as
     // is and increment impl_version.
-    spec_version: 60,
-    impl_version: 60,
+    spec_version: 2,
+    impl_version: 2,
     apis: RUNTIME_API_VERSIONS,
 };
 
@@ -100,6 +105,10 @@ impl system::Trait for Runtime {
 impl utility::Trait for Runtime {
     type Event = Event;
     type Call = Call;
+    type Currency = Balances;
+    type MultisigDepositFactor = ();
+    type MaxSignatories = ();
+    type MultisigDepositBase = ();
 }
 
 parameter_types! {
@@ -117,7 +126,7 @@ parameter_types! {
 }
 
 parameter_types! {
-    pub const EpochDuration: u64 = EPOCH_DURATION_IN_SLOTS;
+    pub const EpochDuration: u64 = EPOCH_DURATION_IN_BLOCKS as u64;
     pub const ExpectedBlockTime: Moment = MILLISECS_PER_BLOCK;
 }
 
@@ -147,9 +156,9 @@ impl indices::Trait for Runtime {
 }
 
 parameter_types! {
-    pub const ExistentialDeposit: Balance = 1 * MILLIDNA;
-    pub const TransferFee: Balance = 0_1 * MILLIDNA;
-    pub const CreationFee: Balance = 1 * MILLIDNA;
+    pub const ExistentialDeposit: Balance = 1 * CENTS;
+    pub const TransferFee: Balance = 0_1 * CENTS;
+    pub const CreationFee: Balance = 1 * CENTS;
 }
 
 impl balances::Trait for Runtime {
@@ -169,17 +178,54 @@ impl balances::Trait for Runtime {
 }
 
 parameter_types! {
-    pub const TransactionBaseFee: Balance = 1 * MILLIDNA;
-    pub const TransactionByteFee: Balance = 0 * MILLIDNA;
+    pub const TransactionBaseFee: Balance = 1 * CENTS;
+    pub const TransactionByteFee: Balance = 0 * CENTS;
     // setting this to zero will disable the weight fee.
     pub const WeightFeeCoefficient: Balance = 0;
     // for a sane configuration, this should always be less than `AvailableBlockRatio`.
     pub const TargetBlockFullness: Perbill = Perbill::from_percent(25);
 }
 
+pub type NegativeImbalance<T> =
+    <balances::Module<T> as Currency<<T as system::Trait>::AccountId>>::NegativeImbalance;
+
+/// Logic for the author to get a portion of fees.
+pub struct ToAuthor<R>(sp_std::marker::PhantomData<R>);
+
+impl<R> OnUnbalanced<NegativeImbalance<R>> for ToAuthor<R>
+where
+    R: balances::Trait + authorship::Trait,
+    <R as system::Trait>::AccountId: From<AccountId>,
+    <R as system::Trait>::AccountId: Into<AccountId>,
+    <R as system::Trait>::Event: From<
+        balances::RawEvent<
+            <R as system::Trait>::AccountId,
+            <R as balances::Trait>::Balance,
+            balances::DefaultInstance,
+        >,
+    >,
+{
+    fn on_nonzero_unbalanced(amount: NegativeImbalance<R>) {
+        let numeric_amount = amount.peek();
+        let author = <authorship::Module<R>>::author();
+        <balances::Module<R>>::resolve_creating(&<authorship::Module<R>>::author(), amount);
+        <system::Module<R>>::deposit_event(balances::RawEvent::Deposit(author, numeric_amount));
+    }
+}
+
+/// Splits fees 80/20 between treasury and block author.
+pub type DealWithFees = SplitTwoWays<
+    Balance,
+    NegativeImbalance<Runtime>,
+    _4,
+    Treasury, // 4 parts (80%) goes to the treasury.
+    _1,
+    ToAuthor<Runtime>, // 1 part (20%) goes to the block author.
+>;
+
 impl transaction_payment::Trait for Runtime {
     type Currency = Balances;
-    type OnTransactionPayment = ();
+    type OnTransactionPayment = DealWithFees;
     type TransactionBaseFee = TransactionBaseFee;
     type TransactionByteFee = TransactionByteFee;
     type WeightToFee = LinearWeightToFee<WeightFeeCoefficient>;
@@ -234,12 +280,31 @@ parameter_types! {
     pub const RewardCurve: &'static PiecewiseLinear<'static> = &REWARD_CURVE;
 }
 
+parameter_types! {
+    pub const ProposalBond: Permill = Permill::from_percent(5);
+    pub const ProposalBondMinimum: Balance = 20 * DOLLARS;
+    pub const SpendPeriod: BlockNumber = 6 * DAYS;
+    pub const Burn: Permill = Permill::from_percent(0);
+}
+
+impl treasury::Trait for Runtime {
+    type Currency = Balances;
+    type ApproveOrigin = collective::EnsureProportionAtLeast<_3, _5, AccountId, CouncilCollective>;
+    type RejectOrigin = collective::EnsureProportionMoreThan<_1, _2, AccountId, CouncilCollective>;
+    type Event = Event;
+    type ProposalRejection = Treasury;
+    type ProposalBond = ProposalBond;
+    type ProposalBondMinimum = ProposalBondMinimum;
+    type SpendPeriod = SpendPeriod;
+    type Burn = Burn;
+}
+
 impl staking::Trait for Runtime {
     type Currency = Balances;
     type Time = Timestamp;
     type CurrencyToVote = CurrencyToVoteHandler;
     type Event = Event;
-    type Slash = ();
+    type Slash = Treasury;
     type Reward = ();
     type RewardRemainder = ();
     type SlashDeferDuration = SlashDeferDuration;
@@ -273,7 +338,7 @@ impl sudo::Trait for Runtime {
 }
 
 parameter_types! {
-    pub const SessionDuration: BlockNumber = EPOCH_DURATION_IN_SLOTS as _;
+    pub const SessionDuration: BlockNumber = EPOCH_DURATION_IN_BLOCKS as _;
 }
 
 impl im_online::Trait for Runtime {
@@ -302,7 +367,10 @@ impl system::offchain::CreateTransaction<Runtime, UncheckedExtrinsic> for Runtim
         public: Self::Public,
         account: AccountId,
         index: Index,
-    ) -> Option<(Call, <UncheckedExtrinsic as traits::Extrinsic>::SignaturePayload)> {
+    ) -> Option<(
+        Call,
+        <UncheckedExtrinsic as traits::Extrinsic>::SignaturePayload,
+    )> {
         let period = 1 << 8;
         let current_block = System::block_number().saturated_into::<u64>();
         let tip = 0;
@@ -322,6 +390,95 @@ impl system::offchain::CreateTransaction<Runtime, UncheckedExtrinsic> for Runtim
     }
 }
 
+parameter_types! {
+    pub const LaunchPeriod: BlockNumber = 7 * DAYS;
+    pub const VotingPeriod: BlockNumber = 7 * DAYS;
+    pub const EmergencyVotingPeriod: BlockNumber = 3 * HOURS;
+    pub const MinimumDeposit: Balance = 1 * DOLLARS;
+    pub const EnactmentPeriod: BlockNumber = 8 * DAYS;
+    pub const CooloffPeriod: BlockNumber = 7 * DAYS;
+    // One cent: $10,000 / MB
+    pub const PreimageByteDeposit: Balance = 10 * MILLICENTS;
+}
+
+impl democracy::Trait for Runtime {
+    type Proposal = Call;
+    type Event = Event;
+    type Currency = Balances;
+    type EnactmentPeriod = EnactmentPeriod;
+    type LaunchPeriod = LaunchPeriod;
+    type VotingPeriod = VotingPeriod;
+    type EmergencyVotingPeriod = EmergencyVotingPeriod;
+    type MinimumDeposit = MinimumDeposit;
+    /// A straight majority of the council can decide what their next motion is.
+    type ExternalOrigin = collective::EnsureProportionAtLeast<_1, _2, AccountId, CouncilCollective>;
+    /// A majority can have the next scheduled referendum be a straight majority-carries vote.
+    type ExternalMajorityOrigin =
+        collective::EnsureProportionAtLeast<_1, _2, AccountId, CouncilCollective>;
+    /// A unanimous council can have the next scheduled referendum be a straight default-carries
+    /// (NTB) vote.
+    type ExternalDefaultOrigin =
+        collective::EnsureProportionAtLeast<_1, _1, AccountId, CouncilCollective>;
+    /// Two thirds of the technical committee can have an ExternalMajority/ExternalDefault vote
+    /// be tabled immediately and with a shorter voting/enactment period.
+    type FastTrackOrigin =
+        collective::EnsureProportionAtLeast<_2, _3, AccountId, TechnicalCollective>;
+    // To cancel a proposal which has been passed, 2/3 of the council must agree to it.
+    type CancellationOrigin =
+        collective::EnsureProportionAtLeast<_2, _3, AccountId, CouncilCollective>;
+    // Any single technical committee member may veto a coming council proposal, however they can
+    // only do it once and it lasts only for the cooloff period.
+    type VetoOrigin = collective::EnsureMember<AccountId, TechnicalCollective>;
+    type CooloffPeriod = CooloffPeriod;
+    type PreimageByteDeposit = PreimageByteDeposit;
+    type Slash = Treasury;
+}
+
+parameter_types! {
+    // Minimum 100 bytes/KSM deposited (1 CENT/byte)
+    pub const BasicDeposit: Balance = 10 * DOLLARS;       // 258 bytes on-chain
+    pub const FieldDeposit: Balance = 250 * CENTS;        // 66 bytes on-chain
+    pub const SubAccountDeposit: Balance = 2 * DOLLARS;   // 53 bytes on-chain
+    pub const MaximumSubAccounts: u32 = 100;
+}
+
+impl identity::Trait for Runtime {
+    type Event = Event;
+    type Currency = Balances;
+    type Slashed = Treasury;
+    type BasicDeposit = BasicDeposit;
+    type FieldDeposit = FieldDeposit;
+    type SubAccountDeposit = SubAccountDeposit;
+    type MaximumSubAccounts = MaximumSubAccounts;
+    type RegistrarOrigin =
+        collective::EnsureProportionMoreThan<_1, _2, AccountId, CouncilCollective>;
+    type ForceOrigin = collective::EnsureProportionMoreThan<_1, _2, AccountId, CouncilCollective>;
+}
+
+parameter_types! {
+    pub const CandidacyBond: Balance = 1 * DOLLARS;
+    pub const VotingBond: Balance = 5 * CENTS;
+    /// Daily council elections.
+    pub const TermDuration: BlockNumber = 24 * HOURS;
+    pub const DesiredMembers: u32 = 13;
+    pub const DesiredRunnersUp: u32 = 7;
+}
+
+impl elections_phragmen::Trait for Runtime {
+    type Event = Event;
+    type Currency = Balances;
+    type ChangeMembers = Council;
+    type CurrencyToVote = CurrencyToVoteHandler;
+    type CandidacyBond = CandidacyBond;
+    type VotingBond = VotingBond;
+    type TermDuration = TermDuration;
+    type DesiredMembers = DesiredMembers;
+    type DesiredRunnersUp = DesiredRunnersUp;
+    type LoserCandidate = Treasury;
+    type BadReport = Treasury;
+    type KickedMember = Treasury;
+}
+
 construct_runtime!(
     pub enum Runtime where
         Block = Block,
@@ -331,7 +488,6 @@ construct_runtime!(
         // Basic stuff.
         System: system::{Module, Call, Storage, Config, Event},
         Timestamp: timestamp::{Module, Call, Storage, Inherent},
-        Utility: utility::{Module, Call, Event},
 
         // Native currency and accounts.
         Indices: indices,
@@ -352,10 +508,49 @@ construct_runtime!(
         ImOnline: im_online::{Module, Call, Storage, Event<T>, ValidateUnsigned, Config<T>},
         AuthorityDiscovery: authority_discovery::{Module, Call, Config},
         Sudo: sudo,
+
+        // Governance stuff; uncallable initiallly
+        Democracy: democracy::{Module, Call, Storage, Config, Event<T>},
+        Council: collective::<Instance1>::{Module, Call, Storage, Origin<T>, Event<T>, Config<T>},
+        Treasury: treasury::{Module, Call, Storage, Event<T>},
+        ElectionsPhragmen: elections_phragmen::{Module, Call, Storage, Event<T>},
+		TechnicalMembership: membership::<Instance1>::{Module, Call, Storage, Event<T>, Config<T>},
+        TechnicalCommittee: collective::<Instance2>::{Module, Call, Storage, Origin<T>, Event<T>, Config<T>},
+
         // Custom modules
         Assets: assets::{Module, Call, Storage},
+        
+        // Utility module
+        Utility: utility::{Module, Call, Event<T>},
+
+		// Less simple identity module.
+        Identity: identity::{Module, Call, Storage, Event<T>},
     }
 );
+
+type TechnicalCollective = collective::Instance2;
+impl collective::Trait<TechnicalCollective> for Runtime {
+    type Origin = Origin;
+    type Proposal = Call;
+    type Event = Event;
+}
+
+type CouncilCollective = collective::Instance1;
+impl collective::Trait<CouncilCollective> for Runtime {
+    type Origin = Origin;
+    type Proposal = Call;
+    type Event = Event;
+}
+
+impl membership::Trait<membership::Instance1> for Runtime {
+    type Event = Event;
+    type AddOrigin = collective::EnsureProportionMoreThan<_1, _2, AccountId, CouncilCollective>;
+    type RemoveOrigin = collective::EnsureProportionMoreThan<_1, _2, AccountId, CouncilCollective>;
+    type SwapOrigin = collective::EnsureProportionMoreThan<_1, _2, AccountId, CouncilCollective>;
+    type ResetOrigin = collective::EnsureProportionMoreThan<_1, _2, AccountId, CouncilCollective>;
+    type MembershipInitialized = TechnicalCommittee;
+    type MembershipChanged = TechnicalCommittee;
+}
 
 /// The type used as a helper for interpreting the sender of transactions.
 pub type Context = system::ChainContext<Runtime>;

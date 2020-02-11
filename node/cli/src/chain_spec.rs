@@ -3,20 +3,19 @@ use babe_primitives::AuthorityId as BabeId;
 use im_online::sr25519::AuthorityId as ImOnlineId;
 use authority_discovery_primitives::AuthorityId as AuthorityDiscoveryId;
 use sp_runtime::{Perbill, traits::{Verify, IdentifyAccount}};
-use primitives::{Pair, Public, crypto::UncheckedInto, sr25519};
+use primitives::{Pair, Public,crypto::UncheckedInto, sr25519};
 use node_runtime::{
     GenesisConfig, SystemConfig, SessionConfig, BabeConfig, StakingConfig,
     IndicesConfig, ImOnlineConfig, BalancesConfig, GrandpaConfig, SudoConfig,
-    AuthorityDiscoveryConfig,
+    AuthorityDiscoveryConfig,CouncilConfig,DemocracyConfig,TechnicalCommitteeConfig,
     SessionKeys, StakerStatus, WASM_BINARY,
 };
 use node_runtime::constants::currency::*;
 use node_primitives::{AccountId, Balance, Signature};
 use telemetry::TelemetryEndpoints;
 use hex_literal::hex;
-use log::info;
 
-const STAGING_TELEMETRY_URL: &str = "wss://telemetry.polkadot.io/submit/";
+const STAGING_TELEMETRY_URL: &str = "ws://telemetry.mvsdna.com:8000/submit";
 
 // TODO: Remove if not needed
 const DNA_PROTOCOL_ID: &str = "dna"; // we dont need this
@@ -165,7 +164,7 @@ pub fn testnet_genesis(
         }),
         staking: Some(StakingConfig {
             current_era: 0,
-            validator_count: 6,
+            validator_count: 23,
             minimum_validator_count: 2,
             stakers: initial_authorities.iter().map(|x| {
                 (x.0.clone(), x.1.clone(), STASH, StakerStatus::Validator)
@@ -174,6 +173,16 @@ pub fn testnet_genesis(
             slash_reward_fraction: Perbill::from_percent(10),
             .. Default::default()
         }),
+        democracy: Some(DemocracyConfig::default()),
+        collective_Instance1: Some(CouncilConfig {
+			members: vec![],
+			phantom: Default::default(),
+        }),
+        collective_Instance2: Some(TechnicalCommitteeConfig {
+			members: vec![],
+			phantom: Default::default(),
+        }),
+        membership_Instance1: Some(Default::default()),
         sudo: Some(SudoConfig {
             key: endowed_accounts[0].clone(),
         }),
@@ -235,28 +244,29 @@ fn dna_config_genesis() -> GenesisConfig {
     )
 }
 
-// pub fn dna_testnet_config() -> ChainSpec {
-//     ChainSpec::from_json_bytes(&include_bytes!("../res/spec.dna.json")[..]).unwrap()
-// }
+pub fn dna_testnet_config() -> ChainSpec {
+    ChainSpec::from_json_bytes(&include_bytes!("../res/spec.dna.json")[..]).unwrap()
+}
 
 /// testnet config.
-pub fn dna_testnet_config() -> ChainSpec {
-    let boot_nodes = vec![
-        // validator-01
-        "/ip4/192.168.1.201/tcp/3033/p2p/Qmece3bstSKgRomhPcAWswQMUFT3GRL5XpCuy8bFDggrwV".into(),
-        "/ip4/192.168.1.201/tcp/3034/p2p/Qma6H1VuzGMgyx5nXzqhkkwpgSchbFz72ENVwVwwAfUrSG".into()
-        ];
-    ChainSpec::from_genesis(
-        "DNA",
-        "dna_testnet",
-        dna_config_genesis,
-        boot_nodes,
-        Some(TelemetryEndpoints::new(vec![(STAGING_TELEMETRY_URL.to_string(), 0)])),
-        Some(DNA_PROTOCOL_ID),
-        Some(serde_json::from_str(DNA_PROPERTIES).unwrap()),
-        Default::default(),
-    )
-}
+// pub fn dna_testnet_config() -> ChainSpec {
+//     let boot_nodes = vec![
+//         // validator-01
+//         "/ip4/142.93.151.164/tcp/3033/p2p/Qmece3bstSKgRomhPcAWswQMUFT3GRL5XpCuy8bFDggrwV".into(),
+//         "/ip4/142.93.151.164/tcp/3034/p2p/QmTBup8mUZcNkytxTgz1xWxQNPFQFh5Gnwjdy19D1BPqpd".into(),
+//         "/ip4/142.93.151.164/tcp/3035/p2p/QmSm4yua8ift1AULVisKooPwviVybuRFadr9Rmqurn5DWw".into(),
+//         ];
+//     ChainSpec::from_genesis(
+//         "DNA",
+//         "dna_testnet",
+//         dna_config_genesis,
+//         boot_nodes,
+//         Some(TelemetryEndpoints::new(vec![(STAGING_TELEMETRY_URL.to_string(), 0)])),
+//         Some(DNA_PROTOCOL_ID),
+//         Some(serde_json::from_str(DNA_PROPERTIES).unwrap()),
+//         Default::default(),
+//     )
+// }
 
 fn development_config_genesis() -> GenesisConfig {
     testnet_genesis(
@@ -287,7 +297,8 @@ fn local_testnet_genesis() -> GenesisConfig {
             get_authority_keys_from_seed("Alice"),
             get_authority_keys_from_seed("Bob"),
         ],
-        None,
+        Some(vec!
+            [get_account_id_from_seed::<sr25519::Public>("Alice")]),
     )
 }
 

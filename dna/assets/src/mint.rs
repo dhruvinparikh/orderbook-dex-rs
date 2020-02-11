@@ -2,10 +2,23 @@ use super::*;
 
 // This function creates tokens of a given asset and deposits them into an address. If the recipient address doesn't exist, it is created.
 impl<T: Trait> Module<T> {
-    pub fn mint(to_address: H256, asset_id: u32, amount: DNAi64, name: u32) -> DispatchResult {
+    pub fn mint(
+        _sender: T::AccountId,
+        to_address: T::AccountId,
+        asset_id: u32,
+        amount: DNAi64,
+    ) -> DispatchResult {
+        if !<Self as Store>::Tokens::exists(asset_id) {
+            Err("The asset with given id does not exists.")?
+        }
+
+        if _sender != <Self as Store>::OwnerOf::get(asset_id) {
+            Err("Only owner can mint the tokens to an asset.")?
+        }
+
         // Checking that amount is non-negative.
         if amount < DNAi64::from(0) {
-             Err("Amount can't be negative.")?
+            Err("Amount can't be negative.")?
         }
 
         // Increasing supply.
@@ -14,15 +27,13 @@ impl<T: Trait> Module<T> {
             <Self as Store>::TotalSupply::insert(asset_id, new_supply);
         } else {
             <Self as Store>::TotalSupply::insert(asset_id, amount);
-            <Self as Store>::Tokens::insert(name, amount);
         }
-
         // Crediting amount to to_address.
-        if <Self as Store>::Balances::exists((asset_id, to_address)) {
-            let new_balance = <Self as Store>::Balances::get((asset_id, to_address)) + amount;
-            <Self as Store>::Balances::insert((asset_id, to_address), new_balance);
+        if <Self as Store>::Balances::exists((asset_id, to_address.clone())) {
+            let new_balance = <Self as Store>::Balances::get((asset_id, to_address.clone())) + amount;
+            <Self as Store>::Balances::insert((asset_id, to_address.clone()), new_balance);
         } else {
-            <Self as Store>::Balances::insert((asset_id, to_address), amount);
+            <Self as Store>::Balances::insert((asset_id, to_address.clone()), amount);
         }
 
         // Return Ok.

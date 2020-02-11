@@ -28,3 +28,8 @@ package-lock.json
 node_modules
 dnachain
 logs
+Cargo.lock
+.maintain
+dnachain*
+credentials.js
+test-accounts

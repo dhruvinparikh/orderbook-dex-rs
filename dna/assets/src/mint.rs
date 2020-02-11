@@ -2,9 +2,9 @@ use super::*;
 
 // This function creates tokens of a given asset and deposits them into an address. If the recipient address doesn't exist, it is created.
 impl<T: Trait> Module<T> {
-    pub fn mint(to_address: H256, asset_id: u32, amount: Real, name: u32) -> DispatchResult {
+    pub fn mint(to_address: H256, asset_id: u32, amount: DNAi64, name: u32) -> DispatchResult {
         // Checking that amount is non-negative.
-        if amount < Real::from(0) {
+        if amount < DNAi64::from(0) {
              Err("Amount can't be negative.")?
         }
 
@@ -97,9 +97,9 @@ mod tests {
     fn mint_works() {
         new_test_ext().execute_with(|| {
             // Initialize some values.
-            let supply = Real::from(999000);
+            let supply = 999000;
             let to_address = H256::random();
-            let to_balance = Real::from(200);
+            let to_balance = 200;
             let asset_id = 1;
 
             // Manually store addresses with balances.
@@ -107,11 +107,11 @@ mod tests {
             <Assets as Store>::Balances::insert((asset_id, to_address), to_balance);
 
             // Test case of negative transfer amount.
-            let mut amount = Real::from(-100);
+            let mut amount = -100;
             assert!(Assets::mint(to_address, asset_id, amount).is_err());
 
             // Test normal case.
-            amount = Real::from(1000);
+            amount = 1000;
             assert!(Assets::mint(to_address, asset_id, amount).is_ok());
             assert_eq!(
                 supply + amount,

@@ -1,7 +1,17 @@
 const { WsProvider, Keyring, ApiRx } = require("@polkadot/api");
+const { setSS58Format } = require("@polkadot/util-crypto");
 const async = require("async");
 const program = require("commander");
+const fs = require("fs");
 const pkg = require("./package.json");
+
+function restoreAccount(accountJson, password) {
+  setSS58Format(42);
+  const kr = new Keyring();
+  const pair = kr.addFromJson(accountJson);
+  pair.decodePkcs8(password);
+  return pair;
+}
 
 async function getAccountPair(keypairType, seedWords) {
   const keyring = new Keyring({ type: keypairType });
@@ -14,7 +24,10 @@ async function getApi(url) {
   const provider = new WsProvider(url);
 
   // Create the API and wait until ready
-  const api = await ApiRx.create({ provider }).toPromise();
+  const api = await ApiRx.create({
+    provider,
+    types: { DNAi64: "Option<i64>" }
+  }).toPromise();
   return api;
 }
 
@@ -53,93 +66,81 @@ async function getArg() {
     .version(pkg.version, "-v, --version", "output the version")
     .name(pkg.name)
     .option("--url <string>", "websocket provider url")
-    .option("--keypair-type <string>", "sr25519 or ed25519")
-    .option("--amount <number>", "amount");
+    .option(
+      "--master-account <string>",
+      "account object array {<json-file-path>:<password>}"
+    )
+    .option(
+      "--accounts <string>",
+      "account object array [{<json-file-path1>:<password1>},{<json-file-path2>:<password2>}"
+    );
   program.parse(process.argv);
-  if (
-    !program.url ||
-    !program.keypairType ||
-    !program.amount
-  ) {
+  if (!program.url || !program.masterAccount || !program.accounts) {
     program.help();
   }
-  const masterAccount =
-    "grace require cluster fringe insane pulse slab orient palm spot shaft soda";
-  const testAccsObj = (testAccounts = {
-    "process buyer mixed permit faint bright budget history humor stairs donate table":
-      "sr25519",
-    "humble mosquito problem small brown aunt caught swallow virus super theory toilet":
-      "ed25519",
-    "size frown gun bracket present nerve wink glare note sauce replace garbage":
-      "sr25519",
-    "ceiling fragile wet account retreat future lucky concert supreme stick vault buddy":
-      "ed25519",
-    "choice kitten boy build canyon below lunar major hire diet daring sword":
-      "sr25519"
-  });
   return new Promise(resolve => {
     resolve({
       url: program.url,
-      masterAccountURI: masterAccount,
-      keypairType: program.keypairType,
-      testAccounts: testAccsObj,
-      amount: program.amount
+      masterAccountObj: JSON.parse(program.masterAccount),
+      accountArr: JSON.parse(program.accounts)
     });
   });
 }
 
+function getAccountPairFromJSON(accountObj) {
+  const account = JSON.parse(fs.readFileSync(Object.keys(accountObj)[0]));
+  const accountPair = restoreAccount(
+    account,
+    accountObj[Object.keys(accountObj)[0]]
+  );
+  return accountPair;
+}
+
 async function main() {
-  const {
-    url,
-    masterAccountURI,
-    keypairType,
-    testAccounts,
-    amount
-  } = await getArg();
+  const { url, masterAccountObj, accountArr } = await getArg();
   const api = await getApi(url);
-  const accountPair = await getAccountPair(keypairType, masterAccountURI);
-  const { address } = accountPair;
-  const testAccURIs = Object.keys(testAccounts).map(x => x);
+  const masterAccountPair = getAccountPairFromJSON(masterAccountObj);
+  const accountPairArr = accountArr.map(accountObj => {
+    const pair = getAccountPairFromJSON(accountObj);
+    return pair;
+  });
   console.log("Funding test accounts");
   let count = 0;
-  await async.mapSeries(testAccURIs, async uri => {
-    const nonce = await api.query.system.accountNonce(address);
-    const { address: to } = await getAccountPair(testAccounts[uri], uri);
-    const data = { to, amount, accountPair, id: ++count, api, nonce };
+  await async.mapSeries(accountPairArr, async accountPair => {
+    const nonce = await api.query.system.accountNonce(
+      masterAccountPair.address
+    );
+    const data = {
+      to: accountPair.address,
+      amount: 10000000,
+      accountPair: masterAccountPair,
+      id: ++count,
+      api,
+      nonce
+    };
     const signTransaction = await getSignTransaction(data);
-    console.log(`to : ${to} STATUS : ${signTransaction.status}`);
+    console.log(`to : ${data.to} STATUS : ${signTransaction.status}`);
   });
   console.log("Done funding test accounts");
   console.log("Starting testing suite");
   count = 0;
   let val = 1000;
-  await async.mapSeries(testAccURIs, async uri => {
-    const accPair = await getAccountPair(testAccounts[uri], uri);
-    const { address: from } = accPair;
-    const nonce = await api.query.system.accountNonce(from);
-    const randomNum = Math.floor(Math.random() * testAccURIs.length);
-    const toUri = testAccURIs[randomNum];
-    const { address: to } = await getAccountPair(testAccounts[toUri], toUri);
+  await async.mapSeries(accountPairArr, async accountPair => {
+    const nonce = await api.query.system.accountNonce(accountPair.address);
+    const randomNum = Math.floor(Math.random() * accountPairArr.length);
     const data = {
-      to,
+      to: accountPairArr[randomNum].address,
       amount: val,
-      accountPair: accPair,
+      accountPair,
       id: ++count,
       api,
       nonce
     };
     const signTransaction = await getSignTransaction(data);
     console.log(
-      `from:${from}, to:${to}, ID : ${signTransaction.id} STATUS : ${signTransaction.status}`
+      `from:${accountPair.address}, to:${data.to}, ID : ${signTransaction.id} STATUS : ${signTransaction.status}`
     );
   });
-  // const tos = [
-  //   "5GiFdKY55j8EwviqBVi2Jd6MNb6GnZDRZnc2tVSENmEdn1Vw",
-  //   "5CW139xu5PGYjccoJ8aKJRkD8BBRM5cHvLnfVm9Au2NbkTDw",
-  //   "5CW139xu5PGYjccoJ8aKJRkD8BBRM5cHvLnfVm9Au2NbkTDw",
-  //   "5H6W77mdpU31V6vEZeMWcCaz14cKDrjqwFiXDY9ZzNX1w81x",
-  //   "5H6W77mdpU31V6vEZeMWcCaz14cKDrjqwFiXDY9ZzNX1w81x"
-  // ];
   process.exit(0);
 }
 

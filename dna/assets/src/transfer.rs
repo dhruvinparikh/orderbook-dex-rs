@@ -3,9 +3,9 @@ use super::*;
 
 // This function transfers tokens of a given asset from one address to another. If the recipient address doesn't exist, it is created.
 impl<T: Trait> Module<T> {
-    pub fn transfer(from_address: H256, to_address: H256, asset_id: u32, amount: Real) -> DispatchResult {
+    pub fn transfer(from_address: H256, to_address: H256, asset_id: u32, amount: DNAi64) -> DispatchResult {
         // Checking that amount is non-negative.
-        if amount < Real::from(0) {
+        if amount < DNAi64::from(0) {
              Err("Amount can't be negative.")?
         }
 
@@ -26,7 +26,7 @@ impl<T: Trait> Module<T> {
 
         // Deducting amount from from_address.
         let new_balance = <Self as Store>::Balances::get((asset_id, from_address)) - amount;
-        if new_balance == Real::from(0) {
+        if new_balance == DNAi64::from(0) {
             <Self as Store>::Balances::remove((asset_id, from_address));
         } else {
             <Self as Store>::Balances::insert((asset_id, from_address), new_balance);
@@ -113,9 +113,9 @@ mod tests {
         new_test_ext().execute_with(|| {
             // Initialize some values.
             let from_address = H256::random();
-            let from_balance = Real::from(1000);
+            let from_balance = 1000;
             let to_address = H256::random();
-            let to_balance = Real::from(200);
+            let to_balance = 200;
             let asset_id = 1;
 
             // Manually store addresses with balances.
@@ -123,15 +123,15 @@ mod tests {
             <Assets as Store>::Balances::insert((asset_id, to_address), to_balance);
 
             // Test case of negative transfer amount.
-            let mut amount = Real::from(-100);
+            let mut amount = -100;
             assert!(Assets::transfer(from_address, to_address, asset_id, amount).is_err());
 
             // Test case of insuficient balance.
-            amount = Real::from(1000000);
+            amount = 1000000;
             assert!(Assets::transfer(from_address, to_address, asset_id, amount).is_err());
 
             // Test case of equal addresses.
-            amount = Real::from(100);
+            amount = 100;
             assert!(Assets::transfer(from_address, from_address, asset_id, amount).is_err());
 
             // Test case of non-existent address.

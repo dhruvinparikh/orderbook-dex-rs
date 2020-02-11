@@ -1,8 +1,8 @@
 # Running atleast one validator with rotating session keys
 
 ## Getting Started
- * Start validator with `./target/release/substrate --bob --base-path /tmp/bob --port 3033 --validator --ws-port 9944`
- * Start second validator with `./target/release/substrate --alice --base-path /tmp/alice --port 3034 --validator --bootnodes /ip4/##bob_ip#/tcp/30333/p2p/##bob_node_identifier## --ws-port 9945`
+ * Start validator with `./target/release/dnachain --bob --base-path /tmp/bob --port 3033 --validator --ws-port 9944`
+ * Start second validator with `./target/release/dnachain --alice --base-path /tmp/alice --port 3034 --validator --bootnodes /ip4/##bob_ip#/tcp/30333/p2p/##bob_node_identifier## --ws-port 9945`
  * Both should start producing blocks
  * Run a regular validator with --validator option. Also run ws-port which has dep to second step
  * Connect PDOTJS APP to your local node

@@ -121,7 +121,7 @@ async function main() {
     try {
       if (balance.lt(new BN(THRESHOLD_AMOUNT))) {
         console.log(
-          `Funding test account ${accountPair.address} from ${masterAccount.address} amount : ${THRESHOLD_AMOUNT/10000}`
+          `Funding test account ${accountPair.address} from ${masterAccountPair.address} amount : ${THRESHOLD_AMOUNT/10000}`
         );
         const masterAccountNonce = await api.query.system.accountNonce(
           masterAccountPair.address

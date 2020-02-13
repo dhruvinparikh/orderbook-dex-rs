@@ -1,27 +1,31 @@
-
 use super::*;
 
 // This function transfers tokens of a given asset from one address to another. If the recipient address doesn't exist, it is created.
 impl<T: Trait> Module<T> {
-    pub fn transfer(from_address: H256, to_address: H256, asset_id: u32, amount: DNAi64) -> DispatchResult {
+    pub fn transfer(
+        from_address: H256,
+        to_address: H256,
+        asset_id: u32,
+        amount: DNAi64,
+    ) -> DispatchResult {
         // Checking that amount is non-negative.
         if amount < DNAi64::from(0) {
-             Err("Amount can't be negative.")?
+            Err("Amount can't be negative.")?
         }
 
         // Checking that from_address and to_address are different.
         if from_address == to_address {
-             Err("From_address and to_address can't be equal.")?
+            Err("From_address and to_address can't be equal.")?
         }
 
         // Checking that from_address and asset_id exists.
         if !<Self as Store>::Balances::exists((asset_id, from_address)) {
-             Err("From_address doesn't exist at given Asset_ID.")?
+            Err("From_address doesn't exist at given Asset_ID.")?
         }
 
         // Checking that from_address has enough balance.
         if amount > <Self as Store>::Balances::get((asset_id, from_address)) {
-             Err("From_address doesn't have enough balance.")?
+            Err("From_address doesn't have enough balance.")?
         }
 
         // Deducting amount from from_address.

@@ -30,7 +30,8 @@ impl<T: Trait> Module<T> {
         }
         // Crediting amount to to_address.
         if <Self as Store>::Balances::exists((asset_id, to_address.clone())) {
-            let new_balance = <Self as Store>::Balances::get((asset_id, to_address.clone())) + amount;
+            let new_balance =
+                <Self as Store>::Balances::get((asset_id, to_address.clone())) + amount;
             <Self as Store>::Balances::insert((asset_id, to_address.clone()), new_balance);
         } else {
             <Self as Store>::Balances::insert((asset_id, to_address.clone()), amount);

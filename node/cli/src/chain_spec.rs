@@ -295,7 +295,7 @@ pub fn dna_testnet_config() -> ChainSpec {
 //         "/ip4/142.93.151.164/tcp/3033/p2p/Qmece3bstSKgRomhPcAWswQMUFT3GRL5XpCuy8bFDggrwV".into(),
 //         // validator-02
 //         "/ip4/142.93.151.164/tcp/3034/p2p/QmTBup8mUZcNkytxTgz1xWxQNPFQFh5Gnwjdy19D1BPqpd".into(),
-//         // validator-03   
+//         // validator-03
 //         "/ip4/142.93.151.164/tcp/3035/p2p/QmSm4yua8ift1AULVisKooPwviVybuRFadr9Rmqurn5DWw".into(),
 //         ];
 //     ChainSpec::from_genesis(

@@ -5,7 +5,7 @@ impl<T: Trait> Module<T> {
     pub fn mint(to_address: H256, asset_id: u32, amount: DNAi64, name: u32) -> DispatchResult {
         // Checking that amount is non-negative.
         if amount < DNAi64::from(0) {
-             Err("Amount can't be negative.")?
+            Err("Amount can't be negative.")?
         }
 
         // Increasing supply.

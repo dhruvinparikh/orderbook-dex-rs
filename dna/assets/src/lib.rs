@@ -6,10 +6,10 @@
 
 // Importing crates declared in the cargo.toml file.
 use codec::{Decode, Encode};
-use primitives::H256;
-use support::{decl_module, decl_storage, dispatch::DispatchResult, StorageMap};
-use rstd::prelude::*;
 use core::ops::{Add, AddAssign, Sub, SubAssign};
+use primitives::H256;
+use rstd::prelude::*;
+use support::{decl_module, decl_storage, dispatch::DispatchResult, StorageMap};
 
 // Importing the rest of the files in this crate.
 mod burn;

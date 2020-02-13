@@ -18,9 +18,9 @@ impl<T: Trait> Module<T> {
         }
 
         // Checking that sender and to_address are different.
-        // _sender == to_address {
-        //     Err("Sender and to_address can't be equal.")?
-        // }
+        if _sender == to_address {
+            Err("Sender and to_address can't be equal.")?
+        }
 
         // Checking that from_address and asset_id exists.
         if !<Self as Store>::Balances::exists((asset_id, _sender.clone())) {

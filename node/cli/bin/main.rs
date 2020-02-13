@@ -19,10 +19,15 @@ impl sc_cli::IntoExit for Exit {
 
         let exit_send_cell = RefCell::new(Some(exit_send));
         ctrlc::set_handler(move || {
-            if let Some(exit_send) = exit_send_cell.try_borrow_mut().expect("signal handler not reentrant; qed").take() {
+            if let Some(exit_send) = exit_send_cell
+                .try_borrow_mut()
+                .expect("signal handler not reentrant; qed")
+                .take()
+            {
                 exit_send.send(()).expect("Error sending exit notification");
             }
-        }).expect("Error setting Ctrl-C handler");
+        })
+        .expect("Error setting Ctrl-C handler");
 
         exit.map(|_| ())
     }

@@ -43,7 +43,7 @@ pub enum OrderType {
 #[cfg_attr(feature = "std", derive(Debug))]
 pub enum OrderStatus {
 	Pending,
-	PartialFilled,
+	PartialFilled,  // skipping for now
 	Filled,
 	Canceled,
 }
@@ -58,8 +58,6 @@ pub struct LimitOrder<T> where T: Trait {
 	pub price: T::Price,
 	pub sell_amount: T::Balance,
 	pub buy_amount: T::Balance,
-	pub remained_sell_amount: T::Balance,
-	pub remained_buy_amount: T::Balance,
 	pub otype: OrderType,
 	pub status: OrderStatus,
 }
@@ -74,8 +72,8 @@ pub struct DEX<T> where T: Trait {
 	quote: T::Hash,
 	buyer: T::AccountId, // have base
 	seller: T::AccountId, // have quote
-	maker: T::AccountId, // create order first
-	taker: T::AccountId, // create order not first
+	maker: T::AccountId, // create first order 
+	taker: T::AccountId, // did not create the first order
 	otype: OrderType, // taker order's type
 	price: T::Price, // maker order's price
 	base_amount: T::Balance, // base asset amount to exchange

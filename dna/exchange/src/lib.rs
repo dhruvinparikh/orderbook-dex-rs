@@ -1,4 +1,4 @@
-//! # Assets module
+//! # DEX module
 //!
 
 #![cfg_attr(not(feature = "std"), no_std)]

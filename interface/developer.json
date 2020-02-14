@@ -1,0 +1,42 @@
+{
+    "DNAi64": "Option<i64>",
+    "OrderType": {
+      "_enum": ["Buy", "Sell"]
+    },
+    "OrderStatus": {
+      "_enum": ["Pending", "PartialFilled", "Filled", "Canceled"]
+    },
+    "ExchangePair": {
+      "hash": "H256",
+      "base": "H256",
+      "quote": "H256",
+      "buy_one_price": "Option<Price>",
+      "sell_one_price": "Option<Price>",
+      },
+    "Price": "u128",
+    "LimitOrder": {
+      "hash": "H256",
+      "base": "H256",
+      "quote": "H256",
+      "owner": "AccountId",
+      "price": "Price",
+      "sell_amount": "Balance",
+      "buy_amount": "Balance",
+      "otype": "OrderType",
+      "status": "OrderStatus"
+    },
+    "Exchange": {
+      "hash": "H256",
+      "base": "H256",
+      "quote": "H256",
+      "buyer": "AccountId",
+      "seller": "AccountId",
+      "maker": "AccountId",
+      "taker": "AccountId",
+      "otype": "OrderType",
+      "price": "Price",
+      "base_amount": "Balance",
+      "quote_amount": "Balance"
+    }
+}
+  

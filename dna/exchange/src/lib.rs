@@ -21,6 +21,55 @@ pub struct TradePair<T> where T: Trait {
 	quote: T::Hash,
 }
 
+#[derive(Encode, Decode, Debug, Clone, Copy, PartialEq, Eq)]
+pub enum OrderType {
+	Buy,
+	Sell,
+}
+
+#[derive(Encode, Decode, Clone, PartialEq, Eq)]
+#[cfg_attr(feature = "std", derive(Debug))]
+pub enum OrderStatus {
+	Pending,
+	PartialFilled,
+	Filled,
+	Canceled,
+}
+
+#[derive(Encode, Decode, Clone, PartialEq, Eq)]
+#[cfg_attr(feature = "std", derive(Debug))]
+pub struct LimitOrder<T> where T: Trait {
+	pub hash: T::Hash,
+	pub base: T::Hash,
+	pub quote: T::Hash,
+	pub owner: T::AccountId,
+	pub price: T::Price,
+	pub sell_amount: T::Balance,
+	pub buy_amount: T::Balance,
+	pub remained_sell_amount: T::Balance,
+	pub remained_buy_amount: T::Balance,
+	pub otype: OrderType,
+	pub status: OrderStatus,
+}
+
+pub type Price = u128;
+
+#[derive(Encode, Decode, Clone, PartialEq, Eq)]
+#[cfg_attr(feature = "std", derive(Debug))]
+pub struct Trade<T> where T: Trait {
+	hash: T::Hash,
+	base: T::Hash,
+	quote: T::Hash,
+	buyer: T::AccountId, // have base
+	seller: T::AccountId, // have quote
+	maker: T::AccountId, // create order first
+	taker: T::AccountId, // create order not first
+	otype: OrderType, // taker order's type
+	price: T::Price, // maker order's price
+	base_amount: T::Balance, // base token amount to exchange
+	quote_amount: T::Balance, // quote token amount to exchange
+}
+
 // This module's storage items.
 decl_storage! {
     trait Store for Module<T: Trait> as ExchangeStorage {

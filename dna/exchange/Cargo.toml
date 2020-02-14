@@ -1,0 +1,35 @@
+[package]
+name = "dna-exchange"
+version = "0.1.0"
+authors = ["BlockX Labs <info@blockxlabs.com>"]
+edition = "2018"
+
+[dependencies]
+serde = { version = "1.0.101", optional = true }
+codec = { package = "parity-scale-codec", version = "1.1.0", default-features = false, features = ["derive"] }
+# We need the H256 of this module
+primitives = { package = "sp-core", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
+# Needed for various traits.
+sp-runtime = {git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
+# Needed for type-safe access to storage DB.
+support = { package = "frame-support", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
+# `system` module provides us with all sorts of useful stuff and macros depend on it being around.
+system = { package = "frame-system", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
+rstd = { package = "sp-std", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
+
+[dev-dependencies]
+rstd = { package = "sp-std", git = "https://github.com/blockxlabs/substrate", branch = "blockx-dev-test-0" }
+runtime-io = { package = "sp-io", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
+
+[features]
+default = ["std"]
+std = [
+  "serde",
+  "codec/std",
+  "primitives/std",
+  "sp-runtime/std",
+  "support/std",
+  "system/std",
+  "runtime-io/std",
+  "rstd/std"
+]

@@ -13,6 +13,13 @@ use rstd::prelude::*;
 use support::{decl_module, decl_storage, dispatch::DispatchResult, StorageMap};
 use system::ensure_signed;
 
+#[derive(Encode, Decode, Clone, PartialEq, Eq)]
+#[cfg_attr(feature = "std", derive(Debug))]
+pub struct TradePair<T> where T: Trait {
+	hash: T::Hash,
+	base: T::Hash,
+	quote: T::Hash,
+}
 
 // This module's storage items.
 decl_storage! {

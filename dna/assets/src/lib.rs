@@ -115,5 +115,31 @@ decl_module! {
             // Return Ok if successful.
             Ok(())
         }
+
+        /// # Provide info to freeze funds of the order maker
+        /// * `_origin` - signer
+        /// * `asset_id` - asset id
+        /// * `amount` - amount to freeze
+        pub fn freeze(_origin, asset_id : u32, amount:Balance) -> DispatchResult {
+            let sender = ensure_signed(_origin)?;
+
+             // call corresponding internal function
+
+             // Return Ok if successful.
+             Ok(())
+        }
+
+        /// # Provide info to unfreeze funds of the order maker
+        /// * `_origin` - signer
+        /// * `asset_id` - asset id
+        /// * `amount` - amount to freeze
+        pub fn unfreeze(_origin, asset_id : u32, amount:Balance) -> DispatchResult {
+            let sender = ensure_signed(_origin)?;
+
+             // call corresponding internal function
+
+             // Return Ok if successful.
+             Ok(())
+        }
     }
 }

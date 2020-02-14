@@ -116,7 +116,7 @@ decl_module! {
             Ok(())
         }
 
-        /// # Provide info to freeze funds of the order maker
+        /// # Provide info to freeze funds
         /// * `_origin` - signer
         /// * `asset_id` - asset id
         /// * `amount` - amount to freeze
@@ -129,7 +129,7 @@ decl_module! {
              Ok(())
         }
 
-        /// # Provide info to unfreeze funds of the order maker
+        /// # Provide info to unfreeze funds
         /// * `_origin` - signer
         /// * `asset_id` - asset id
         /// * `amount` - amount to freeze

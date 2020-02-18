@@ -9,6 +9,7 @@ use codec::{Decode, Encode};
 use core::ops::{Add, AddAssign, Sub, SubAssign};
 use primitives::H256;
 use rstd::prelude::*;
+use sp_runtime::traits::Hash;
 use support::{decl_module, decl_storage, dispatch::DispatchResult, StorageMap};
 
 // Importing the rest of the files in this crate.
@@ -84,6 +85,8 @@ decl_storage! {
         pub Balances get(fn balances): map (u32, H256) => DNAi64;
         pub TotalSupply get(fn total_supply): map u32 => DNAi64;
         pub Tokens get(fn tokens): map u32 => DNAi64;
+        pub FreeBalanceOf get(free_balance_of): map (T::AccountId, T::Hash) => DNAi64;
+        pub FreezedBalanceOf get(freezed_balance_of): map (T::AccountId, T::Hash) => DNAi64;
     }
 }
 

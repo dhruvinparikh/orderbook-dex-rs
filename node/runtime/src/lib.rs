@@ -356,7 +356,9 @@ impl offences::Trait for Runtime {
     type OnOffenceHandler = Staking;
 }
 
-impl assets::Trait for Runtime {}
+impl assets::Trait for Runtime {
+    type Event = Event;
+}
 
 impl system::offchain::CreateTransaction<Runtime, UncheckedExtrinsic> for Runtime {
     type Public = <Signature as traits::Verify>::Signer;
@@ -518,7 +520,8 @@ construct_runtime!(
         TechnicalCommittee: collective::<Instance2>::{Module, Call, Storage, Origin<T>, Event<T>, Config<T>},
 
         // Custom modules
-        Assets: assets::{Module, Call, Storage},
+        Assets: assets::{Module, Call, Storage,Event<T>,Error},
+        // DEX: dex::{Module,Call,Storage,Event<T>,Error},
         
         // Utility module
         Utility: utility::{Module, Call, Event<T>},

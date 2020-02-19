@@ -16,6 +16,8 @@ support = { package = "frame-support", git = "https://github.com/blockxlabs/subs
 # `system` module provides us with all sorts of useful stuff and macros depend on it being around.
 system = { package = "frame-system", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
 rstd = { package = "sp-std", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
+randomness-collective-flip = { package = "pallet-randomness-collective-flip", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
+balances = { package = "pallet-balances", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
 
 [dev-dependencies]
 rstd = { package = "sp-std", git = "https://github.com/blockxlabs/substrate", branch = "blockx-dev-test-0" }

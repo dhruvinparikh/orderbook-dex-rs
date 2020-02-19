@@ -7,7 +7,6 @@
 // Importing crates declared in the cargo.toml file.
 use codec::{Decode, Encode};
 // use core::ops::{Add, AddAssign, Sub, SubAssign};
-use primitives::H256;
 use rstd::prelude::*;
 use sp_runtime::traits::{Bounded, Hash};
 use support::{

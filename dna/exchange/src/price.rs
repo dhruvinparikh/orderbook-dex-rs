@@ -38,10 +38,10 @@ impl<T: Trait> Module<T> {
             }
         }
 
-        ensure!(amount_u256 == amount_v2, Error::<T>::BoundsCheckFailed3);
+        ensure!(amount_u256 == amount_v2, Error::<T>::BoundsCheckFailed);
         ensure!(
             counterparty_amount != 0.into() && counterparty_amount <= max_balance_u256,
-            Error::<T>::BoundsCheckFailed4
+            Error::<T>::BoundsCheckFailed
         );
 
         // todo: change to u128

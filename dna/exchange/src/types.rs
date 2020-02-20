@@ -1,6 +1,6 @@
 use super::*;
 use crate::exchange::{self, *};
-use sp_runtime::{DispatchResult as Result};
+use sp_runtime::DispatchResult as Result;
 
 #[derive(Encode, Decode, Clone)]
 #[cfg_attr(feature = "std", derive(PartialEq, Eq, Debug))]
@@ -14,6 +14,20 @@ pub struct LinkedItem<K1, K2, K3> {
 }
 
 pub struct LinkedList<T, S, K1, K2, K3>(rstd::marker::PhantomData<(T, S, K1, K2, K3)>);
+
+
+pub type OrderLinkedItem<T> = LinkedItem<
+    <T as system::Trait>::Hash,
+    <T as Trait>::Price,
+    <T as balances::Trait>::Balance,
+>;
+pub type OrderLinkedItemList<T> = LinkedList<
+    T,
+    LinkedItemList<T>,
+    <T as system::Trait>::Hash,
+    <T as Trait>::Price,
+    <T as balances::Trait>::Balance,
+>;
 
 // Self: StorageMap, Key1: ExchangePairHash, Key2: Price, Value: OrderHash
 impl<T, S, K1, K2, K3> LinkedList<T, S, K1, K2, K3>

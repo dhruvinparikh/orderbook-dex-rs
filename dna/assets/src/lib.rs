@@ -22,65 +22,6 @@ pub mod mint;
 pub mod transfer;
 pub mod unfreeze;
 
-/// The scale factor (must be positive).
-// const SF: i128 = 1000000000;
-
-/// This struct implements the DNAi64 data type. It is a tuple containing a single Option of
-/// an i64.
-// #[derive(Copy, Clone, Decode, Debug, Encode, Default, PartialEq, Eq, PartialOrd, Ord)]
-// pub struct DNAi64(pub Option<i64>);
-
-// impl DNAi64 {
-//     /// Transforms an i64 into a DNAi64. It scales the input by the scale factor.
-//     pub fn from(x: i64) -> DNAi64 {
-//         DNAi64(x.checked_mul(SF as i64))
-//     }
-// }
-
-/// Calculates the sum of two DNAi64s. If any of the inputs is 'None' (or the result over/underflows),
-/// it returns 'None'. It does operator overloading for the symbol '+'.
-// impl Add for DNAi64 {
-//     type Output = DNAi64;
-
-//     fn add(self, rhs: DNAi64) -> DNAi64 {
-//         if self.0.is_some() && rhs.0.is_some() {
-//             DNAi64(self.0.unwrap().checked_add(rhs.0.unwrap()))
-//         } else {
-//             DNAi64(None)
-//         }
-//     }
-// }
-
-/// Implements the addition assignment operator +=. Follows the same rules as the
-/// addition operator.
-// impl AddAssign for DNAi64 {
-//     fn add_assign(&mut self, rhs: Self) {
-//         *self = *self + rhs;
-//     }
-// }
-
-/// Calculates the subtraction of two DNAi64s. If any of the inputs is 'None' (or the result
-/// over/underflows), it returns 'None'. It does operator overloading for the symbol '-'.
-// impl Sub for DNAi64 {
-//     type Output = DNAi64;
-
-//     fn sub(self, rhs: DNAi64) -> DNAi64 {
-//         if self.0.is_some() && rhs.0.is_some() {
-//             DNAi64(self.0.unwrap().checked_sub(rhs.0.unwrap()))
-//         } else {
-//             DNAi64(None)
-//         }
-//     }
-// }
-
-/// Implements the subtraction assignment operator -=. Follows the same rules as the
-/// subtraction operator.
-// impl SubAssign for DNAi64 {
-//     fn sub_assign(&mut self, rhs: Self) {
-//         *self = *self - rhs;
-//     }
-// }
-
 #[derive(Encode, Decode, Default, Clone, PartialEq)]
 #[cfg_attr(feature = "std", derive(Debug))]
 pub struct Asset<Hash, Balance> {
@@ -206,26 +147,5 @@ decl_module! {
              // Return Ok if successful.
              Ok(())
         }
-    }
-}
-
-impl<T: Trait> Module<T> {
-    pub fn ensure_free_balance(
-        sender: T::AccountId,
-        hash: T::Hash,
-        amount: T::Balance,
-    ) -> DispatchResult {
-        let asset = Self::asset(hash);
-        ensure!(asset.is_some(), Error::<T>::NoMatchingAsset);
-
-        ensure!(
-            FreeBalanceOf::<T>::exists((sender.clone(), hash.clone())),
-            Error::<T>::SenderHaveNoAsset
-        );
-
-        let free_amount = Self::free_balance_of((sender.clone(), hash.clone()));
-        ensure!(free_amount >= amount, Error::<T>::BalanceNotEnough);
-
-        Ok(())
     }
 }

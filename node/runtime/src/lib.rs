@@ -184,7 +184,7 @@ parameter_types! {
     pub const WeightFeeCoefficient: Balance = 0;
     // for a sane configuration, this should always be less than `AvailableBlockRatio`.
     pub const TargetBlockFullness: Perbill = Perbill::from_percent(25);
-    pub const PriceFactor: u128 = 100_000_000;
+    pub const PriceFactor: u128 = 1;
     pub const BlocksPerDay: u32 = 6 * 60 * 24;
     pub const OpenedOrdersArrayCap: u8 = 20;
     pub const ClosedOrdersArrayCap: u8 = 100;

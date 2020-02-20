@@ -23,10 +23,13 @@ use byteorder::{ByteOrder, LittleEndian};
 use codec::{Decode, Encode, EncodeLike};
 use system::ensure_signed;
 
-pub mod exchange;
-pub mod types;
-// pub mod utils;
+mod create_order;
+mod exchange;
+mod exchange_pair;
+mod match_order;
+mod market;
+mod types;
+mod price;
 
 pub use exchange::*;
 pub use types::*;
-// pub use utils::*;

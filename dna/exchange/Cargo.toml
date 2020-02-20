@@ -35,5 +35,6 @@ std = [
   "support/std",
   "system/std",
   "runtime-io/std",
-  "rstd/std"
+  "rstd/std",
+  "balances/std"
 ]

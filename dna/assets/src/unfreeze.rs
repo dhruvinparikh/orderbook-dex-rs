@@ -33,7 +33,7 @@ impl<T: Trait> Module<T> {
 
         ensure!(
             FreeBalanceOf::<T>::exists((sender.clone(), hash.clone())),
-            Error::<T>::SenderHaveNoAsset5
+            Error::<T>::SenderHaveNoAsset
         );
 
         let free_amount = Self::free_balance_of((sender.clone(), hash.clone()));

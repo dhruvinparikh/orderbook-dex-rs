@@ -87,11 +87,11 @@ impl<T: Trait> Module<T> {
     pub fn ensure_bounds(price: T::Price, sell_amount: T::Balance) -> DispatchResult {
         ensure!(
             price > Zero::zero() && price <= T::Price::max_value(),
-            Error::<T>::BoundsCheckFailed1
+            Error::<T>::BoundsCheckFailed
         );
         ensure!(
             sell_amount > Zero::zero() && sell_amount <= T::Balance::max_value(),
-            Error::<T>::BoundsCheckFailed2
+            Error::<T>::BoundsCheckFailed
         );
         Ok(())
     }

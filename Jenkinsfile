@@ -3,6 +3,11 @@ pipeline {
     options {
         timeout(time:2, unit: 'HOURS')
     }
+    stage('Copy cache') {
+            steps {
+                sh 'cp ./target ${HOME}/kush'
+            }
+        }
     stages {
         stage('Build all native code') {
             steps {

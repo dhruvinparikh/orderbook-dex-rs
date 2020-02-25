@@ -6,9 +6,13 @@ pipeline {
     stages {
         stage('Build all native code') {
             steps {
-                sh 'cargo clean'
-                sh 'cargo build --release --jobs 8'
-            }
+                    cache(maxCacheSize: 250, caches: [
+                    [$class: 'ArbitraryFileCache', includes: 'target', path: '${HOME}/.mvsdna/caches'],
+                    ]) {
+                        sh 'cargo clean'
+                        sh 'cargo build --release --jobs 8'
+                    }
+                }
         }
         // stage('Test') {
         //     steps {

@@ -4,11 +4,6 @@ pipeline {
         timeout(time:2, unit: 'HOURS')
     }
     stages {
-        // stage('Copy cache') {
-        //     steps {
-        //         sh 'cp ./target ${HOME}/kush'
-        //     }
-        // }
         stage('Build all native code') {
             steps {
                     // cache(maxCacheSize: 250, caches: [
@@ -24,6 +19,11 @@ pipeline {
         //         sh 'cargo test'
         //     }
         // }
+        stage('Copy cache') {
+            steps {
+                sh 'cp ./target ${HOME}/kush'
+            }
+        }
         stage('Master Build') {
             when {
                 branch 'master'

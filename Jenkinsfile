@@ -9,7 +9,7 @@ pipeline {
                     // sh 'cargo clean'
                     // sh 'cargo build --release --target-dir ${HOME}/kush/metaverse-dna/target --jobs=8'
                     cache(maxCacheSize: 7000, caches: [
-                    [$class: 'ArbitraryFileCache',includes: '**/*',path: '${HOME}/kush/metaverse-dna'],
+                    [$class: 'ArbitraryFileCache',includes: '**/*',path: '${HOME}/kush/metaverse-dna/target'],
                     ]) {
                         sh 'cargo build --release --jobs=8'
                     }

@@ -7,7 +7,7 @@ pipeline {
         stage('Build all native code') {
             steps {
                     cache(maxCacheSize: 250, caches: [
-                    [$class: 'ArbitraryFileCache',includes: '**/*',path: './target'],
+                    [$class: 'ArbitraryFileCache',includes: '**/*',path: '${HOME}/kush/target'],
                     ]) {
                         // sh 'cargo clean'
                         sh 'cargo build --release --jobs 8'

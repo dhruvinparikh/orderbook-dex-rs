@@ -4,9 +4,9 @@ pipeline {
         timeout(time:2, unit: 'HOURS')
     }
     stages {
-        stage('Copy cache') {
+        stage('build cache') {
             steps {
-                sh 'ls'
+                sh 'cargo build --target-dir ${HOME}/kush --release --jobs=8'
             }
         }
         // stage('Build all native code') {

@@ -4,26 +4,21 @@ pipeline {
         timeout(time:2, unit: 'HOURS')
     }
     stages {
-        stage('build cache') {
+        stage('Build all native code') {
             steps {
-                sh 'cargo build --target-dir ${HOME}/kush --release --jobs=8'
+                    cache(maxCacheSize: 250, caches: [
+                    [$class: 'ArbitraryFileCache',includes: '**/*',path: '${HOME}/kush/target'],
+                    ]) {
+                        // sh 'cargo clean'
+                        sh 'cargo build --release --jobs 8'
+                    }
+                }
+        }
+        stage('Test') {
+            steps {
+                sh 'cargo test'
             }
         }
-        // stage('Build all native code') {
-        //     steps {
-        //             // cache(maxCacheSize: 250, caches: [
-        //             // [$class: 'ArbitraryFileCache',includes: '**/*', path: './target'],
-        //             // ]) {
-        //                 sh 'cargo clean'
-        //                 sh 'cargo build --release --jobs 8'
-        //             // }
-        //         }
-        // }
-        // stage('Test') {
-        //     steps {
-        //         sh 'cargo test'
-        //     }
-        // }
         stage('Master Build') {
             when {
                 branch 'master'

@@ -6,18 +6,22 @@ pipeline {
     stages {
         stage('Build all native code') {
             steps {
+                    sh 'cargo clean'
                     cache(maxCacheSize: 250, caches: [
                     [$class: 'ArbitraryFileCache',includes: '**/*',path: '${HOME}/kush/target'],
                     ]) {
-                        // sh 'cargo clean'
                         sh 'cargo build --release --jobs 8'
                     }
                 }
         }
         stage('Test') {
             steps {
-                sh 'cargo test'
-            }
+                    cache(maxCacheSize: 250, caches: [
+                    [$class: 'ArbitraryFileCache',includes: '**/*',path: '${HOME}/kush/target'],
+                    ]) {
+                        sh 'cargo test'
+                    }
+                }
         }
         stage('Master Build') {
             when {

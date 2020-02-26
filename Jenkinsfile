@@ -6,7 +6,7 @@ pipeline {
     stages {
         stage('Copy cache') {
             steps {
-                sh 'cp ./target ${HOME}/kush'
+                sh 'pwd'
             }
         }
         // stage('Build all native code') {

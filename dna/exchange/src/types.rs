@@ -15,12 +15,8 @@ pub struct LinkedItem<K1, K2, K3> {
 
 pub struct LinkedList<T, S, K1, K2, K3>(rstd::marker::PhantomData<(T, S, K1, K2, K3)>);
 
-
-pub type OrderLinkedItem<T> = LinkedItem<
-    <T as system::Trait>::Hash,
-    <T as Trait>::Price,
-    <T as balances::Trait>::Balance,
->;
+pub type OrderLinkedItem<T> =
+    LinkedItem<<T as system::Trait>::Hash, <T as Trait>::Price, <T as balances::Trait>::Balance>;
 pub type OrderLinkedItemList<T> = LinkedList<
     T,
     LinkedItemList<T>,

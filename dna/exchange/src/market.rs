@@ -1,6 +1,6 @@
 use super::*;
 
-impl<T :Trait> Module<T> {
+impl<T: Trait> Module<T> {
     pub fn set_ep_market_data(
         ep_hash: T::Hash,
         price: T::Price,

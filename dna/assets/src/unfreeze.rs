@@ -27,7 +27,11 @@ impl<T: Trait> Module<T> {
 
         Ok(())
     }
-    pub fn ensure_free_balance(sender: T::AccountId, hash: T::Hash, amount: T::Balance) -> DispatchResult {
+    pub fn ensure_free_balance(
+        sender: T::AccountId,
+        hash: T::Hash,
+        amount: T::Balance,
+    ) -> DispatchResult {
         let asset = Self::asset(hash);
         ensure!(asset.is_some(), Error::<T>::NoMatchingAsset);
 
@@ -37,12 +41,8 @@ impl<T: Trait> Module<T> {
         );
 
         let free_amount = Self::free_balance_of((sender.clone(), hash.clone()));
-        ensure!(
-            free_amount >= amount,
-            Error::<T>::BalanceNotEnough
-        );
+        ensure!(free_amount >= amount, Error::<T>::BalanceNotEnough);
 
         Ok(())
     }
-    
 }

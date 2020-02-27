@@ -2,5 +2,5 @@
 
 path=$(pwd)
 
-cd $path/scripts/transfer && npm install && cd $path
+cd $path/scripts/transfer && npm --prefer-online install && cd $path
 node $path/scripts/transfer/index.js

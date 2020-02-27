@@ -26,10 +26,10 @@ use system::ensure_signed;
 mod create_order;
 mod exchange;
 mod exchange_pair;
-mod match_order;
 mod market;
-mod types;
+mod match_order;
 mod price;
+mod types;
 
 pub use exchange::*;
 pub use types::*;

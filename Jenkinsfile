@@ -6,15 +6,23 @@ pipeline {
     stages {
         stage('Build all native code') {
             steps {
-                sh 'cargo clean'
-                sh 'cargo build --release --jobs 8'
-            }
+                    cache(maxCacheSize: 7000, caches: [
+                    [$class: 'ArbitraryFileCache',includes: '**/*',path: '${HOME}/.cargo/registry/cache'],
+                    ]) {
+                        sh 'cargo clean'
+                        sh 'cargo build --release --jobs=8'
+                    }
+                }
         }
-        // stage('Test') {
-        //     steps {
-        //         sh 'cargo test'
-        //     }
-        // }
+        stage('Test') {
+            steps {
+                    cache(maxCacheSize: 7000, caches: [
+                    [$class: 'ArbitraryFileCache',includes: '**/*',path: '${HOME}/.cargo/registry/cache'],
+                    ]) {
+                        sh 'cargo test'
+                    }
+                }
+        }
         stage('Master Build') {
             when {
                 branch 'master'

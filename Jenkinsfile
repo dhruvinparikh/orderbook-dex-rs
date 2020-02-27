@@ -6,7 +6,7 @@ pipeline {
     stages {
         stage('Build all native code') {
             steps {
-                sh 'ls -al ${HOME}/.cargo/registry/cache'
+                sh 'ls -al ${HOME}/.cargo/registry/cache/github.com-1ecc6299db9ec823'
                 //     cache(maxCacheSize: 7000, caches: [
                 //     [$class: 'ArbitraryFileCache',includes: '**/*',path: '${HOME}/.cargo/registry/cache'],
                 //     ]) {

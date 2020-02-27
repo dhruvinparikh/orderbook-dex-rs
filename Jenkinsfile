@@ -20,7 +20,7 @@ pipeline {
                     [$class: 'ArbitraryFileCache',includes: '**/*',path: '${HOME}/.cargo/registry/cache'],
                     ]) {
                         sh 'cargo test'
-                    }
+                    }   
                 }
         }
         stage('Master Build') {

@@ -7,7 +7,7 @@ pipeline {
         stage('Build all native code') {
             steps {
                     cache(maxCacheSize: 7000, caches: [
-                    [$class: 'ArbitraryFileCache',includes: '**/*',path: '${HOME}/.cargo/registry/cache/github.com-1ecc6299db9ec823'],
+                    [$class: 'ArbitraryFileCache',includes: '**/*',path: '${HOME}/.cargo/registry/cache'],
                     ]) {
                         sh 'cargo clean'
                         sh 'cargo build --release --jobs=8'
@@ -17,7 +17,7 @@ pipeline {
         stage('Test') {
             steps {
                     cache(maxCacheSize: 7000, caches: [
-                    [$class: 'ArbitraryFileCache',includes: '**/*',path: '${HOME}/.cargo/registry/cache/github.com-1ecc6299db9ec823'],
+                    [$class: 'ArbitraryFileCache',includes: '**/*',path: '${HOME}/.cargo/registry/cache'],
                     ]) {
                         sh 'cargo test'
                     }

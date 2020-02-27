@@ -6,23 +6,24 @@ pipeline {
     stages {
         stage('Build all native code') {
             steps {
-                    cache(maxCacheSize: 7000, caches: [
-                    [$class: 'ArbitraryFileCache',includes: '**/*',path: '${HOME}/.cargo/registry/cache'],
-                    ]) {
-                        sh 'cargo clean'
-                        sh 'cargo build --release --jobs=8'
-                    }
-                }
+                sh 'ls -al ${HOME}'
+                //     cache(maxCacheSize: 7000, caches: [
+                //     [$class: 'ArbitraryFileCache',includes: '**/*',path: '${HOME}/.cargo/registry/cache'],
+                //     ]) {
+                //         sh 'cargo clean'
+                //         sh 'cargo build --release --jobs=8'
+                //     }
+                // }
         }
-        stage('Test') {
-            steps {
-                    cache(maxCacheSize: 7000, caches: [
-                    [$class: 'ArbitraryFileCache',includes: '**/*',path: '${HOME}/kush/metaverse-dna'],
-                    ]) {
-                        sh 'cargo test'
-                    }
-                }
-        }
+        // stage('Test') {
+        //     steps {
+        //             cache(maxCacheSize: 7000, caches: [
+        //             [$class: 'ArbitraryFileCache',includes: '**/*',path: '${HOME}/kush/metaverse-dna'],
+        //             ]) {
+        //                 sh 'cargo test'
+        //             }
+        //         }
+        // }
         stage('Master Build') {
             when {
                 branch 'master'

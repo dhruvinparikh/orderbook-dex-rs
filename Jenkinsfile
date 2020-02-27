@@ -13,7 +13,7 @@ pipeline {
                 //         sh 'cargo clean'
                 //         sh 'cargo build --release --jobs=8'
                 //     }
-                // }
+                }
         }
         // stage('Test') {
         //     steps {

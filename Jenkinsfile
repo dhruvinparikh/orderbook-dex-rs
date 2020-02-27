@@ -6,24 +6,23 @@ pipeline {
     stages {
         stage('Build all native code') {
             steps {
-                sh 'ls -al ${HOME}/.npm'
-                //     cache(maxCacheSize: 7000, caches: [
-                //     [$class: 'ArbitraryFileCache',includes: '**/*',path: '${HOME}/.cargo/registry/cache/github.com-1ecc6299db9ec823'],
-                //     ]) {
-                //         sh 'cargo clean'
-                //         sh 'cargo build --release --jobs=8'
-                //     }
+                    cache(maxCacheSize: 7000, caches: [
+                    [$class: 'ArbitraryFileCache',includes: '**/*',path: '${HOME}/.cargo/registry/cache/github.com-1ecc6299db9ec823'],
+                    ]) {
+                        sh 'cargo clean'
+                        sh 'cargo build --release --jobs=8'
+                    }
                 }
         }
-        // stage('Test') {
-        //     steps {
-        //             cache(maxCacheSize: 7000, caches: [
-        //             [$class: 'ArbitraryFileCache',includes: '**/*',path: '${HOME}/kush/metaverse-dna'],
-        //             ]) {
-        //                 sh 'cargo test'
-        //             }
-        //         }
-        // }
+        stage('Test') {
+            steps {
+                    cache(maxCacheSize: 7000, caches: [
+                    [$class: 'ArbitraryFileCache',includes: '**/*',path: '${HOME}/.cargo/registry/cache/github.com-1ecc6299db9ec823'],
+                    ]) {
+                        sh 'cargo test'
+                    }
+                }
+        }
         stage('Master Build') {
             when {
                 branch 'master'

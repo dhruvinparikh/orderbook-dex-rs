@@ -407,25 +407,13 @@ impl<T: Trait> OwnedEPOpenedOrders<T> {
 }
 
 impl<T: Trait> Orderbook<T> {
-    pub fn add_to_order_book(order_hash: T::Hash,limit_order:&LimitOrder<T> ) {
-        // let mut orders;
-        // if let Some(ts) = Self::get((account_id.clone(), ep_hash)) {
-        //     orders = ts;
-        // } else {
-        //     orders = Vec::<T::Hash>::new();
-        // }
+    pub fn add_to_order_book(order_hash: T::Hash,limit_order:LimitOrder<T> ) {
 
-        // match orders.iter().position(|&x| x == order_hash) {
-        //     Some(_) => return,
-        //     None => {
-        //         orders.insert(0, order_hash);
-        //         if orders.len() == T::OpenedOrdersArrayCap::get() as usize {
-        //             orders.pop();
-        //         }
-
-        //         <OwnedEPOpenedOrders<T>>::insert((account_id, ep_hash), orders);
-        //     }
-        // }
+// let order = new 
+        <Orderbook<T>>::mutate(|r| {
+                r.push(Some(limit_order));
+                (r.len() - 1) as u64;
+            });
     }
 
     pub fn remove_from_order_book(order_hash: T::Hash) {
@@ -440,7 +428,6 @@ impl<T: Trait> Orderbook<T> {
         // <OwnedEPOpenedOrders<T>>::insert((account_id, ep_hash), orders);
     }
 }
-
 
 impl<T: Trait> OwnedEPClosedOrders<T> {
     pub fn add_order(account_id: T::AccountId, ep_hash: T::Hash, order_hash: T::Hash) {

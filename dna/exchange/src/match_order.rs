@@ -209,7 +209,6 @@ impl<T: Trait> Module<T> {
         }
 
         if order.status == OrderStatus::Filled {
-
             Ok(true)
         } else {
             Ok(false)

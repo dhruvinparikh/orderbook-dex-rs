@@ -5,24 +5,32 @@ pipeline {
     }
     stages {
         stage('Build all native code') {
+            // steps {
+            //         cache(maxCacheSize: 7000, caches: [
+            //         [$class: 'ArbitraryFileCache',includes: '**/*',path: '${HOME}/kush/metaverse-dna/'],
+            //         ]) {
+            //             // sh 'cargo clean'
+            //             sh 'cargo build --release --jobs=8'
+            //         }
+            //     }
             steps {
-                    cache(maxCacheSize: 7000, caches: [
-                    [$class: 'ArbitraryFileCache',includes: '**/*',path: '${HOME}/.cargo/registry/cache'],
-                    ]) {
-                        sh 'cargo clean'
-                        sh 'cargo build --release --jobs=8'
-                    }
-                }
+                sh 'cp -aRf ${HOME}/kush/metaverse-dna/ .'
+                sh 'cargo build --release --jobs=8'
+                sh 'cp -aRf Cargo.lock ${HOME}/kush/metaverse-dna'
+                sh 'cp -aRf target ${HOME}/kush/metaverse-dna/'
+            }
+
         }
-        stage('Test') {
-            steps {
-                    cache(maxCacheSize: 7000, caches: [
-                    [$class: 'ArbitraryFileCache',includes: '**/*',path: '${HOME}/.cargo/registry/cache'],
-                    ]) {
-                        sh 'cargo test --release --jobs=8'
-                    }
-                }
-        }
+        
+        // stage('Test') {
+        //     steps {
+        //             // cache(maxCacheSize: 7000, caches: [
+        //             // [$class: 'ArbitraryFileCache',includes: '**/*',path: '${HOME}/kush/metaverse-dna/'],
+        //             // ]) {
+        //             //     sh 'cargo test --release --jobs=8'
+        //             // }
+        //         }
+        // }
         stage('Master Build') {
             when {
                 branch 'master'

@@ -10,7 +10,7 @@ pipeline {
                     [$class: 'ArbitraryFileCache',includes: '**/*',path: '${HOME}/.cargo/registry/cache'],
                     ]) {
                         sh 'cargo clean'
-                        sh 'cargo build --release --jobs=8 --offline'
+                        sh 'cargo build --release --jobs=8'
                     }
                 }
         }
@@ -19,7 +19,7 @@ pipeline {
                     cache(maxCacheSize: 7000, caches: [
                     [$class: 'ArbitraryFileCache',includes: '**/*',path: '${HOME}/.cargo/registry/cache'],
                     ]) {
-                        sh 'cargo test --release --jobs=8 --offline'
+                        sh 'cargo test --release --jobs=8'
                     }
                 }
         }

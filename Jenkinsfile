@@ -13,7 +13,7 @@ pipeline {
                 sh 'cp -aRf target ${HOME}/kush/metaverse-dna/'
             }
         }
-        stage('Build all native code') {
+        stage('Test') {
             steps {
                 sh 'cargo test --release --jobs=8'
             }

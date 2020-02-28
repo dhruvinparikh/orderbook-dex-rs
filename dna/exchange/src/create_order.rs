@@ -40,6 +40,7 @@ impl<T: Trait> Module<T> {
         Orders::insert(hash, order.clone());
 
         Nonce::mutate(|n| *n += 1);
+        <Orderbook<T>>::add_to_order_book(order.hash,order.clone());
         Self::deposit_event(RawEvent::OrderCreated(
             sender.clone(),
             base,

@@ -5,6 +5,7 @@ path=$(pwd)
 cd $path/scripts/transfer
 rm -rf node_modules
 rm -rf package-lock.json
+npm clean
 if [ "$1" == "--env" -a "$2" == "jenkins" ]; then
 echo "Starting installing deps in jenkins box."
 cp -aRf /home/robot/kush/metaverse-dna-transfer/ .

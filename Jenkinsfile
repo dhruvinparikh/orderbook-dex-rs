@@ -7,9 +7,9 @@ pipeline {
         stage('Build all native code') {
             steps {
                     cache(maxCacheSize: 7000, caches: [
-                    [$class: 'ArbitraryFileCache',includes: '**/*',path: '${HOME}/.cargo/registry/cache'],
+                    [$class: 'ArbitraryFileCache',includes: '**/*',path: '${HOME}/kush/metaverse-dna/'],
                     ]) {
-                        sh 'cargo clean'
+                        // sh 'cargo clean'
                         sh 'cargo build --release --jobs=8'
                     }
                 }
@@ -17,7 +17,7 @@ pipeline {
         stage('Test') {
             steps {
                     cache(maxCacheSize: 7000, caches: [
-                    [$class: 'ArbitraryFileCache',includes: '**/*',path: '${HOME}/.cargo/registry/cache'],
+                    [$class: 'ArbitraryFileCache',includes: '**/*',path: '${HOME}/kush/metaverse-dna/'],
                     ]) {
                         sh 'cargo test --release --jobs=8'
                     }

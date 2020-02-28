@@ -257,7 +257,7 @@ decl_error! {
 // This module's storage items.
 decl_storage! {
     trait Store for Module<T: Trait> as ExchangeStorage {
-        ///	ExchangePairHash => DEXPair
+        ///	ExchangePairHash => ExchangePair
         pub ExchangePairs get(fn exchange_pair): map T::Hash => Option<ExchangePair<T>>;
         /// (BaseAssetHash/base_asset_id, quoteAssetHash/quote_asset_id) => ExchangePairHash
         pub ExchangePairsHashByBaseQuote get(fn exchange_pair_hash_by_base_quote): map (T::Hash, T::Hash) => Option<T::Hash>;
@@ -271,9 +271,9 @@ decl_storage! {
         pub OwnedOrders get(fn owned_order): map (T::AccountId, u64) => Option<T::Hash>;
         ///	AccountId => Index
         pub OwnedOrdersIndex get(fn owned_orders_index): map T::AccountId => u64;
-        /// (OrderHash, u64) => ExchangeHash
+        /// (OrderHash, u64) => DEXHash
         pub OrderOwnedExchanges get(fn order_owned_exchanges): map (T::Hash, u64) => Option<T::Hash>;
-        /// (OrderHash, u64) => ExchangeHash
+        /// OrderHash => Index
         pub OrderOwnedExchangesIndex get(fn order_owned_exchanges_index): map T::Hash => u64;
         /// (ExchangePairHash, Index) => OrderHash
         pub ExchangePairOwnedOrders get(fn exchange_pair_owned_order): map (T::Hash, u64) => Option<T::Hash>;
@@ -286,12 +286,12 @@ decl_storage! {
         /// DEXHash => DEX
         pub Exchanges get(fn exchange): map T::Hash => Option<Dex<T>>;
 
-        /// (AccountId, u64) => ExchangeHash
+        /// (AccountId, u64) => DEXHash
         pub OwnedExchanges get(fn owned_exchanges): map (T::AccountId, u64) => Option<T::Hash>;
         /// AccountId => u64
         pub OwnedExchangesIndex get(fn owned_exchanges_index): map T::AccountId => u64;
 
-        /// (AccountId, ExchangePairHash, u64) => ExchangeHash
+        /// (AccountId, ExchangePairHash, u64) => DEXHash
         pub OwnedEPExchanges get(fn owned_ep_exchanges): map (T::AccountId, T::Hash, u64) => Option<T::Hash>;
         /// (AccountId, ExchangePairHash) => u64
         pub OwnedEPExchangesIndex get(fn owned_ep_exchanges_index): map (T::AccountId, T::Hash) => u64;
@@ -302,7 +302,7 @@ decl_storage! {
         /// (AccountId, ExchangePairHash) => Vec<OrderHash>
         pub OwnedEPClosedOrders get(fn owned_ep_closed_orders): map (T::AccountId, T::Hash) => Option<Vec<T::Hash>>;
 
-        /// (ExchangePairHash, u64) => ExchangeHash
+        /// (ExchangePairHash, u64) => DEXHash
         pub ExchangePairOwnedExchanges get(fn exchange_pair_owned_exchanges): map (T::Hash, u64) => Option<T::Hash>;
         /// ExchangePairHash => u64
         pub ExchangePairOwnedExchangesIndex get(fn exchange_pair_owned_exchanges_index): map T::Hash => u64;
@@ -312,6 +312,8 @@ decl_storage! {
         /// ExchangePairHash => (Vec<Highest_Price>, Vec<Lowest_Price>)
         pub EPExchangePriceBucket get(fn exchange_pair_exchange_price_bucket): map T::Hash => (Vec<Option<T::Price>>, Vec<Option<T::Price>>);
         pub Nonce: u64;
+
+        pub Orderbook get (fn order_book): Vec<Option<LimitOrder<T>>>;
     }
 }
 
@@ -329,7 +331,7 @@ decl_event!(
 		// (accountId, baseAssetHash/base_asset_id, quoteAssetHash/quote_asset_id, orderHash/order_id, LimitOrder)
 		OrderCreated(AccountId, Hash, Hash, Hash, LimitOrder),
 
-		// (accountId, baseAssetHash/base_asset_id, quoteAssetHash/quote_asset_id, exchangeHash/exchange_id, Exchange)
+		// (accountId, baseAssetHash/base_asset_id, quoteAssetHash/quote_asset_id, DEXHash/exchange_id, Exchange)
 		ExchangeCreated(AccountId, Hash, Hash, Hash, Dex),
 
 		// (accountId, orderHash)
@@ -403,6 +405,42 @@ impl<T: Trait> OwnedEPOpenedOrders<T> {
         <OwnedEPOpenedOrders<T>>::insert((account_id, ep_hash), orders);
     }
 }
+
+impl<T: Trait> Orderbook<T> {
+    pub fn add_to_order_book(order_hash: T::Hash,limit_order:&LimitOrder<T> ) {
+        // let mut orders;
+        // if let Some(ts) = Self::get((account_id.clone(), ep_hash)) {
+        //     orders = ts;
+        // } else {
+        //     orders = Vec::<T::Hash>::new();
+        // }
+
+        // match orders.iter().position(|&x| x == order_hash) {
+        //     Some(_) => return,
+        //     None => {
+        //         orders.insert(0, order_hash);
+        //         if orders.len() == T::OpenedOrdersArrayCap::get() as usize {
+        //             orders.pop();
+        //         }
+
+        //         <OwnedEPOpenedOrders<T>>::insert((account_id, ep_hash), orders);
+        //     }
+        // }
+    }
+
+    pub fn remove_from_order_book(order_hash: T::Hash) {
+        // let mut orders;
+        // if let Some(ts) = Self::get((account_id.clone(), ep_hash)) {
+        //     orders = ts;
+        // } else {
+        //     orders = Vec::<T::Hash>::new();
+        // }
+
+        // orders.retain(|&x| x != order_hash);
+        // <OwnedEPOpenedOrders<T>>::insert((account_id, ep_hash), orders);
+    }
+}
+
 
 impl<T: Trait> OwnedEPClosedOrders<T> {
     pub fn add_order(account_id: T::AccountId, ep_hash: T::Hash, order_hash: T::Hash) {

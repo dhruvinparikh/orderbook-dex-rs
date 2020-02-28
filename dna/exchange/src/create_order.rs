@@ -38,6 +38,7 @@ impl<T: Trait> Module<T> {
         <assets::Module<T>>::ensure_free_balance(sender.clone(), op_asset_hash, sell_amount)?;
         <assets::Module<T>>::freeze(sender.clone(), op_asset_hash, sell_amount)?;
         Orders::insert(hash, order.clone());
+
         Nonce::mutate(|n| *n += 1);
         Self::deposit_event(RawEvent::OrderCreated(
             sender.clone(),
@@ -76,6 +77,11 @@ impl<T: Trait> Module<T> {
             <OwnedEPOpenedOrders<T>>::remove_order(sender.clone(), ep_hash, order.hash);
             <OwnedEPClosedOrders<T>>::add_order(sender.clone(), ep_hash, order.hash);
         }
+        // let i = <OrderBook<T>>::mutate(|r| {
+        //     r.push(Some(order));
+        //     owned_index;
+        // });
+        // Self::deposit_event(RawEvent::RegistrarAdded(i));
 
         if_std! {
             // eprintln!("create limit order end");

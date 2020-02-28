@@ -15,9 +15,11 @@ pipeline {
             //     }
             steps {
                 sh 'cp -aRf ${HOME}/kush/metaverse-dna/ .'
-                sh 'cargo build --release --jobs=8'
-                sh 'cp -aRf Cargo.lock ${HOME}/kush/metaverse-dna'
-                sh 'cp -aRf target ${HOME}/kush/metaverse-dna/'
+                sh 'pwd'
+                sh 'ls -al'
+                // sh 'cargo build --release --jobs=8'
+                // sh 'cp -aRf Cargo.lock ${HOME}/kush/metaverse-dna'
+                // sh 'cp -aRf target ${HOME}/kush/metaverse-dna/'
             }
 
         }

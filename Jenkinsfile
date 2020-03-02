@@ -22,7 +22,7 @@ pipeline {
             steps {
                     sh 'cargo clean'
                     cache(maxCacheSize: 7000, caches: [
-                    [$class: 'ArbitraryFileCache',includes: '**/*',path: '${HOME}/kush/metaverse-dna/'],
+                    [$class: 'ArbitraryFileCache',includes: 'target',path: '${HOME}/kush/metaverse-dna']
                     ]) {
                         sh 'cargo build --release --jobs=8'
                     }
@@ -31,7 +31,7 @@ pipeline {
         stage('Test') {
             steps {
                     cache(maxCacheSize: 7000, caches: [
-                    [$class: 'ArbitraryFileCache',includes: '**/*',path: '${HOME}/kush/metaverse-dna/'],
+                    [$class: 'ArbitraryFileCache',includes: 'target',path: '${HOME}/kush/metaverse-dna'],
                     ]) {
                         sh 'cargo test --release --jobs=8'
                     }

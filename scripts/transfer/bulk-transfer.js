@@ -71,6 +71,10 @@ async function getArg() {
     .option(
       "--accounts <string>",
       "account object array [{<json-file-path1>:<password1>},{<json-file-path2>:<password2>}"
+    )
+    .option(
+      "--env <string>",
+      "name of environment {<jenkins>}"
     );
   program.parse(process.argv);
   if (!program.url || !program.masterAccount || !program.accounts) {

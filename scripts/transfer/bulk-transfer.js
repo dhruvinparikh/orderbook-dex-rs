@@ -5,6 +5,7 @@ const program = require("commander");
 const fs = require("fs");
 const BN = require("bn.js");
 const pkg = require("./package.json");
+const { types } = require("./types");
 
 const THRESHOLD_AMOUNT = 20000;
 const DECIMALS = 4;
@@ -20,7 +21,7 @@ function restoreAccount(accountJson, password) {
 async function getApi(url) {
   // Initialise the provider to connect to the local node
   const provider = new WsProvider(url);
-  const api = new ApiPromise({ provider, types: { DNAi64: "Option<i64>" } });
+  const api = new ApiPromise({ provider, types });
   api.on("disconnected", () => {
     api.disconnect();
   });
@@ -34,7 +35,7 @@ async function getSignTransaction(data) {
     try {
       const unsub = await api.tx.balances
         .transfer(to, amount)
-        .signAndSend(accountPair, { nonce }, ({events=[],status}) => {
+        .signAndSend(accountPair, { nonce }, ({ events = [], status }) => {
           if (status.isFinalized) {
             console.log(
               `Transaction included at blockHash ${status.asFinalized}`
@@ -107,7 +108,7 @@ async function main() {
     const pair = getAccountPairFromJSON(accountObj);
     return pair;
   });
-  console.log("Starting testing suite");
+  console.log("Starting bulk-transfer testing suite");
   count = 0;
   await async.mapSeries(accountPairArr, async accountPair => {
     console.log(`Fetching the balance of ${accountPair.address}`);
@@ -121,7 +122,9 @@ async function main() {
     try {
       if (balance.lt(new BN(THRESHOLD_AMOUNT))) {
         console.log(
-          `Funding test account ${accountPair.address} from ${masterAccountPair.address} amount : ${THRESHOLD_AMOUNT/10000}`
+          `Funding test account ${accountPair.address} from ${
+            masterAccountPair.address
+          } amount : ${THRESHOLD_AMOUNT / 10000}`
         );
         const masterAccountNonce = await api.query.system.accountNonce(
           masterAccountPair.address
@@ -135,7 +138,11 @@ async function main() {
         };
         const signTransaction = await getSignTransaction(data);
         console.log(`to : ${data.to} STATUS : ${signTransaction.status}`);
-        console.log(`Done funding test account => ${accountPair.address} from ${masterAccountPair.address} amount : ${THRESHOLD_AMOUNT/10000}`);
+        console.log(
+          `Done funding test account => ${accountPair.address} from ${
+            masterAccountPair.address
+          } amount : ${THRESHOLD_AMOUNT / 10000}`
+        );
       }
     } catch (e) {
       console.log(
@@ -145,7 +152,9 @@ async function main() {
     balance = await api.query.balances.freeBalance(accountPair.address);
     if (balance.gte(new BN(THRESHOLD_AMOUNT))) {
       const randomNum = Math.floor(Math.random() * accountPairArr.length);
-      console.log(`Should transfer 1 DNA from ${accountPair.address} to ${accountPairArr[randomNum].address}.`);
+      console.log(
+        `Should transfer 1 DNA from ${accountPair.address} to ${accountPairArr[randomNum].address}.`
+      );
       try {
         const nonce = await api.query.system.accountNonce(accountPair.address);
         const data = {
@@ -160,7 +169,9 @@ async function main() {
         console.log(
           `from:${accountPair.address}, to:${data.to}, ID : ${signTransaction.id} STATUS : ${signTransaction.status}`
         );
-        console.log(`Transferred 1 DNA from ${accountPair.address} to ${accountPairArr[randomNum].address}.`);
+        console.log(
+          `Transferred 1 DNA from ${accountPair.address} to ${accountPairArr[randomNum].address}.`
+        );
       } catch (e) {
         console.log(
           `Error transferring $${THRESHOLD_AMOUNT / 10000} DNAs from ${
@@ -169,7 +180,11 @@ async function main() {
         );
       }
     } else {
-      console.log(`Skipping the transfer from ${accountPair.address} due to balance less than ${THRESHOLD_AMOUNT/10000} DNAs`)
+      console.log(
+        `Skipping the transfer from ${
+          accountPair.address
+        } due to balance less than ${THRESHOLD_AMOUNT / 10000} DNAs`
+      );
     }
   });
 }

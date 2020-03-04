@@ -5,10 +5,6 @@ impl<T: Trait> Module<T> {
         ep_hash: T::Hash,
         order: &mut LimitOrder<T>,
     ) -> result::Result<bool, DispatchError> {
-        if_std! {
-            // eprintln!("order match begin");
-        }
-
         let mut head = <OrderLinkedItemList<T>>::read_head(ep_hash);
 
         let end_item_price;
@@ -180,11 +176,6 @@ impl<T: Trait> Module<T> {
                     dex.clone(),
                 ));
 
-                order.debug_log();
-                o.debug_log();
-                dex.debug_log();
-                Self::debug_log_market(ep_hash);
-
                 // save exchange reference data to store
                 <OrderOwnedExchanges<T>>::add_exchange(order.hash, dex.hash);
                 <OrderOwnedExchanges<T>>::add_exchange(o.hash, dex.hash);
@@ -202,10 +193,6 @@ impl<T: Trait> Module<T> {
             }
 
             head = <OrderLinkedItemList<T>>::read_head(ep_hash);
-        }
-
-        if_std! {
-            // eprintln!("order match end");
         }
 
         if order.status == OrderStatus::Filled {

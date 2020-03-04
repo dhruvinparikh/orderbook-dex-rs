@@ -101,11 +101,6 @@ where
         buy_amount: K3,
         otype: OrderType,
     ) {
-        if_std! {
-            // eprintln!("order book append item begin");
-            // eprintln!("order book append item: tp_hash[0x{:02x}], price[{:#?}], order_hash[0x{:02x}], order_type:[{:#?}], sell_amount[{:#?}], buy_amount[{:#?}]", utils::ByteBuf(key1.as_ref()), key2, utils::ByteBuf(value.as_ref()), otype, sell_amount, buy_amount);
-        }
-
         let item = S::get((key1, Some(key2)));
         match item {
             Some(mut item) => {
@@ -145,9 +140,6 @@ where
                     item = Self::read(key1, item.next);
                 }
 
-                // add key2 after item
-                // item(new_prev) -> key2 -> item.next(new_next)
-
                 // update new_prev
                 let new_prev = LinkedItem {
                     next: Some(key2),
@@ -177,10 +169,6 @@ where
                 Self::write(key1, Some(key2), item);
             }
         };
-
-        if_std! {
-            // eprintln!("order book append item end");
-        }
     }
 
     pub fn next_match_price(item: &LinkedItem<K1, K2, K3>, otype: OrderType) -> Option<K2> {
@@ -199,10 +187,6 @@ where
     }
 
     pub fn remove_all(key1: K1, otype: OrderType) {
-        if_std! {
-            // eprintln!("order book remove all items begin");
-        }
-
         let end_item;
 
         if otype == OrderType::Buy {
@@ -226,10 +210,6 @@ where
 
             head = Self::read_head(key1);
         }
-
-        if_std! {
-            // eprintln!("order book remove all items end");
-        }
     }
 
     pub fn remove_order(
@@ -239,10 +219,6 @@ where
         sell_amount: K3,
         buy_amount: K3,
     ) -> Result {
-        if_std! {
-            // eprintln!("order book cancel order begin");
-        }
-
         match S::get((key1, Some(key2))) {
             Some(mut item) => {
                 ensure!(
@@ -255,29 +231,16 @@ where
                 item.sell_amount = item.sell_amount - sell_amount;
                 Self::write(key1, Some(key2), item.clone());
 
-                if_std! {
-                    // eprintln!("order book cancel order: tp_hash[0x{:02x}], price[{:#?}], order_hash[0x{:02x}]", utils::ByteBuf(key1.as_ref()), key2, utils::ByteBuf(order_hash.as_ref()));
-                }
-
                 if item.orders.len() == 0 {
                     Self::remove_item(key1, key2);
                 }
             }
             None => {}
         }
-
-        if_std! {
-            // eprintln!("order book cancel order end");
-        }
-
         Ok(())
     }
 
     pub fn remove_item(key1: K1, key2: K2) {
-        if_std! {
-            // eprintln!("order book remove item begin");
-        }
-
         if let Some(item) = S::take((key1, Some(key2))) {
             S::mutate((key1.clone(), item.prev), |x| {
                 if let Some(x) = x {
@@ -290,23 +253,11 @@ where
                     x.prev = item.prev;
                 }
             });
-
-            if_std! {
-                // eprintln!("order book remove item: tp_hash[0x{:02x}], price[{:#?}]", utils::ByteBuf(key1.as_ref()), key2);
-            }
-        }
-
-        if_std! {
-            // eprintln!("order book remove itme end");
         }
     }
 
     // when the order is canceled, it should be remove from Sell / Buy orders
     pub fn remove_orders_in_one_item(key1: K1, key2: K2) -> Result {
-        if_std! {
-            // eprintln!("order book remove order begin");
-        }
-
         match S::get((key1, Some(key2))) {
             Some(mut item) => {
                 while item.orders.len() > 0 {
@@ -319,10 +270,6 @@ where
                     item.orders.remove(0);
 
                     Self::write(key1, Some(key2), item.clone());
-
-                    if_std! {
-                        // eprintln!("order book remove order: tp_hash[0x{:02x}], order_hash[0x{:02x}], Owner[{:#?}], Type[{:#?}], Status[{:#?}], SellAmount[{:#?}], RemainedSellAmount[{:#?}], BuyAmount[{:#?}], RemainBuyAmount[{:#?}]", utils::ByteBuf(key1.as_ref()), utils::ByteBuf(order.hash.as_ref()), order.owner, order.otype, order.status, order.sell_amount, order.remained_sell_amount, order.buy_amount, order.remained_buy_amount);
-                    }
                 }
 
                 if item.orders.len() == 0 {
@@ -330,10 +277,6 @@ where
                 }
             }
             None => {}
-        }
-
-        if_std! {
-            // eprintln!("order book remove order end");
         }
 
         Ok(())

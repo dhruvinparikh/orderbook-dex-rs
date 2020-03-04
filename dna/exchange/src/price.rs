@@ -107,17 +107,6 @@ impl<T: Trait> Module<T> {
                 quote_qty = quote_qty + 1;
             }
 
-            if_std! {
-                // eprintln!("1, calculate exchange amount");
-                // eprintln!("match price is: {:#?}", maker_order.price);
-                // eprintln!("seller order give amount (seller_order.remain_buy_amount): {:#?}", seller_order.remained_buy_amount);
-                // eprintln!("buy order give amount: {:#?}", quote_qty);
-                // eprintln!("maker order: ");
-                maker_order.debug_log();
-                // eprintln!("taker order: ");
-                taker_order.debug_log();
-            }
-
             return Ok((seller_order.remained_buy_amount, Self::from_128(quote_qty)?));
         } else {
             // buyer_order is Filled
@@ -130,17 +119,6 @@ impl<T: Trait> Module<T> {
             // have fraction, buyer(Filled) give more to align
             {
                 base_qty = base_qty + 1;
-            }
-
-            if_std! {
-                // eprintln!("2, calculate exchange amount");
-                // eprintln!("match price is: {:#?}", maker_order.price);
-                // eprintln!("seller order give amount : {:#?}", base_qty);
-                // eprintln!("buy order give amount (buyer_order.remain_buy_amount): {:#?}", buyer_order.remained_buy_amount);
-                // eprintln!("maker order: ");
-                maker_order.debug_log();
-                // eprintln!("taker order: ");
-                taker_order.debug_log();
             }
 
             return Ok((Self::from_128(base_qty)?, buyer_order.remained_buy_amount));

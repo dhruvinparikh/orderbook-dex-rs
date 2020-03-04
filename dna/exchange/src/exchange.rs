@@ -144,12 +144,6 @@ where
         (self.remained_buy_amount == Zero::zero() && self.status == OrderStatus::Filled)
             || self.status == OrderStatus::Canceled
     }
-
-    pub fn debug_log(&self) {
-        if_std! {
-            // eprintln!("[order]: Base[0x{:02x}], Quote[0x{:02x}], Hash[0x{:02x}], Owner[{:#?}], Price[{:#?}], Type[{:#?}], Status[{:#?}], SellAmount[{:#?}], BuyAmount[{:#?}]", utils::ByteBuf(self.base.as_ref()), utils::ByteBuf(self.quote.as_ref()), utils::ByteBuf(self.hash.as_ref()), self.owner, self.price, self.otype, self.status, self.sell_amount, self.buy_amount);
-        }
-    }
 }
 
 impl<T> Dex<T>
@@ -204,12 +198,6 @@ where
             taker: taker_order.owner.clone(),
             otype: taker_order.otype,
             price: maker_order.price,
-        }
-    }
-
-    pub fn debug_log(&self) {
-        if_std! {
-            // eprintln!("[exchange]: Base[0x{:02x}], Quote[0x{:02x}], Hash[0x{:02x}], buyer[{:#?}], seller[{:#?}], maker[{:#?}], taker[{:#?}], Type[{:#?}], price[{:#?}], base_amout[{:#?}], quote_amout[{:#?}]", utils::ByteBuf(self.base.as_ref()), utils::ByteBuf(self.quote.as_ref()), utils::ByteBuf(self.hash.as_ref()), self.buyer, self.seller, self.maker, self.taker, self.otype, self.price, self.base_amount, self.quote_amount);
         }
     }
 }
@@ -407,13 +395,12 @@ impl<T: Trait> OwnedEPOpenedOrders<T> {
 }
 
 impl<T: Trait> Orderbook<T> {
-    pub fn add_to_order_book(order_hash: T::Hash,limit_order:LimitOrder<T> ) {
-
-// let order = new 
+    pub fn add_to_order_book(order_hash: T::Hash, limit_order: LimitOrder<T>) {
+        // let order = new
         <Orderbook<T>>::mutate(|r| {
-                r.push(Some(limit_order));
-                (r.len() - 1) as u64;
-            });
+            r.push(Some(limit_order));
+            (r.len() - 1) as u64;
+        });
     }
 
     pub fn remove_from_order_book(order_hash: T::Hash) {

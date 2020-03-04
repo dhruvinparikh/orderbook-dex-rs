@@ -9,10 +9,6 @@ impl<T: Trait> Module<T> {
         price: T::Price,
         sell_amount: T::Balance,
     ) -> DispatchResult {
-        if_std! {
-            // eprintln!("create limit order begin");
-        }
-
         Self::ensure_bounds(price, sell_amount)?;
         let buy_amount = Self::ensure_counterparty_amount_bounds(otype, price, sell_amount)?;
 
@@ -40,7 +36,7 @@ impl<T: Trait> Module<T> {
         Orders::insert(hash, order.clone());
 
         Nonce::mutate(|n| *n += 1);
-        <Orderbook<T>>::add_to_order_book(order.hash,order.clone());
+        <Orderbook<T>>::add_to_order_book(order.hash, order.clone());
         Self::deposit_event(RawEvent::OrderCreated(
             sender.clone(),
             base,
@@ -49,8 +45,6 @@ impl<T: Trait> Module<T> {
             order.clone(),
         ));
         <OwnedEPOpenedOrders<T>>::add_order(sender.clone(), ep_hash, order.hash);
-
-        order.debug_log();
 
         let owned_index = Self::owned_orders_index(sender.clone());
         OwnedOrders::<T>::insert((sender.clone(), owned_index), hash);
@@ -73,7 +67,6 @@ impl<T: Trait> Module<T> {
                 order.remained_buy_amount,
                 otype,
             );
-            Self::debug_log_market(ep_hash);
         } else {
             <OwnedEPOpenedOrders<T>>::remove_order(sender.clone(), ep_hash, order.hash);
             <OwnedEPClosedOrders<T>>::add_order(sender.clone(), ep_hash, order.hash);
@@ -83,10 +76,6 @@ impl<T: Trait> Module<T> {
         //     owned_index;
         // });
         // Self::deposit_event(RawEvent::RegistrarAdded(i));
-
-        if_std! {
-            // eprintln!("create limit order end");
-        }
 
         Ok(())
     }

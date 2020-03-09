@@ -184,6 +184,10 @@ parameter_types! {
     pub const WeightFeeCoefficient: Balance = 0;
     // for a sane configuration, this should always be less than `AvailableBlockRatio`.
     pub const TargetBlockFullness: Perbill = Perbill::from_percent(25);
+    pub const PriceFactor: u128 = 1;
+    pub const BlocksPerDay: u32 = 6 * 60 * 24;
+    pub const OpenedOrdersArrayCap: u8 = 20;
+    pub const ClosedOrdersArrayCap: u8 = 100;
 }
 
 pub type NegativeImbalance<T> =
@@ -356,7 +360,18 @@ impl offences::Trait for Runtime {
     type OnOffenceHandler = Staking;
 }
 
-impl assets::Trait for Runtime {}
+impl assets::Trait for Runtime {
+    type Event = Event;
+}
+
+impl dex::Trait for Runtime {
+    type Event = Event;
+    type Price = u128;
+    type PriceFactor = PriceFactor;
+    type BlocksPerDay = BlocksPerDay;
+    type OpenedOrdersArrayCap = OpenedOrdersArrayCap;
+    type ClosedOrdersArrayCap = ClosedOrdersArrayCap;
+}
 
 impl system::offchain::CreateTransaction<Runtime, UncheckedExtrinsic> for Runtime {
     type Public = <Signature as traits::Verify>::Signer;
@@ -518,7 +533,8 @@ construct_runtime!(
         TechnicalCommittee: collective::<Instance2>::{Module, Call, Storage, Origin<T>, Event<T>, Config<T>},
 
         // Custom modules
-        Assets: assets::{Module, Call, Storage},
+        Assets: assets::{Module, Call, Storage,Event<T>,Error},
+        Dex: dex::{Module,Call,Storage,Event<T>,Error},
         
         // Utility module
         Utility: utility::{Module, Call, Event<T>},

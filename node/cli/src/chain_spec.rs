@@ -7,15 +7,17 @@ use node_primitives::{AccountId, Balance, Signature};
 use node_runtime::constants::currency::*;
 use node_runtime::{
     AuthorityDiscoveryConfig, BabeConfig, BalancesConfig, CouncilConfig, DemocracyConfig,
-    GenesisConfig, GrandpaConfig, ImOnlineConfig, IndicesConfig, SessionConfig, SessionKeys,
-    StakerStatus, StakingConfig, SudoConfig, SystemConfig, TechnicalCommitteeConfig, WASM_BINARY,
+    DnaRewardConfig, GenesisConfig, GrandpaConfig, ImOnlineConfig, IndicesConfig, SessionConfig,
+    SessionKeys, StakerStatus, StakingConfig, SudoConfig, SystemConfig, TechnicalCommitteeConfig,
+    WASM_BINARY,
 };
 // use primitives::{crypto::UncheckedInto};
 use primitives::{sr25519, Pair, Public};
 use sp_runtime::{
     traits::{IdentifyAccount, Verify},
-    Perbill,
+    Perbill,One
 };
+
 // use telemetry::TelemetryEndpoints;
 
 // const STAGING_TELEMETRY_URL: &str = "ws://telemetry.mvsdna.com:8000/submit";
@@ -217,6 +219,10 @@ pub fn testnet_genesis(
         }),
         grandpa: Some(GrandpaConfig {
             authorities: vec![],
+        }),
+        DnaReward: Some(DnaRewardConfig {
+            current_payout: 95,
+            minting_interval: One::one(),
         }),
         im_online: Some(ImOnlineConfig { keys: vec![] }),
         authority_discovery: Some(AuthorityDiscoveryConfig { keys: vec![] }),

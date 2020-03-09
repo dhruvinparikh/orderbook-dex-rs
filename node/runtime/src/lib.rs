@@ -494,6 +494,11 @@ impl elections_phragmen::Trait for Runtime {
     type KickedMember = Treasury;
 }
 
+impl dna_reward::Trait for Runtime {
+    type Event = Event;
+    type Currency = Balances;
+}
+
 construct_runtime!(
     pub enum Runtime where
         Block = Block,
@@ -535,6 +540,7 @@ construct_runtime!(
         // Custom modules
         Assets: assets::{Module, Call, Storage,Event<T>,Error},
         Dex: dex::{Module,Call,Storage,Event<T>,Error},
+        DnaReward: dna_reward::{Module, Call, Storage, Event<T>, Config<T>},
         
         // Utility module
         Utility: utility::{Module, Call, Event<T>},

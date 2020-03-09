@@ -1,0 +1,40 @@
+[package]
+name = "dna-reward"
+version = "1.0.0"
+authors = ["BlockX Labs <info@blockxlabs.com>"]
+edition = "2018"
+
+[dependencies]
+serde = { version = "1.0", default-features = false, optional = true }
+safe-mix = { version = "1.0", default-features = false }
+codec = { package = "parity-scale-codec", version = "1.0.6", default-features = false, features = ["derive"] }
+sp-std = { git = "https://github.com/blockxlabs/substrate.git", default-features = false, branch = "blockx-dev-test-0" }
+sp-runtime = { git = "https://github.com/blockxlabs/substrate.git", default-features = false, branch = "blockx-dev-test-0" }
+frame-support = { git = "https://github.com/blockxlabs/substrate.git", default-features = false, branch = "blockx-dev-test-0" }
+frame-system = { git = "https://github.com/blockxlabs/substrate.git", default-features = false, branch = "blockx-dev-test-0" }
+pallet-staking = { git = "https://github.com/blockxlabs/substrate.git", default-features = false, branch = "blockx-dev-test-0" }
+pallet-balances = { git = "https://github.com/blockxlabs/substrate.git", default-features = false, branch = "blockx-dev-test-0" }
+pallet-treasury = { git = "https://github.com/blockxlabs/substrate.git", default-features = false, branch = "blockx-dev-test-0" }
+
+[dev-dependencies]
+sp-io = { git = "https://github.com/blockxlabs/substrate.git", default-features = false, branch = "blockx-dev-test-0" }
+sp-staking = { git = "https://github.com/blockxlabs/substrate.git", default-features = false, branch = "blockx-dev-test-0" }
+sp-core = { git = "https://github.com/blockxlabs/substrate.git", default-features = false, branch = "blockx-dev-test-0" }
+pallet-staking-reward-curve = { git = "https://github.com/blockxlabs/substrate.git", default-features = false, branch = "blockx-dev-test-0" }
+pallet-session = { git = "https://github.com/blockxlabs/substrate.git", default-features = false, branch = "blockx-dev-test-0" }
+pallet-timestamp = { git = "https://github.com/blockxlabs/substrate.git", default-features = false, branch = "blockx-dev-test-0" }
+
+[features]
+default = ["std"]
+std = [
+	"serde",
+	"safe-mix/std",
+	"codec/std",
+	"sp-std/std",
+	"sp-runtime/std",
+	"pallet-balances/std",
+	"frame-support/std",
+	"frame-system/std",
+	"pallet-staking/std",
+	"pallet-treasury/std",
+]

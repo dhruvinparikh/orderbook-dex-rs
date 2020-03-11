@@ -5,17 +5,17 @@ use grandpa::AuthorityId as GrandpaId;
 use im_online::sr25519::AuthorityId as ImOnlineId;
 use node_primitives::{AccountId, Balance, Signature};
 use node_runtime::constants::currency::*;
+pub use node_runtime::GenesisConfig;
 use node_runtime::{
     AuthorityDiscoveryConfig, BabeConfig, BalancesConfig, CouncilConfig, DemocracyConfig,
-    DnaRewardConfig, GenesisConfig, GrandpaConfig, ImOnlineConfig, IndicesConfig, SessionConfig,
-    SessionKeys, StakerStatus, StakingConfig, SudoConfig, SystemConfig, TechnicalCommitteeConfig,
-    WASM_BINARY,
+    GrandpaConfig, ImOnlineConfig, IndicesConfig, SessionConfig, SessionKeys, StakerStatus,
+    StakingConfig, SudoConfig, SystemConfig, TechnicalCommitteeConfig, WASM_BINARY,
 };
 // use primitives::{crypto::UncheckedInto};
 use primitives::{sr25519, Pair, Public};
 use sp_runtime::{
-    traits::{IdentifyAccount, Verify},
-    Perbill,One
+    traits::{IdentifyAccount, One, Verify},
+    Perbill,
 };
 
 // use telemetry::TelemetryEndpoints;
@@ -219,10 +219,6 @@ pub fn testnet_genesis(
         }),
         grandpa: Some(GrandpaConfig {
             authorities: vec![],
-        }),
-        DnaReward: Some(DnaRewardConfig {
-            current_payout: 95,
-            minting_interval: One::one(),
         }),
         im_online: Some(ImOnlineConfig { keys: vec![] }),
         authority_discovery: Some(AuthorityDiscoveryConfig { keys: vec![] }),

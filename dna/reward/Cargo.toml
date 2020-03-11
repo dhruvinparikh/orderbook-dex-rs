@@ -1,5 +1,5 @@
 [package]
-name = "dna-reward"
+name = "reward"
 version = "1.0.0"
 authors = ["BlockX Labs <info@blockxlabs.com>"]
 edition = "2018"

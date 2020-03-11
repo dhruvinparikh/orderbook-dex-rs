@@ -5,7 +5,8 @@ members = [
     "node/runtime",
     "node/cli",
     "dna/assets",
-    "dna/exchange"
+    "dna/exchange",
+    "dna/reward-debug-log"
 ]
 
 [profile.release]

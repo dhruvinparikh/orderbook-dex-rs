@@ -494,6 +494,11 @@ impl elections_phragmen::Trait for Runtime {
     type KickedMember = Treasury;
 }
 
+impl reward_debug_log::Trait for Runtime {
+    type AuthorityId = ImOnlineId;
+    type Call = Call;
+}
+
 construct_runtime!(
     pub enum Runtime where
         Block = Block,
@@ -535,6 +540,7 @@ construct_runtime!(
         // Custom modules
         Assets: assets::{Module, Call, Storage,Event<T>,Error},
         Dex: dex::{Module,Call,Storage,Event<T>,Error},
+        RewardDebugLog: reward_debug_log::{Module, Call, Storage},
         
         // Utility module
         Utility: utility::{Module, Call, Event<T>},

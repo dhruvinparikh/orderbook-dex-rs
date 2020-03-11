@@ -1,6 +1,9 @@
 #![recursion_limit = "128"]
 #![cfg_attr(not(feature = "std"), no_std)]
 
+#[cfg(test)]
+mod test;
+
 use frame_support::traits::Currency;
 use sp_runtime::traits::Zero;
 use sp_std::prelude::*;
@@ -45,10 +48,15 @@ decl_event!(
 );
 
 decl_storage! {
-    trait Store for Module<T: Trait> as DnaReward {
+    trait Store for Module<T: Trait> as Reward {
         /// Interval in number of blocks to reward treasury
         pub MintingInterval get(fn minting_interval) config(): T::BlockNumber;
         /// Current payout of module
         pub CurrentPayout get(fn current_payout) config(): BalanceOf<T>;
     }
+
+    // add_extra_genesis {
+    // 	config(authorities): Vec<(AuthorityId, BabeAuthorityWeight)>;
+    // 	// build(|config| Module::<T>::initialize_authorities(&config.authorities))
+    // }
 }

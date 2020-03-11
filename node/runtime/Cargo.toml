@@ -59,7 +59,6 @@ membership = { package = "pallet-membership", git = "https://github.com/blockxla
 
 assets = { package = "dna-assets", path = "../../dna/assets", default-features = false }
 dex = { package = "dna-exchange", path = "../../dna/exchange", default-features = false }
-dna-reward = { path = "../../dna/reward", default-features = false }
 
 [build-dependencies]
 wasm-builder-runner = { package = "substrate-wasm-builder-runner", version = "1.0.4", git = "https://github.com/blockxlabs/substrate", branch = "blockx-dev-test-0" }

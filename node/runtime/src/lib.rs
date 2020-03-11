@@ -278,7 +278,7 @@ pallet_staking_reward_curve::build! {
 }
 
 parameter_types! {
-    pub const SessionsPerEra: sp_staking::SessionIndex = 6;
+    pub const SessionsPerEra: sp_staking::SessionIndex = 2;
     pub const BondingDuration: staking::EraIndex = 24 * 28;
     pub const SlashDeferDuration: staking::EraIndex = 24 * 7; // 1/4 the bonding duration.
     pub const RewardCurve: &'static PiecewiseLinear<'static> = &REWARD_CURVE;
@@ -494,10 +494,10 @@ impl elections_phragmen::Trait for Runtime {
     type KickedMember = Treasury;
 }
 
-impl dna_reward::Trait for Runtime {
-    type Event = Event;
-    type Currency = Balances;
-}
+// impl dna_reward::Trait for Runtime {
+//     type Event = Event;
+//     type Currency = Balances;
+// }
 
 construct_runtime!(
     pub enum Runtime where
@@ -540,7 +540,7 @@ construct_runtime!(
         // Custom modules
         Assets: assets::{Module, Call, Storage,Event<T>,Error},
         Dex: dex::{Module,Call,Storage,Event<T>,Error},
-        DnaReward: dna_reward::{Module, Call, Storage, Event<T>, Config<T>},
+        // DnaReward: dna_reward::{Module, Call, Storage, Event<T>, Config<T>},
         
         // Utility module
         Utility: utility::{Module, Call, Event<T>},

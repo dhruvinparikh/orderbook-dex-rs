@@ -41,7 +41,7 @@ offences = { package = "pallet-offences", git = "https://github.com/blockxlabs/s
 randomness-collective-flip = { package = "pallet-randomness-collective-flip", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
 collective = { package = "pallet-collective", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
 session = { package = "pallet-session", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
-staking = { package = "pallet-staking", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
+#staking = { package = "pallet-staking", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
 pallet-staking-reward-curve = { git = "https://github.com/blockxlabs/substrate", branch = "blockx-dev-test-0", default-features = false }
 sudo = { package = "pallet-sudo", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
 support = { package = "frame-support", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
@@ -61,7 +61,7 @@ assets = { package = "dna-assets", path = "../../dna/assets", default-features =
 dex = { package = "dna-exchange", path = "../../dna/exchange", default-features = false }
 #reward-debug-log = { package = "dna-reward-debug-log", path = "../../dna/reward-debug-log", default-features = false }
 im-online = { package = "pallet-im-online", path="../../dna/im-online", default-features = false }
-
+staking = { package = "pallet-staking", path = "../../dna/staking", default-features = false }
 [build-dependencies]
 wasm-builder-runner = { package = "substrate-wasm-builder-runner", version = "1.0.4", git = "https://github.com/blockxlabs/substrate", branch = "blockx-dev-test-0" }
 

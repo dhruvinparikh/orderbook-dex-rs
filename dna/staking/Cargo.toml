@@ -1,0 +1,46 @@
+[package]
+name = "pallet-staking"
+version = "2.0.0"
+authors = ["BlockX Labs <info@blockxlabs.com>"]
+edition = "2018"
+
+[dependencies]
+serde = { version = "1.0.101", optional = true }
+safe-mix = { version = "1.0.0", default-features = false }
+codec = { package = "parity-scale-codec", version = "1.0.0", default-features = false, features = ["derive"] }
+sp-keyring = { git = "https://github.com/blockxlabs/substrate", optional = true, branch = "blockx-dev-test-0" }
+sp-std = { git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
+sp-phragmen = { git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
+sp-io ={ git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
+sp-runtime = { git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
+sp-staking = { git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
+frame-support = { git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
+frame-system = { git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
+pallet-session = { git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
+pallet-authorship = { git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
+
+[dev-dependencies]
+sp-core = { git = "https://github.com/blockxlabs/substrate", branch = "blockx-dev-test-0" }
+pallet-balances = { git = "https://github.com/blockxlabs/substrate", branch = "blockx-dev-test-0" }
+pallet-timestamp = { git = "https://github.com/blockxlabs/substrate", branch = "blockx-dev-test-0" }
+pallet-staking-reward-curve = { path = "./reward-curve" }
+substrate-test-utils = { git = "https://github.com/blockxlabs/substrate", branch = "blockx-dev-test-0" }
+
+[features]
+migrate = []
+default = ["std"]
+std = [
+	"serde",
+	"safe-mix/std",
+	"sp-keyring",
+	"codec/std",
+	"sp-std/std",
+	"sp-phragmen/std",
+	"sp-io/std",
+	"frame-support/std",
+	"sp-runtime/std",
+	"sp-staking/std",
+	"pallet-session/std",
+	"frame-system/std",
+	"pallet-authorship/std",
+]

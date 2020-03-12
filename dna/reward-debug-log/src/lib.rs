@@ -73,8 +73,15 @@ decl_module! {
     }
 }
 
-pub type AuthorityId = u64;
+pub mod sr25519 {
+	mod app_sr25519 {
+		use sp_application_crypto::{app_crypto, key_types::BABE,sr25519};
+		app_crypto!(sr25519,REWARD_DEBUG_LOG);
+    }
 
+	/// An i'm online identifier using sr25519 as its crypto.
+	pub type AuthorityId = app_sr25519::Public;
+}
 // Keep track of number of authored blocks per authority, uncles are counted as
 /// well since they're a valid proof of being online.
 impl<T: Trait + authorship::Trait> authorship::EventHandler<T::ValidatorId, T::BlockNumber> for Module<T> {

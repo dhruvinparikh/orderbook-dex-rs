@@ -12,6 +12,7 @@ use authority_discovery_primitives::AuthorityId as AuthorityDiscoveryId;
 use grandpa::fg_primitives;
 use grandpa::AuthorityList as GrandpaAuthorityList;
 use im_online::sr25519::AuthorityId as ImOnlineId;
+use reward_debug_log::sr25519::AuthorityId as RewardDebugLogId;
 use impls::{CurrencyToVoteHandler, LinearWeightToFee, TargetedFeeAdjustment};
 use inherents::{CheckInherentsResult, InherentData};
 use node_primitives::{
@@ -495,7 +496,7 @@ impl elections_phragmen::Trait for Runtime {
 }
 
 impl reward_debug_log::Trait for Runtime {
-    type AuthorityId = ImOnlineId;
+    type AuthorityId = RewardDebugLogId;
     type Call = Call;
 }
 

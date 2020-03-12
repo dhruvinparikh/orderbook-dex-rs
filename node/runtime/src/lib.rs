@@ -12,6 +12,7 @@ use authority_discovery_primitives::AuthorityId as AuthorityDiscoveryId;
 use grandpa::fg_primitives;
 use grandpa::AuthorityList as GrandpaAuthorityList;
 use im_online::sr25519::AuthorityId as ImOnlineId;
+// TODO DP - Figure out to use rewar_Debug_log to make session handler work
 // use reward_debug_log::sr25519::AuthorityId as RewardDebugLogId;
 use impls::{CurrencyToVoteHandler, LinearWeightToFee, TargetedFeeAdjustment};
 use inherents::{CheckInherentsResult, InherentData};
@@ -495,6 +496,7 @@ impl elections_phragmen::Trait for Runtime {
     type KickedMember = Treasury;
 }
 
+// TODO DP - Figure out to use rewar_Debug_log to make session handler work
 // impl reward_debug_log::Trait for Runtime {
 //     type AuthorityId = ImOnlineId;
 //     type Call = Call;
@@ -541,6 +543,7 @@ construct_runtime!(
         // Custom modules
         Assets: assets::{Module, Call, Storage,Event<T>,Error},
         Dex: dex::{Module,Call,Storage,Event<T>,Error},
+        // TODO DP - Figure out to use rewar_Debug_log to make session handler work
         // RewardDebugLog: reward_debug_log::{Module, Call, Storage},
         
         // Utility module

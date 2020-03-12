@@ -73,6 +73,7 @@ decl_module! {
     }
 }
 
+// TODO DP : Figure out proper way to declare sr25519
 // pub mod sr25519 {
 // 	mod app_sr25519 {
 // 		use sp_application_crypto::{app_crypto, key_types::IM_ONLINE, sr25519};

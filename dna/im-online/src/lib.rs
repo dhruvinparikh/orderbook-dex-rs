@@ -489,7 +489,7 @@ impl<T: Trait> pallet_session::OneSessionHandler<T::AccountId> for Module<T> {
 		let keys = Keys::<T>::get();
 		let current_validators = <pallet_session::Module<T>>::validators();
 
-        info!("---Current validator reward debug log : ");
+        info!("---List of Validators from previous session: ");
         for validator in &current_validators {
             info!("{:?}", validator);
         }

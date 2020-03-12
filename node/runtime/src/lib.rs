@@ -12,7 +12,7 @@ use authority_discovery_primitives::AuthorityId as AuthorityDiscoveryId;
 use grandpa::fg_primitives;
 use grandpa::AuthorityList as GrandpaAuthorityList;
 use im_online::sr25519::AuthorityId as ImOnlineId;
-use reward_debug_log::sr25519::AuthorityId as RewardDebugLogId;
+// use reward_debug_log::sr25519::AuthorityId as RewardDebugLogId;
 use impls::{CurrencyToVoteHandler, LinearWeightToFee, TargetedFeeAdjustment};
 use inherents::{CheckInherentsResult, InherentData};
 use node_primitives::{
@@ -141,7 +141,7 @@ impl authorship::Trait for Runtime {
     type FindAuthor = session::FindAccountFromAuthorIndex<Self, Babe>;
     type UncleGenerations = UncleGenerations;
     type FilterUncle = ();
-    type EventHandler = (Staking, ImOnline, RewardDebugLog);
+    type EventHandler = (Staking, ImOnline);
 }
 
 impl indices::Trait for Runtime {
@@ -495,10 +495,10 @@ impl elections_phragmen::Trait for Runtime {
     type KickedMember = Treasury;
 }
 
-impl reward_debug_log::Trait for Runtime {
-    type AuthorityId = RewardDebugLogId;
-    type Call = Call;
-}
+// impl reward_debug_log::Trait for Runtime {
+//     type AuthorityId = ImOnlineId;
+//     type Call = Call;
+// }
 
 construct_runtime!(
     pub enum Runtime where
@@ -541,7 +541,7 @@ construct_runtime!(
         // Custom modules
         Assets: assets::{Module, Call, Storage,Event<T>,Error},
         Dex: dex::{Module,Call,Storage,Event<T>,Error},
-        RewardDebugLog: reward_debug_log::{Module, Call, Storage},
+        // RewardDebugLog: reward_debug_log::{Module, Call, Storage},
         
         // Utility module
         Utility: utility::{Module, Call, Event<T>},

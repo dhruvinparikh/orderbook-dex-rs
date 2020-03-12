@@ -44,5 +44,6 @@ std = [
   "balances/std",
   "session/std",
   "im-online/std",
-  "sp-application-crypto/std"
+  "sp-application-crypto/std",
+  "authorship/std"
 ]

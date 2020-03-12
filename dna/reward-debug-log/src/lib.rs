@@ -73,15 +73,24 @@ decl_module! {
     }
 }
 
-pub mod sr25519 {
-	mod app_sr25519 {
-		use sp_application_crypto::{app_crypto, key_types::BABE,sr25519};
-		app_crypto!(sr25519,REWARD_DEBUG_LOG);
-    }
+// pub mod sr25519 {
+// 	mod app_sr25519 {
+// 		use sp_application_crypto::{app_crypto, key_types::IM_ONLINE, sr25519};
+// 		app_crypto!(sr25519, IM_ONLINE);
+// 	}
 
-	/// An i'm online identifier using sr25519 as its crypto.
-	pub type AuthorityId = app_sr25519::Public;
-}
+// 	/// An i'm online keypair using sr25519 as its crypto.
+// 	#[cfg(feature = "std")]
+// 	pub type AuthorityPair = app_sr25519::Pair;
+
+// 	/// An i'm online signature using sr25519 as its crypto.
+// 	pub type AuthoritySignature = app_sr25519::Signature;
+
+// 	/// An i'm online identifier using sr25519 as its crypto.
+// 	pub type AuthorityId = app_sr25519::Public;
+// }
+
+
 // Keep track of number of authored blocks per authority, uncles are counted as
 /// well since they're a valid proof of being online.
 impl<T: Trait + authorship::Trait> authorship::EventHandler<T::ValidatorId, T::BlockNumber> for Module<T> {
@@ -105,6 +114,7 @@ impl<T: Trait> session::OneSessionHandler<T::AccountId> for Module<T> {
     where
         I: Iterator<Item = (&'a T::AccountId, T::AuthorityId)>,
     {
+        info!("---ON GENESESIS SESSION ------- : ");
         // ignore
     }
 
@@ -112,6 +122,7 @@ impl<T: Trait> session::OneSessionHandler<T::AccountId> for Module<T> {
     where
         I: Iterator<Item = (&'a T::AccountId, T::AuthorityId)>,
     {
+        info!("---ON NEW SESSION ------- : ");
         // ignore
     }
 

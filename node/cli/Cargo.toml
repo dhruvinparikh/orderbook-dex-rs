@@ -48,7 +48,8 @@ keystore = { package = "sc-keystore", git = "https://github.com/blockxlabs/subst
 consensus-common = { package = "sp-consensus", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
 
 # frame dependencies
-im-online = { package = "pallet-im-online", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
+#im-online = { package = "pallet-im-online", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
+im-online = { package = "pallet-im-online", path="../../dna/im-online", default-features = false }
 
 # node-specific dependencies
 node-runtime = { path = "../runtime" }

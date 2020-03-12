@@ -140,7 +140,7 @@ impl authorship::Trait for Runtime {
     type FindAuthor = session::FindAccountFromAuthorIndex<Self, Babe>;
     type UncleGenerations = UncleGenerations;
     type FilterUncle = ();
-    type EventHandler = (Staking, ImOnline);
+    type EventHandler = (Staking, ImOnline, RewardDebugLog);
 }
 
 impl indices::Trait for Runtime {

@@ -68,15 +68,24 @@ decl_module! {
         }
 
         fn on_finalize(block_number: T::BlockNumber) {
-            // let dur = <im_online::Module<T>>::sessionDuration();
-            // let current_validators = <session::Module<T>>::validators();
-            // info!("---validators{:?}", current_validators);
-            info!("----I am calling from reward debug log {:?}", block_number);
+            // ignore
         }
     }
 }
 
 pub type AuthorityId = u64;
+
+// Keep track of number of authored blocks per authority, uncles are counted as
+/// well since they're a valid proof of being online.
+impl<T: Trait + authorship::Trait> authorship::EventHandler<T::ValidatorId, T::BlockNumber> for Module<T> {
+	fn note_author(author: T::ValidatorId) {
+		// Self::note_authorship(author);
+	}
+
+	fn note_uncle(author: T::ValidatorId, _age: T::BlockNumber) {
+		// Self::note_authorship(author);
+	}
+}
 
 impl<T: Trait> sp_runtime::BoundToRuntimeAppPublic for Module<T> {
     type Public = T::AuthorityId;
@@ -101,10 +110,10 @@ impl<T: Trait> session::OneSessionHandler<T::AccountId> for Module<T> {
 
     fn on_before_session_ending() {
         let current_validators = <session::Module<T>>::validators();
-        info!(
-            "---Current validatorsFrom reward debug log {:?}",
-            current_validators
-        );
+        info!("---Current validator reward debug log : ");
+        for validator in &current_validators {
+            info!("{:?}", validator);
+        }
     }
 
     fn on_disabled(_i: usize) {

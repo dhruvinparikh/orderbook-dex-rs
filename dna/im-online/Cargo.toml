@@ -5,7 +5,6 @@ authors = ["BlockX Labs <info@blockxlabs.io>"]
 edition = "2018"
 
 [dependencies]
-log = "0.4.8"
 sp-application-crypto = { git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
 pallet-authorship = { git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
 codec = { package = "parity-scale-codec", version = "1.0.0", default-features = false, features = ["derive"] }

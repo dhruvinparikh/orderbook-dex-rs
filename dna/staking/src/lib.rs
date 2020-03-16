@@ -1266,25 +1266,29 @@ impl<T: Trait> Module<T> {
     /// nominators' balance, pro-rata based on their exposure, after having removed the validator's
     /// pre-payout cut.
     fn reward_validator(stash: &T::AccountId, reward: BalanceOf<T>) -> PositiveImbalanceOf<T> {
-        let off_the_table = Self::validators(stash).commission * reward;
-        let reward = reward.saturating_sub(off_the_table);
+        let off_the_table = reward;
+        // Self::validators(stash).commission * reward;
+        // let reward = reward.saturating_sub(off_the_table);
         let mut imbalance = <PositiveImbalanceOf<T>>::zero();
-        let validator_cut = if reward.is_zero() {
-            Zero::zero()
-        } else {
+        // let validator_cut = if reward.is_zero() {
+        //     Zero::zero()
+        // } else {
             let exposure = Self::stakers(stash);
             let total = exposure.total.max(One::one());
-
+            debug::native::info!("*********Stakers********");
             for i in &exposure.others {
                 let per_u64 = Perbill::from_rational_approximation(i.value, total);
-                imbalance.maybe_subsume(Self::make_payout(&i.who, per_u64 * reward));
+                imbalance.maybe_subsume(Self::make_payout(&i.who, reward));
+                debug::native::info!("Payout : {:?} => {:?}",&i.who, reward);
             }
-
-            let per_u64 = Perbill::from_rational_approximation(exposure.own, total);
-            per_u64 * reward
-        };
-
-        imbalance.maybe_subsume(Self::make_payout(stash, validator_cut + off_the_table));
+            debug::native::info!("*********Stakers********");
+            // let per_u64 = Perbill::from_rational_approximation(exposure.own, total);
+            // per_u64 * reward
+        // };
+        debug::native::info!("*********Stasher********");
+        debug::native::info!("payout : {:?} => {:?}", stash,  off_the_table);
+        debug::native::info!("*********Stasher********");
+        imbalance.maybe_subsume(Self::make_payout(stash,  off_the_table));
 
         imbalance
     }
@@ -1343,37 +1347,39 @@ impl<T: Trait> Module<T> {
                 validators
             );
             debug::native::info!("**********************************");
-            let validator_len: BalanceOf<T> = (validators.len() as u32).into();
-            let total_rewarded_stake = Self::slot_stake() * validator_len;
+            // let validator_len: BalanceOf<T> = (validators.len() as u32).into();
+            // let total_rewarded_stake = Self::slot_stake() * validator_len;
 
-            debug::native::info!("************************************************");
-            debug::native::info!("Total rewarded stake {:?}", total_rewarded_stake.clone());
-            debug::native::info!("************************************************");
+            // debug::native::info!("************************************************");
+            // debug::native::info!("Total rewarded stake {:?}", total_rewarded_stake.clone());
+            // debug::native::info!("************************************************");
 
-            let (total_payout, max_payout) = inflation::compute_total_payout(
-                T::Currency::total_issuance(),
-                // Duration of era; more than u64::MAX is rewarded as u64::MAX.
-                era_duration.saturated_into::<u64>(),
-            );
+            // let (total_payout, max_payout) = inflation::compute_total_payout(
+            //     T::Currency::total_issuance(),
+            //     // Duration of era; more than u64::MAX is rewarded as u64::MAX.
+            //     era_duration.saturated_into::<u64>(),
+            // );
 
             let mut total_imbalance = <PositiveImbalanceOf<T>>::zero();
-
+            debug::native::info!("********Rewarding*********");
             for (v, p) in validators.iter().zip(points.individual.into_iter()) {
                 if p != 0 {
-                    let reward =
-                        Perbill::from_rational_approximation(p, points.total) * total_payout;
-                    total_imbalance.subsume(Self::reward_validator(v, reward));
+                    // let reward = Perbill::from_rational_approximation(p, points.total) * total_payout;
+                    // debug::native::info!(" {:?} , {:?}",v, reward );
+                    let reward = 10000;
+                    total_imbalance.subsume(Self::reward_validator(v, reward.into()));
                 }
             }
+            debug::native::info!("********Rewarding*********");
 
             // assert!(total_imbalance.peek() == total_payout)
-            let total_payout = total_imbalance.peek();
+            // let total_payout = total_imbalance.peek();
 
-            let rest = max_payout.saturating_sub(total_payout);
-            Self::deposit_event(RawEvent::Reward(total_payout, rest));
+            // let rest = max_payout.saturating_sub(total_payout);
+            // Self::deposit_event(RawEvent::Reward(total_payout, rest));
 
-            T::Reward::on_unbalanced(total_imbalance);
-            T::RewardRemainder::on_unbalanced(T::Currency::issue(rest));
+            // T::Reward::on_unbalanced(total_imbalance);
+            // T::RewardRemainder::on_unbalanced(T::Currency::issue(rest));
         }
 
         // Increment current era.

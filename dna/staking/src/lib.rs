@@ -231,13 +231,8 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 mod migration;
-// #[cfg(test)]
-// mod mock;
 mod slashing;
-// #[cfg(test)]
-// mod tests;
 
-pub mod inflation;
 use codec::{Decode, Encode, HasCompact};
 use frame_support::{
     debug,
@@ -1339,14 +1334,14 @@ impl<T: Trait> Module<T> {
         let era_duration = now - previous_era_start;
         if !era_duration.is_zero() {
             let validators = Self::current_elected();
-            debug::native::info!("**********************************");
-            debug::native::info!("Current session Index : {:?}", start_session_index);
-            debug::native::info!("**********************************");
-            debug::native::info!(
-                "Set of validators from previous session on start of new era : {:?}",
-                validators
-            );
-            debug::native::info!("**********************************");
+            // debug::native::info!("**********************************");
+            // debug::native::info!("Current session Index : {:?}", start_session_index);
+            // debug::native::info!("**********************************");
+            // debug::native::info!(
+            //     "Set of validators from previous session on start of new era : {:?}",
+            //     validators
+            // );
+            // debug::native::info!("**********************************");
             // let validator_len: BalanceOf<T> = (validators.len() as u32).into();
             // let total_rewarded_stake = Self::slot_stake() * validator_len;
 
@@ -1361,7 +1356,7 @@ impl<T: Trait> Module<T> {
             // );
 
             let mut total_imbalance = <PositiveImbalanceOf<T>>::zero();
-            debug::native::info!("********Rewarding*********");
+            // debug::native::info!("********Rewarding*********");
             for (v, p) in validators.iter().zip(points.individual.into_iter()) {
                 if p != 0 {
                     // let reward = Perbill::from_rational_approximation(p, points.total) * total_payout;
@@ -1370,7 +1365,7 @@ impl<T: Trait> Module<T> {
                     total_imbalance.subsume(Self::reward_validator(v, reward.into()));
                 }
             }
-            debug::native::info!("********Rewarding*********");
+            // debug::native::info!("********Rewarding*********");
 
             // assert!(total_imbalance.peek() == total_payout)
             // let total_payout = total_imbalance.peek();

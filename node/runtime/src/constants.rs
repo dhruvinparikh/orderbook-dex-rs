@@ -21,7 +21,7 @@ pub mod time {
     // Minutes makes 1 session equal 10 blocks that quicks the developement and testing
 
     // These time units are defined in number of blocks.
-    pub const MINUTES: BlockNumber = 60_000 / (MILLISECS_PER_BLOCK as BlockNumber);
+    pub const MINUTES: BlockNumber = 10_000 / (MILLISECS_PER_BLOCK as BlockNumber);
     pub const HOURS: BlockNumber = MINUTES * 60;
     pub const DAYS: BlockNumber = HOURS * 24;
 

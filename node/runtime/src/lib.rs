@@ -28,9 +28,9 @@ use sp_runtime::transaction_validity::TransactionValidity;
 use sp_runtime::{create_runtime_str, generic, ApplyExtrinsicResult, Percent};
 use sp_std::prelude::*;
 use support::{
-    construct_runtime, parameter_types,
+    construct_runtime, debug, parameter_types,
     traits::{Currency, Imbalance, OnUnbalanced, Randomness, SplitTwoWays},
-    weights::Weight, debug
+    weights::Weight,
 };
 use system::offchain::TransactionSubmitter;
 use transaction_payment_rpc_runtime_api::RuntimeDispatchInfo;
@@ -101,8 +101,8 @@ impl system::Trait for Runtime {
     type AvailableBlockRatio = AvailableBlockRatio;
     type ModuleToIndex = ModuleToIndex;
     type AccountData = balances::AccountData<Balance>;
-	type OnNewAccount = ();
-	type OnKilledAccount = ();
+    type OnNewAccount = ();
+    type OnKilledAccount = ();
 }
 
 impl utility::Trait for Runtime {
@@ -148,9 +148,9 @@ impl authorship::Trait for Runtime {
 
 impl indices::Trait for Runtime {
     type AccountIndex = AccountIndex;
-	type Event = Event;
-	type Currency = Balances;
-	type Deposit = ExistentialDeposit;
+    type Event = Event;
+    type Currency = Balances;
+    type Deposit = ExistentialDeposit;
 }
 
 parameter_types! {
@@ -242,13 +242,13 @@ parameter_types! {
 
 impl session::Trait for Runtime {
     type Event = Event;
-	type ValidatorId = <Self as system::Trait>::AccountId;
-	type ValidatorIdOf = staking::StashOf<Self>;
-	type ShouldEndSession = Babe;
-	type SessionManager = Staking;
-	type SessionHandler = <SessionKeys as OpaqueKeys>::KeyTypeIdProviders;
-	type Keys = SessionKeys;
-	type DisabledValidatorsThreshold = DisabledValidatorsThreshold;
+    type ValidatorId = <Self as system::Trait>::AccountId;
+    type ValidatorIdOf = staking::StashOf<Self>;
+    type ShouldEndSession = Babe;
+    type SessionManager = Staking;
+    type SessionHandler = <SessionKeys as OpaqueKeys>::KeyTypeIdProviders;
+    type Keys = SessionKeys;
+    type DisabledValidatorsThreshold = DisabledValidatorsThreshold;
 }
 
 impl session::historical::Trait for Runtime {
@@ -295,20 +295,20 @@ parameter_types! {
 // }
 
 impl treasury::Trait for Runtime {
-	type Currency = Balances;
-	type ApproveOrigin = collective::EnsureMembers<_4, AccountId, CouncilCollective>;
-	type RejectOrigin = collective::EnsureMembers<_2, AccountId, CouncilCollective>;
-	type Tippers = ElectionsPhragmen;
-	type TipCountdown = TipCountdown;
-	type TipFindersFee = TipFindersFee;
-	type TipReportDepositBase = TipReportDepositBase;
-	type TipReportDepositPerByte = TipReportDepositPerByte;
-	type Event = Event;
-	type ProposalRejection = ();
-	type ProposalBond = ProposalBond;
-	type ProposalBondMinimum = ProposalBondMinimum;
-	type SpendPeriod = SpendPeriod;
-	type Burn = Burn;
+    type Currency = Balances;
+    type ApproveOrigin = collective::EnsureMembers<_4, AccountId, CouncilCollective>;
+    type RejectOrigin = collective::EnsureMembers<_2, AccountId, CouncilCollective>;
+    type Tippers = ElectionsPhragmen;
+    type TipCountdown = TipCountdown;
+    type TipFindersFee = TipFindersFee;
+    type TipReportDepositBase = TipReportDepositBase;
+    type TipReportDepositPerByte = TipReportDepositPerByte;
+    type Event = Event;
+    type ProposalRejection = ();
+    type ProposalBond = ProposalBond;
+    type ProposalBondMinimum = ProposalBondMinimum;
+    type SpendPeriod = SpendPeriod;
+    type Burn = Burn;
 }
 
 impl staking::Trait for Runtime {
@@ -337,10 +337,10 @@ impl grandpa::Trait for Runtime {
 parameter_types! {
     pub const WindowSize: BlockNumber = 101;
     pub const ReportLatency: BlockNumber = 1000;
-	pub const TipCountdown: BlockNumber = 1 * DAYS;
-	pub const TipFindersFee: Percent = Percent::from_percent(20);
-	pub const TipReportDepositBase: Balance = 1 * DOLLARS;
-	pub const TipReportDepositPerByte: Balance = 1 * CENTS;
+    pub const TipCountdown: BlockNumber = 1 * DAYS;
+    pub const TipFindersFee: Percent = Percent::from_percent(20);
+    pub const TipReportDepositBase: Balance = 1 * DOLLARS;
+    pub const TipReportDepositPerByte: Balance = 1 * CENTS;
 }
 
 impl finality_tracker::Trait for Runtime {
@@ -357,16 +357,16 @@ impl sudo::Trait for Runtime {
 pub type SubmitTransaction = TransactionSubmitter<ImOnlineId, Runtime, UncheckedExtrinsic>;
 
 parameter_types! {
-	pub const SessionDuration: BlockNumber = EPOCH_DURATION_IN_BLOCKS as _;
+    pub const SessionDuration: BlockNumber = EPOCH_DURATION_IN_BLOCKS as _;
 }
 
 impl im_online::Trait for Runtime {
-	type AuthorityId = ImOnlineId;
-	type Event = Event;
-	type Call = Call;
-	type SubmitTransaction = SubmitTransaction;
-	type SessionDuration = SessionDuration;
-	type ReportUnresponsiveness = Offences;
+    type AuthorityId = ImOnlineId;
+    type Event = Event;
+    type Call = Call;
+    type SubmitTransaction = SubmitTransaction;
+    type SessionDuration = SessionDuration;
+    type ReportUnresponsiveness = Offences;
 }
 
 impl offences::Trait for Runtime {
@@ -375,59 +375,63 @@ impl offences::Trait for Runtime {
     type OnOffenceHandler = Staking;
 }
 
-// impl assets::Trait for Runtime {
-//     type Event = Event;
-// }
-
-// impl dex::Trait for Runtime {
-//     type Event = Event;
-//     type Price = u128;
-//     type PriceFactor = PriceFactor;
-//     type BlocksPerDay = BlocksPerDay;
-//     type OpenedOrdersArrayCap = OpenedOrdersArrayCap;
-//     type ClosedOrdersArrayCap = ClosedOrdersArrayCap;
-// }
-
-impl system::offchain::CreateTransaction<Runtime, UncheckedExtrinsic> for Runtime {
-	type Public = <Signature as traits::Verify>::Signer;
-	type Signature = Signature;
-
-	fn create_transaction<TSigner: system::offchain::Signer<Self::Public, Self::Signature>>(
-		call: Call,
-		public: Self::Public,
-		account: AccountId,
-		index: Index,
-	) -> Option<(Call, <UncheckedExtrinsic as traits::Extrinsic>::SignaturePayload)> {
-		// take the biggest period possible.
-		let period = BlockHashCount::get()
-			.checked_next_power_of_two()
-			.map(|c| c / 2)
-			.unwrap_or(2) as u64;
-		let current_block = System::block_number()
-			.saturated_into::<u64>()
-			// The `System::block_number` is initialized with `n+1`,
-			// so the actual block number is `n`.
-			.saturating_sub(1);
-		let tip = 0;
-		let extra: SignedExtra = (
-			system::CheckVersion::<Runtime>::new(),
-			system::CheckGenesis::<Runtime>::new(),
-			system::CheckEra::<Runtime>::from(generic::Era::mortal(period, current_block)),
-			system::CheckNonce::<Runtime>::from(index),
-			system::CheckWeight::<Runtime>::new(),
-			transaction_payment::ChargeTransactionPayment::<Runtime>::from(tip),
-			// Default::default(),
-		);
-		let raw_payload = SignedPayload::new(call, extra).map_err(|e| {
-			debug::warn!("Unable to create signed payload: {:?}", e);
-		}).ok()?;
-		let signature = TSigner::sign(public, &raw_payload)?;
-		let address = Indices::unlookup(account);
-		let (call, extra, _) = raw_payload.deconstruct();
-		Some((call, (address, signature, extra)))
-	}
+impl assets::Trait for Runtime {
+    type Event = Event;
 }
 
+impl dex::Trait for Runtime {
+    type Event = Event;
+    type Price = u128;
+    type PriceFactor = PriceFactor;
+    type BlocksPerDay = BlocksPerDay;
+    type OpenedOrdersArrayCap = OpenedOrdersArrayCap;
+    type ClosedOrdersArrayCap = ClosedOrdersArrayCap;
+}
+
+impl system::offchain::CreateTransaction<Runtime, UncheckedExtrinsic> for Runtime {
+    type Public = <Signature as traits::Verify>::Signer;
+    type Signature = Signature;
+
+    fn create_transaction<TSigner: system::offchain::Signer<Self::Public, Self::Signature>>(
+        call: Call,
+        public: Self::Public,
+        account: AccountId,
+        index: Index,
+    ) -> Option<(
+        Call,
+        <UncheckedExtrinsic as traits::Extrinsic>::SignaturePayload,
+    )> {
+        // take the biggest period possible.
+        let period = BlockHashCount::get()
+            .checked_next_power_of_two()
+            .map(|c| c / 2)
+            .unwrap_or(2) as u64;
+        let current_block = System::block_number()
+            .saturated_into::<u64>()
+            // The `System::block_number` is initialized with `n+1`,
+            // so the actual block number is `n`.
+            .saturating_sub(1);
+        let tip = 0;
+        let extra: SignedExtra = (
+            system::CheckVersion::<Runtime>::new(),
+            system::CheckGenesis::<Runtime>::new(),
+            system::CheckEra::<Runtime>::from(generic::Era::mortal(period, current_block)),
+            system::CheckNonce::<Runtime>::from(index),
+            system::CheckWeight::<Runtime>::new(),
+            transaction_payment::ChargeTransactionPayment::<Runtime>::from(tip),
+            // Default::default(),
+        );
+        let raw_payload = SignedPayload::new(call, extra)
+            .map_err(|e| {
+                debug::warn!("Unable to create signed payload: {:?}", e);
+            })
+            .ok()?;
+        let signature = TSigner::sign(public, &raw_payload)?;
+        let address = Indices::unlookup(account);
+        let (call, extra, _) = raw_payload.deconstruct();
+        Some((call, (address, signature, extra)))
+    }
+}
 
 parameter_types! {
     pub const LaunchPeriod: BlockNumber = 7 * DAYS;
@@ -495,7 +499,6 @@ impl identity::Trait for Runtime {
         collective::EnsureProportionMoreThan<_1, _2, AccountId, CouncilCollective>;
     type ForceOrigin = collective::EnsureProportionMoreThan<_1, _2, AccountId, CouncilCollective>;
     type MaxAdditionalFields = MaxAdditionalFields;
-
 }
 
 parameter_types! {
@@ -561,8 +564,8 @@ construct_runtime!(
         TechnicalCommittee: collective::<Instance2>::{Module, Call, Storage, Origin<T>, Event<T>, Config<T>},
 
         // Custom modules
-        // Assets: assets::{Module, Call, Storage,Event<T>},
-        // Dex: dex::{Module,Call,Storage,Event<T>},
+        Assets: assets::{Module, Call, Storage,Event<T>},
+        Dex: dex::{Module,Call,Storage,Event<T>},
 
         // Utility module
         Utility: utility::{Module, Call, Event<T>},
@@ -574,7 +577,7 @@ construct_runtime!(
 
 // TODO: KP: What should be our Council Motion duration, if we need it.
 parameter_types! {
-	pub const CouncilMotionDuration: BlockNumber = 5 * DAYS;
+    pub const CouncilMotionDuration: BlockNumber = 5 * DAYS;
 }
 type TechnicalCollective = collective::Instance2;
 impl collective::Trait<TechnicalCollective> for Runtime {
@@ -722,8 +725,8 @@ impl_runtime_apis! {
         }
 
         fn current_epoch_start() -> babe_primitives::SlotNumber {
-			Babe::current_epoch_start()
-		}
+            Babe::current_epoch_start()
+        }
     }
 
     impl authority_discovery_primitives::AuthorityDiscoveryApi<Block> for Runtime {

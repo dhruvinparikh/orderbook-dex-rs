@@ -5,21 +5,20 @@ use hex_literal::hex;
 use im_online::sr25519::AuthorityId as ImOnlineId;
 use node_primitives::{AccountId, Balance, Signature};
 use node_runtime::constants::currency::*;
+use node_runtime::Block;
 use node_runtime::{
     AuthorityDiscoveryConfig, BabeConfig, BalancesConfig, CouncilConfig, DemocracyConfig,
     GenesisConfig, GrandpaConfig, ImOnlineConfig, IndicesConfig, SessionConfig, SessionKeys,
     StakerStatus, StakingConfig, SudoConfig, SystemConfig, TechnicalCommitteeConfig, WASM_BINARY,
 };
-use primitives::{crypto::UncheckedInto};
+use primitives::crypto::UncheckedInto;
 use primitives::{sr25519, Pair, Public};
+use sc_chain_spec::ChainSpecExtension;
+use serde::{Deserialize, Serialize};
 use sp_runtime::{
     traits::{IdentifyAccount, Verify},
     Perbill,
 };
-use serde::{Serialize, Deserialize};
-use sc_chain_spec::ChainSpecExtension;
-use node_runtime::Block;
-
 
 use telemetry::TelemetryEndpoints;
 
@@ -42,17 +41,14 @@ type AccountPublic = <Signature as Verify>::Signer;
 #[derive(Default, Clone, Serialize, Deserialize, ChainSpecExtension)]
 #[serde(rename_all = "camelCase")]
 pub struct Extensions {
-	/// Block numbers with known hashes.
-	pub fork_blocks: sc_client::ForkBlocks<Block>,
-	/// Known bad block hashes.
-	pub bad_blocks: sc_client::BadBlocks<Block>,
+    /// Block numbers with known hashes.
+    pub fork_blocks: sc_client::ForkBlocks<Block>,
+    /// Known bad block hashes.
+    pub bad_blocks: sc_client::BadBlocks<Block>,
 }
 
 /// Specialized `ChainSpec`.
-pub type ChainSpec = sc_service::GenericChainSpec<
-	GenesisConfig,
-	Extensions,
->;
+pub type ChainSpec = sc_service::GenericChainSpec<GenesisConfig, Extensions>;
 /// The chain specification option. This is expected to come in from the CLI and
 /// is little more than one of a number of alternatives which can easily be converted
 /// from a string (`--chain=...`) into a `ChainSpec`.
@@ -153,30 +149,38 @@ pub fn testnet_genesis(
             code: WASM_BINARY.to_vec(),
             changes_trie_config: Default::default(),
         }),
-        indices: Some(IndicesConfig {
-			indices: vec![],
-		}),
+        indices: Some(IndicesConfig { indices: vec![] }),
         balances: Some(BalancesConfig {
-			balances: endowed_accounts.iter().cloned()
-				.map(|k| (k, ENDOWMENT))
-				.chain(initial_authorities.iter().map(|x| (x.0.clone(), STASH)))
-				.collect(),
-		}),
+            balances: endowed_accounts
+                .iter()
+                .cloned()
+                .map(|k| (k, ENDOWMENT))
+                .chain(initial_authorities.iter().map(|x| (x.0.clone(), STASH)))
+                .collect(),
+        }),
         session: Some(SessionConfig {
-			keys: initial_authorities.iter().map(|x| {
-				(x.0.clone(), x.0.clone(), session_keys(x.2.clone(), x.3.clone(), x.4.clone(), x.5.clone()))
-			}).collect::<Vec<_>>(),
-		}),
+            keys: initial_authorities
+                .iter()
+                .map(|x| {
+                    (
+                        x.0.clone(),
+                        x.0.clone(),
+                        session_keys(x.2.clone(), x.3.clone(), x.4.clone(), x.5.clone()),
+                    )
+                })
+                .collect::<Vec<_>>(),
+        }),
         staking: Some(StakingConfig {
-			validator_count: initial_authorities.len() as u32 * 2,
-			minimum_validator_count: initial_authorities.len() as u32,
-			stakers: initial_authorities.iter().map(|x| {
-				(x.0.clone(), x.1.clone(), STASH, StakerStatus::Validator)
-			}).collect(),
-			invulnerables: initial_authorities.iter().map(|x| x.0.clone()).collect(),
-			slash_reward_fraction: Perbill::from_percent(10),
-			..Default::default()
-		}),
+            validator_count: initial_authorities.len() as u32 * 2,
+            minimum_validator_count: initial_authorities.len() as u32,
+            stakers: initial_authorities
+                .iter()
+                .map(|x| (x.0.clone(), x.1.clone(), STASH, StakerStatus::Validator))
+                .collect(),
+            invulnerables: initial_authorities.iter().map(|x| x.0.clone()).collect(),
+            slash_reward_fraction: Perbill::from_percent(10),
+            ..Default::default()
+        }),
         democracy: Some(DemocracyConfig::default()),
         collective_Instance1: Some(CouncilConfig {
             members: vec![],
@@ -274,13 +278,16 @@ pub fn dna_testnet_config() -> ChainSpec {
         "/ip4/127.0.0.1/tcp/3033/p2p/Qmece3bstSKgRomhPcAWswQMUFT3GRL5XpCuy8bFDggrwV".into(),
         "/ip4/127.0.0.1/tcp/3034/p2p/QmTBup8mUZcNkytxTgz1xWxQNPFQFh5Gnwjdy19D1BPqpd".into(),
         "/ip4/127.0.0.1/tcp/3035/p2p/QmSm4yua8ift1AULVisKooPwviVybuRFadr9Rmqurn5DWw".into(),
-        ];
+    ];
     ChainSpec::from_genesis(
         "DNA",
         "dna_testnet",
         dna_config_genesis,
         boot_nodes,
-        Some(TelemetryEndpoints::new(vec![(STAGING_TELEMETRY_URL.to_string(), 0)])),
+        Some(TelemetryEndpoints::new(vec![(
+            STAGING_TELEMETRY_URL.to_string(),
+            0,
+        )])),
         Some(DNA_PROTOCOL_ID),
         Some(serde_json::from_str(DNA_PROPERTIES).unwrap()),
         Default::default(),

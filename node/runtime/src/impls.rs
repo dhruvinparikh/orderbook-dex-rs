@@ -1,8 +1,8 @@
-use crate::{MaximumBlockWeight, System, Balances};
+use crate::{Balances, MaximumBlockWeight, System};
 use node_primitives::Balance;
 use sp_runtime::traits::{Convert, Saturating};
 use sp_runtime::{Fixed64, Perbill};
-use support::{traits::{Get}, weights::Weight};
+use support::{traits::Get, weights::Weight};
 
 /// Struct that handles the conversion of Balance -> `u64`. This is used for staking's election
 /// calculation.

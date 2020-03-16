@@ -6,7 +6,7 @@ pub trait Trait: assets::Trait + system::Trait {
         + Default
         + Member
         + Bounded
-        + SimpleArithmetic
+        + AtLeast32Bit
         + Copy
         + From<u128>
         + Into<u128>;
@@ -246,59 +246,59 @@ decl_error! {
 decl_storage! {
     trait Store for Module<T: Trait> as ExchangeStorage {
         ///	ExchangePairHash => ExchangePair
-        pub ExchangePairs get(fn exchange_pair): map T::Hash => Option<ExchangePair<T>>;
+        pub ExchangePairs get(fn exchange_pair): map hasher(blake2_256) T::Hash => Option<ExchangePair<T>>;
         /// (BaseAssetHash/base_asset_id, quoteAssetHash/quote_asset_id) => ExchangePairHash
-        pub ExchangePairsHashByBaseQuote get(fn exchange_pair_hash_by_base_quote): map (T::Hash, T::Hash) => Option<T::Hash>;
+        pub ExchangePairsHashByBaseQuote get(fn exchange_pair_hash_by_base_quote): map hasher(blake2_256) (T::Hash, T::Hash) => Option<T::Hash>;
         /// Index => ExchangePairHash
-        pub ExchangePairsHashByIndex get(fn exchange_pair_hash_by_index): map u64 => Option<T::Hash>;
+        pub ExchangePairsHashByIndex get(fn exchange_pair_hash_by_index): map hasher(blake2_256) u64 => Option<T::Hash>;
         /// Index
         pub ExchangePairsIndex get(fn exchange_pair_index): u64;
         /// OrderHash => Order
-        pub Orders get(fn order): map T::Hash => Option<LimitOrder<T>>;
+        pub Orders get(fn order): map hasher(blake2_256) T::Hash => Option<LimitOrder<T>>;
         /// (AccoundId, Index) => OrderHash
-        pub OwnedOrders get(fn owned_order): map (T::AccountId, u64) => Option<T::Hash>;
+        pub OwnedOrders get(fn owned_order): map hasher(blake2_256) (T::AccountId, u64) => Option<T::Hash>;
         ///	AccountId => Index
-        pub OwnedOrdersIndex get(fn owned_orders_index): map T::AccountId => u64;
+        pub OwnedOrdersIndex get(fn owned_orders_index): map hasher(blake2_256) T::AccountId => u64;
         /// (OrderHash, u64) => DEXHash
-        pub OrderOwnedExchanges get(fn order_owned_exchanges): map (T::Hash, u64) => Option<T::Hash>;
+        pub OrderOwnedExchanges get(fn order_owned_exchanges): map hasher(blake2_256) (T::Hash, u64) => Option<T::Hash>;
         /// OrderHash => Index
-        pub OrderOwnedExchangesIndex get(fn order_owned_exchanges_index): map T::Hash => u64;
+        pub OrderOwnedExchangesIndex get(fn order_owned_exchanges_index): map hasher(blake2_256) T::Hash => u64;
         /// (ExchangePairHash, Index) => OrderHash
-        pub ExchangePairOwnedOrders get(fn exchange_pair_owned_order): map (T::Hash, u64) => Option<T::Hash>;
+        pub ExchangePairOwnedOrders get(fn exchange_pair_owned_order): map hasher(blake2_256) (T::Hash, u64) => Option<T::Hash>;
         /// ExchangePairHash => Index
-        pub ExchangePairOwnedOrdersIndex get(fn exchange_pair_owned_order_index): map T::Hash => u64;
+        pub ExchangePairOwnedOrdersIndex get(fn exchange_pair_owned_order_index): map hasher(blake2_256) T::Hash => u64;
 
         /// (ExchangePairHash, Price) => LinkedItem
-        pub LinkedItemList get(fn linked_item): map (T::Hash, Option<T::Price>) => Option<OrderLinkedItem<T>>;
+        pub LinkedItemList get(fn linked_item): map hasher(blake2_256) (T::Hash, Option<T::Price>) => Option<OrderLinkedItem<T>>;
 
         /// DEXHash => DEX
-        pub Exchanges get(fn exchange): map T::Hash => Option<Dex<T>>;
+        pub Exchanges get(fn exchange): map hasher(blake2_256) T::Hash => Option<Dex<T>>;
 
         /// (AccountId, u64) => DEXHash
-        pub OwnedExchanges get(fn owned_exchanges): map (T::AccountId, u64) => Option<T::Hash>;
+        pub OwnedExchanges get(fn owned_exchanges): map hasher(blake2_256) (T::AccountId, u64) => Option<T::Hash>;
         /// AccountId => u64
-        pub OwnedExchangesIndex get(fn owned_exchanges_index): map T::AccountId => u64;
+        pub OwnedExchangesIndex get(fn owned_exchanges_index): map hasher(blake2_256) T::AccountId => u64;
 
         /// (AccountId, ExchangePairHash, u64) => DEXHash
-        pub OwnedEPExchanges get(fn owned_ep_exchanges): map (T::AccountId, T::Hash, u64) => Option<T::Hash>;
+        pub OwnedEPExchanges get(fn owned_ep_exchanges): map hasher(blake2_256) (T::AccountId, T::Hash, u64) => Option<T::Hash>;
         /// (AccountId, ExchangePairHash) => u64
-        pub OwnedEPExchangesIndex get(fn owned_ep_exchanges_index): map (T::AccountId, T::Hash) => u64;
+        pub OwnedEPExchangesIndex get(fn owned_ep_exchanges_index): map hasher(blake2_256) (T::AccountId, T::Hash) => u64;
 
         /// (AccountId, ExchangePairHash) => Vec<OrderHash>
-        pub OwnedEPOpenedOrders get(fn owned_ep_opened_orders): map (T::AccountId, T::Hash) => Option<Vec<T::Hash>>;
+        pub OwnedEPOpenedOrders get(fn owned_ep_opened_orders): map hasher(blake2_256) (T::AccountId, T::Hash) => Option<Vec<T::Hash>>;
 
         /// (AccountId, ExchangePairHash) => Vec<OrderHash>
-        pub OwnedEPClosedOrders get(fn owned_ep_closed_orders): map (T::AccountId, T::Hash) => Option<Vec<T::Hash>>;
+        pub OwnedEPClosedOrders get(fn owned_ep_closed_orders): map hasher(blake2_256) (T::AccountId, T::Hash) => Option<Vec<T::Hash>>;
 
         /// (ExchangePairHash, u64) => DEXHash
-        pub ExchangePairOwnedExchanges get(fn exchange_pair_owned_exchanges): map (T::Hash, u64) => Option<T::Hash>;
+        pub ExchangePairOwnedExchanges get(fn exchange_pair_owned_exchanges): map hasher(blake2_256) (T::Hash, u64) => Option<T::Hash>;
         /// ExchangePairHash => u64
-        pub ExchangePairOwnedExchangesIndex get(fn exchange_pair_owned_exchanges_index): map T::Hash => u64;
+        pub ExchangePairOwnedExchangesIndex get(fn exchange_pair_owned_exchanges_index): map hasher(blake2_256) T::Hash => u64;
         /// (ExchangePairHash, BlockNumber) => (Sum_of_Exchange_Volume, Highest_Price, Lowest_Price)
-        pub EPExchangeDataBucket get(fn exchange_pair_exchange_data_bucket): map (T::Hash, T::BlockNumber) => (T::Balance, Option<T::Price>, Option<T::Price>);
+        pub EPExchangeDataBucket get(fn exchange_pair_exchange_data_bucket): map hasher(blake2_256) (T::Hash, T::BlockNumber) => (T::Balance, Option<T::Price>, Option<T::Price>);
         /// store the exchange pair's H/L price within last day
         /// ExchangePairHash => (Vec<Highest_Price>, Vec<Lowest_Price>)
-        pub EPExchangePriceBucket get(fn exchange_pair_exchange_price_bucket): map T::Hash => (Vec<Option<T::Price>>, Vec<Option<T::Price>>);
+        pub EPExchangePriceBucket get(fn exchange_pair_exchange_price_bucket): map hasher(blake2_256) T::Hash => (Vec<Option<T::Price>>, Vec<Option<T::Price>>);
         pub Nonce: u64;
 
         pub Orderbook get (fn order_book): Vec<Option<LimitOrder<T>>>;

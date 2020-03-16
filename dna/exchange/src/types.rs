@@ -37,8 +37,8 @@ where
         + Copy
         + PartialEq
         + AsRef<[u8]>,
-    K2: Parameter + Default + Member + Bounded + SimpleArithmetic + Copy,
-    K3: Parameter + Default + Member + Bounded + SimpleArithmetic + Copy,
+    K2: Parameter + Default + Member + Bounded + AtLeast32Bit + Copy,
+    K3: Parameter + Default + Member + Bounded + AtLeast32Bit + Copy,
     S: StorageMap<(K1, Option<K2>), LinkedItem<K1, K2, K3>, Query = Option<LinkedItem<K1, K2, K3>>>,
 {
     pub fn read_head(key: K1) -> LinkedItem<K1, K2, K3> {

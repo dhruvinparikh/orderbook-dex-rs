@@ -7,7 +7,7 @@ impl<T: Trait> Module<T> {
         ensure!(asset.is_some(), Error::<T>::NoMatchingAsset);
 
         ensure!(
-            FreeBalanceOf::<T>::exists((sender.clone(), hash)),
+            FreeBalanceOf::<T>::contains_key((sender.clone(), hash)),
             Error::<T>::SenderHaveNoAsset
         );
 
@@ -36,7 +36,7 @@ impl<T: Trait> Module<T> {
         ensure!(asset.is_some(), Error::<T>::NoMatchingAsset);
 
         ensure!(
-            FreeBalanceOf::<T>::exists((sender.clone(), hash.clone())),
+            FreeBalanceOf::<T>::contains_key((sender.clone(), hash.clone())),
             Error::<T>::SenderHaveNoAsset
         );
 

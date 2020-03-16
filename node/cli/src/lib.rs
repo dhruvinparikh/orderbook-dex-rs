@@ -20,9 +20,9 @@ mod browser;
 #[cfg(feature = "cli")]
 mod cli;
 #[cfg(feature = "cli")]
-mod factory_impl;
-#[cfg(feature = "cli")]
 mod command;
+#[cfg(feature = "cli")]
+mod factory_impl;
 
 #[cfg(feature = "browser")]
 pub use browser::*;
@@ -35,13 +35,12 @@ pub use command::*;
 pub enum ChainSpec {
     Development,
     LocalTestnet,
-    DNATestnet
+    DNATestnet,
 }
-
 
 impl ChainSpec {
     /// Get an actual chain config from one of the alternatives.
-	pub(crate) fn load(self) -> Result<chain_spec::ChainSpec, String> {
+    pub(crate) fn load(self) -> Result<chain_spec::ChainSpec, String> {
         Ok(match self {
             ChainSpec::Development => chain_spec::development_config(),
             ChainSpec::LocalTestnet => chain_spec::local_testnet_config(),
@@ -60,9 +59,10 @@ impl ChainSpec {
 }
 
 fn load_spec(id: &str) -> Result<Box<dyn sc_service::ChainSpec>, String> {
-	Ok(match ChainSpec::from(id) {
-		Some(spec) => Box::new(spec.load()?),
-		None => Box::new(chain_spec::ChainSpec::from_json_file(std::path::PathBuf::from(id))?),
-	})
+    Ok(match ChainSpec::from(id) {
+        Some(spec) => Box::new(spec.load()?),
+        None => Box::new(chain_spec::ChainSpec::from_json_file(
+            std::path::PathBuf::from(id),
+        )?),
+    })
 }
-

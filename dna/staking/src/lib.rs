@@ -1357,13 +1357,13 @@ impl<T: Trait> Module<T> {
 
             let mut total_imbalance = <PositiveImbalanceOf<T>>::zero();
             // debug::native::info!("********Rewarding*********");
-            for (v, p) in validators.iter().zip(points.individual.into_iter()) {
-                if p != 0 {
+            for (v) in validators.iter() {
+                // if p != 0 {
                     // let reward = Perbill::from_rational_approximation(p, points.total) * total_payout;
                     // debug::native::info!(" {:?} , {:?}",v, reward );
                     let reward = 2560000;
                     total_imbalance.subsume(Self::reward_validator(v, reward.into()));
-                }
+                // }
             }
             // debug::native::info!("********Rewarding*********");
 

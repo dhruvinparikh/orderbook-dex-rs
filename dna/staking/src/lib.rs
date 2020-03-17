@@ -1361,7 +1361,7 @@ impl<T: Trait> Module<T> {
                 if p != 0 {
                     // let reward = Perbill::from_rational_approximation(p, points.total) * total_payout;
                     // debug::native::info!(" {:?} , {:?}",v, reward );
-                    let reward = 10000;
+                    let reward = 2560000;
                     total_imbalance.subsume(Self::reward_validator(v, reward.into()));
                 }
             }

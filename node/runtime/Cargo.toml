@@ -36,7 +36,7 @@ balances = { package = "pallet-balances", git = "https://github.com/blockxlabs/s
 executive = { package = "frame-executive", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev" }
 finality-tracker = { package = "pallet-finality-tracker", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev" }
 grandpa = { package = "pallet-grandpa", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev" }
-im-online = { package = "pallet-im-online", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev" }
+#im-online = { package = "pallet-im-online", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev" }
 indices = { package = "pallet-indices", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev" }
 offences = { package = "pallet-offences", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev" }
 randomness-collective-flip = { package = "pallet-randomness-collective-flip", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev" }
@@ -61,8 +61,7 @@ membership = { package = "pallet-membership", git = "https://github.com/blockxla
 
 assets = { package = "dna-assets", path = "../../dna/assets", default-features = false }
 dex = { package = "dna-exchange", path = "../../dna/exchange", default-features = false }
-#reward-debug-log = { package = "dna-reward-debug-log", path = "../../dna/reward-debug-log", default-features = false }
-#im-online = { package = "pallet-im-online", path="../../dna/im-online", default-features = false }
+im-online = { package = "pallet-im-online", path="../../dna/im-online", default-features = false }
 #staking = { package = "dna-staking", path = "../../dna/staking", default-features = false }
 [build-dependencies]
 wasm-builder-runner = { package = "substrate-wasm-builder-runner", version = "1.0.4", git = "https://github.com/blockxlabs/substrate", branch = "blockx-dev" }

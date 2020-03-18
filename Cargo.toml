@@ -6,9 +6,8 @@ members = [
     "node/cli",
     "dna/assets",
     "dna/exchange",
-    #"dna/reward-debug-log",
     "dna/im-online",
-    "dna/staking"
+    #"dna/staking"
 ]
 
 [profile.release]

@@ -9,7 +9,7 @@ use core::convert::{TryFrom, TryInto};
 use primitives::U256;
 use rstd::if_std;
 use rstd::{ops::Not, prelude::*, result};
-use sp_runtime::traits::{Bounded, CheckedSub, Hash, Member, AtLeast32Bit, Zero};
+use sp_runtime::traits::{AtLeast32Bit, Bounded, CheckedSub, Hash, Member, Zero};
 use sp_runtime::RuntimeDebug;
 use support::{
     decl_error, decl_event, decl_module, decl_storage,

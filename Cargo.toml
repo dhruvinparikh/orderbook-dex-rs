@@ -7,7 +7,7 @@ members = [
     "dna/assets",
     "dna/exchange",
     "dna/im-online",
-    #"dna/staking"
+    "dna/staking"
 ]
 
 [profile.release]

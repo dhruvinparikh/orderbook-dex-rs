@@ -8,22 +8,22 @@ edition = "2018"
 serde = { version = "1.0.101", optional = true }
 safe-mix = { version = "1.0.0", default-features = false }
 codec = { package = "parity-scale-codec", version = "1.0.0", default-features = false, features = ["derive"] }
-sp-keyring = { git = "https://github.com/blockxlabs/substrate", optional = true, branch = "blockx-dev-test-0" }
-sp-std = { git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
-sp-phragmen = { git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
-sp-io ={ git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
-sp-runtime = { git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
-sp-staking = { git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
-frame-support = { git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
-frame-system = { git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
-pallet-session = { git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
-pallet-authorship = { git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
+sp-keyring = { git = "https://github.com/blockxlabs/substrate", optional = true, branch = "blockx-dev" }
+sp-std = { git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev" }
+sp-phragmen = { git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev" }
+sp-io ={ git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev" }
+sp-runtime = { git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev" }
+sp-staking = { git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev" }
+frame-support = { git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev" }
+frame-system = { git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev" }
+pallet-session = { git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev" }
+pallet-authorship = { git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev" }
 
 [dev-dependencies]
-sp-core = { git = "https://github.com/blockxlabs/substrate", branch = "blockx-dev-test-0" }
-pallet-balances = { git = "https://github.com/blockxlabs/substrate", branch = "blockx-dev-test-0" }
-pallet-timestamp = { git = "https://github.com/blockxlabs/substrate", branch = "blockx-dev-test-0" }
-substrate-test-utils = { git = "https://github.com/blockxlabs/substrate", branch = "blockx-dev-test-0" }
+sp-core = { git = "https://github.com/blockxlabs/substrate", branch = "blockx-dev" }
+pallet-balances = { git = "https://github.com/blockxlabs/substrate", branch = "blockx-dev" }
+pallet-timestamp = { git = "https://github.com/blockxlabs/substrate", branch = "blockx-dev" }
+substrate-test-utils = { git = "https://github.com/blockxlabs/substrate", branch = "blockx-dev" }
 
 [features]
 migrate = []

@@ -23,7 +23,7 @@ impl<T: Trait> Module<T> {
         };
 
         Nonce::mutate(|n| *n += 1);
-        Assets::<T>::insert(hash.clone(), asset);
+        <Assets<T>>::insert(hash.clone(), asset);
         Owners::<T>::insert(hash.clone(), sender.clone());
         BalanceOf::<T>::insert((sender.clone(), hash.clone()), total_supply);
         FreeBalanceOf::<T>::insert((sender.clone(), hash.clone()), total_supply);

@@ -247,7 +247,8 @@ use codec::{HasCompact, Encode, Decode};
 use frame_support::{
 	decl_module, decl_event, decl_storage, ensure, decl_error,
 	weights::SimpleDispatchInfo,
-	dispatch::DispatchResult,
+    dispatch::DispatchResult,
+    debug,
 	traits::{
 		Currency, LockIdentifier, LockableCurrency,
 		WithdrawReasons, OnUnbalanced, Imbalance, Get, Time
@@ -256,7 +257,7 @@ use frame_support::{
 use pallet_session::historical::SessionManager;
 use sp_runtime::{
 	Perbill, PerThing, RuntimeDebug,
-	curve::PiecewiseLinear,
+    curve::PiecewiseLinear,
 	traits::{
 		Convert, Zero, StaticLookup, CheckedSub, Saturating, SaturatedConversion,
 		AtLeast32Bit, EnsureOrigin,
@@ -1408,6 +1409,7 @@ decl_module! {
 		/// # </weight>
 		#[weight = SimpleDispatchInfo::FixedNormal(500_000)]
 		fn payout_validator(origin, era: EraIndex) -> DispatchResult {
+            debug::info!("*** PAYOUT ************** VALIDATOR ***************");
 			let who = ensure_signed(origin)?;
 			Self::do_payout_validator(who, era)
 		}
@@ -1534,7 +1536,7 @@ impl<T: Trait> Module<T> {
 				);
 			}
 		}
-        
+
 		if let Some(imbalance) = Self::make_payout(&nominator_ledger.stash, reward * era_payout) {
 			Self::deposit_event(RawEvent::Reward(who, imbalance.peek()));
 		}
@@ -1575,7 +1577,7 @@ impl<T: Trait> Module<T> {
 			commission.saturating_add(
 				Perbill::one().saturating_sub(commission).saturating_mul(exposure_part)
 			)
-		);
+        );
 
 		if let Some(imbalance) = Self::make_payout(&ledger.stash, reward * era_payout) {
 			Self::deposit_event(RawEvent::Reward(who, imbalance.peek()));
@@ -1631,9 +1633,9 @@ impl<T: Trait> Module<T> {
 
 	/// Plan a new session potentially trigger a new era.
 	fn new_session(session_index: SessionIndex) -> Option<Vec<T::AccountId>> {
+        debug::info!("*** NEW ************** SESSION ***************");
 		if let Some(current_era) = Self::current_era() {
 			// Initial era has been set.
-
 			let current_era_start_session_index = Self::eras_start_session_index(current_era)
 				.unwrap_or_else(|| {
 					frame_support::print("Error: start_session_index must be set for current_era");
@@ -1659,6 +1661,7 @@ impl<T: Trait> Module<T> {
 
 	/// Start a session potentially starting an era.
 	fn start_session(start_session: SessionIndex) {
+        debug::info!("*** START ************** SESSION ***************");
 		let next_active_era = Self::active_era().map(|e| e.index + 1).unwrap_or(0);
 		if let Some(next_active_era_start_session_index) =
 			Self::eras_start_session_index(next_active_era)
@@ -1676,7 +1679,8 @@ impl<T: Trait> Module<T> {
 
 	/// End a session potentially ending an era.
 	fn end_session(session_index: SessionIndex) {
-		if let Some(active_era) = Self::active_era() {
+        debug::info!("*** END ************** SESSION ***************");
+ 		if let Some(active_era) = Self::active_era() {
 			if let Some(next_active_era_start_session_index) =
 				Self::eras_start_session_index(active_era.index + 1)
 			{
@@ -1691,6 +1695,7 @@ impl<T: Trait> Module<T> {
 	/// * reset `active_era.start`,
 	/// * update `BondedEras` and apply slashes.
 	fn start_era(start_session: SessionIndex) {
+        debug::info!("*** START ************** ERA ***************");
 		let active_era = <ActiveEra<T>>::mutate(|active_era| {
 			let new_index = active_era.as_ref().map(|info| info.index + 1).unwrap_or(0);
 			*active_era = Some(ActiveEraInfo {
@@ -1730,6 +1735,7 @@ impl<T: Trait> Module<T> {
 
 	/// Compute payout for era.
 	fn end_era(active_era: ActiveEraInfo<MomentOf<T>>, _session_index: SessionIndex) {
+        debug::info!("*** END ************** ERA ***************");
 		// Note: active_era_start can be None if end era is called during genesis config.
 		if let Some(active_era_start) = active_era.start {
 			let now = T::Time::now();
@@ -1750,6 +1756,7 @@ impl<T: Trait> Module<T> {
 
 	/// Plan a new era. Return the potential new staking set.
 	fn new_era(start_session_index: SessionIndex) -> Option<Vec<T::AccountId>> {
+        debug::info!("*** NEW ************** ERA ***************");
 		// Increment or set current era.
 		let current_era = CurrentEra::mutate(|s| {
 			*s = Some(s.map(|s| s + 1).unwrap_or(0));
@@ -1760,16 +1767,17 @@ impl<T: Trait> Module<T> {
 		// Clean old era information.
 		if let Some(old_era) = current_era.checked_sub(Self::history_depth() + 1) {
 			Self::clear_era_information(old_era);
-		}
-
+        }
+        
 		// Set staking information for new era.
-		let maybe_new_validators = Self::select_validators(current_era);
+        let maybe_new_validators = Self::select_validators(current_era);
 
 		maybe_new_validators
 	}
 
 	/// Clear all era information for given era.
 	fn clear_era_information(era_index: EraIndex) {
+        debug::info!("*** CLEAR ************** ERA ******* INFORMATION ********");
 		<ErasStakers<T>>::remove_prefix(era_index);
 		<ErasStakersClipped<T>>::remove_prefix(era_index);
 		<ErasValidatorPrefs<T>>::remove_prefix(era_index);
@@ -1999,6 +2007,7 @@ impl<T: Trait> SessionManager<T::AccountId, Exposure<T::AccountId, BalanceOf<T>>
 	fn new_session(new_index: SessionIndex)
 		-> Option<Vec<(T::AccountId, Exposure<T::AccountId, BalanceOf<T>>)>>
 	{
+        // debug::info!("*** NEW ************** SESSION ******* SESSION **** MANAGER ****");
 		<Self as pallet_session::SessionManager<_>>::new_session(new_index).map(|validators| {
 			let current_era = Self::current_era()
 				// Must be some as a new era has been created.
@@ -2011,9 +2020,11 @@ impl<T: Trait> SessionManager<T::AccountId, Exposure<T::AccountId, BalanceOf<T>>
 		})
 	}
 	fn start_session(start_index: SessionIndex) {
+        // debug::info!("*** START ************** SESSION ****** SESSION **** MANAGER*****");
 		<Self as pallet_session::SessionManager<_>>::start_session(start_index)
 	}
 	fn end_session(end_index: SessionIndex) {
+        // debug::info!("*** END ************** SESSION ******* SESSION**** MANAGER ****");
 		<Self as pallet_session::SessionManager<_>>::end_session(end_index)
 	}
 }

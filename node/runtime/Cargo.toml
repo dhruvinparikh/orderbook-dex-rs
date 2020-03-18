@@ -62,7 +62,7 @@ membership = { package = "pallet-membership", git = "https://github.com/blockxla
 assets = { package = "dna-assets", path = "../../dna/assets", default-features = false }
 dex = { package = "dna-exchange", path = "../../dna/exchange", default-features = false }
 im-online = { package = "pallet-im-online", path="../../dna/im-online", default-features = false }
-staking = { package = "dna-staking", path = "../../dna/staking", default-features = false }
+staking = { package = "pallet-staking", path = "../../dna/staking", default-features = false }
 pallet-staking-reward-curve = { path = "../../dna/staking/reward-curve", default-features = false }
 [build-dependencies]
 wasm-builder-runner = { package = "substrate-wasm-builder-runner", version = "1.0.4", git = "https://github.com/blockxlabs/substrate", branch = "blockx-dev" }

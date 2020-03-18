@@ -71,14 +71,14 @@ decl_event!(
 // This module's storage items.
 decl_storage! {
     trait Store for Module<T: Trait> as AssetsStorage {
-        pub Assets get(asset): map T::Hash => Option<Asset<T::Hash, T::Balance>>;
-        pub Owners get(owner): map T::Hash => Option<T::AccountId>;
-        pub BalanceOf get(balance_of): map (T::AccountId, T::Hash) => T::Balance;
-        pub FreeBalanceOf get(free_balance_of): map (T::AccountId, T::Hash) => T::Balance;
-        pub FreezedBalanceOf get(freezed_balance_of): map (T::AccountId, T::Hash) => T::Balance;
+        pub Assets get(asset): map hasher(blake2_256) T::Hash => Option<Asset<T::Hash, T::Balance>>;
+        pub Owners get(owner): map hasher(blake2_256) T::Hash => Option<T::AccountId>;
+        pub BalanceOf get(balance_of): map hasher(blake2_256) (T::AccountId, T::Hash) => T::Balance;
+        pub FreeBalanceOf get(free_balance_of): map hasher(blake2_256) (T::AccountId, T::Hash) => T::Balance;
+        pub FreezedBalanceOf get(freezed_balance_of): map hasher(blake2_256) (T::AccountId, T::Hash) => T::Balance;
 
-        pub OwnedAssets get(owned_asset): map (T::AccountId, u64) => Option<T::Hash>;
-        pub OwnedAssetsIndex get(owned_asset_index): map T::AccountId => u64;
+        pub OwnedAssets get(owned_asset): map hasher(blake2_256) (T::AccountId, u64) => Option<T::Hash>;
+        pub OwnedAssetsIndex get(owned_asset_index): map hasher(blake2_256) T::AccountId => u64;
 
         Nonce: u64;
     }

@@ -5,5 +5,5 @@ authors = ["BlockX Labs"]
 edition = "2018"
 
 [dependencies]
-sc-executor = { git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev-test-0" }
+sc-executor = { git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev" }
 node-runtime = { path = "../runtime" }

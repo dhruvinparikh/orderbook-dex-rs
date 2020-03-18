@@ -25,6 +25,7 @@ use sp_api::impl_runtime_apis;
 use sp_runtime::traits::{
     self, BlakeTwo256, Block as BlockT, NumberFor, OpaqueKeys, SaturatedConversion, StaticLookup,
 };
+use sp_runtime::curve::PiecewiseLinear;
 use sp_runtime::transaction_validity::TransactionValidity;
 use sp_runtime::{create_runtime_str, generic, ApplyExtrinsicResult, Percent};
 use sp_std::prelude::*;
@@ -255,6 +256,17 @@ impl session::Trait for Runtime {
 impl session::historical::Trait for Runtime {
     type FullIdentification = staking::Exposure<AccountId, Balance>;
     type FullIdentificationOf = staking::ExposureOf<Runtime>;
+}
+
+pallet_staking_reward_curve::build! {
+    const REWARD_CURVE: PiecewiseLinear<'static> = curve!(
+        min_inflation: 0_025_000,
+        max_inflation: 0_100_000,
+        ideal_stake: 0_500_000,
+        falloff: 0_050_000,
+        max_piece_count: 40,
+        test_precision: 0_005_000,
+    );
 }
 
 parameter_types! {

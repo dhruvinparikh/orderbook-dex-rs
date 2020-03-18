@@ -12,8 +12,6 @@ use authority_discovery_primitives::AuthorityId as AuthorityDiscoveryId;
 use grandpa::fg_primitives;
 use grandpa::AuthorityList as GrandpaAuthorityList;
 use im_online::sr25519::AuthorityId as ImOnlineId;
-// TODO DP - Figure out to use rewar_Debug_log to make session handler work
-// use reward_debug_log::sr25519::AuthorityId as RewardDebugLogId;
 use impls::{CurrencyToVoteHandler, LinearWeightToFee, TargetedFeeAdjustment};
 use inherents::{CheckInherentsResult, InherentData};
 use node_primitives::{
@@ -22,10 +20,10 @@ use node_primitives::{
 use primitives::u32_trait::{_1, _2, _3, _4, _5};
 use primitives::OpaqueMetadata;
 use sp_api::impl_runtime_apis;
+use sp_runtime::curve::PiecewiseLinear;
 use sp_runtime::traits::{
     self, BlakeTwo256, Block as BlockT, NumberFor, OpaqueKeys, SaturatedConversion, StaticLookup,
 };
-use sp_runtime::curve::PiecewiseLinear;
 use sp_runtime::transaction_validity::TransactionValidity;
 use sp_runtime::{create_runtime_str, generic, ApplyExtrinsicResult, Percent};
 use sp_std::prelude::*;
@@ -526,12 +524,6 @@ impl elections_phragmen::Trait for Runtime {
     type BadReport = Treasury;
     type KickedMember = Treasury;
 }
-
-// TODO DP - Figure out to use rewar_Debug_log to make session handler work
-// impl reward_debug_log::Trait for Runtime {
-//     type AuthorityId = ImOnlineId;
-//     type Call = Call;
-// }
 
 construct_runtime!(
     pub enum Runtime where

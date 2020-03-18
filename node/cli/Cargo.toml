@@ -63,7 +63,7 @@ frame-benchmarking-cli = { package="frame-benchmarking-cli",  git = "https://git
 sc-tracing = { git = "https://github.com/blockxlabs/substrate", branch = "blockx-dev" }
 
 # frame dependencies
-im-online = { package = "pallet-im-online", git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev" }
+im-online = { package = "pallet-im-online", path="../../dna/im-online", default-features = false }
 pallet-transaction-payment = { git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev" }
 pallet-indices = { git = "https://github.com/blockxlabs/substrate", default-features = false, branch = "blockx-dev" }
 

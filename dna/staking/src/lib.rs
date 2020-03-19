@@ -1962,18 +1962,18 @@ impl<T: Trait> Module<T> {
 	///
 	/// COMPLEXITY: Complexity is `number_of_validator_to_reward x current_elected_len`.
 	/// If you need to reward lots of validator consider using `reward_by_indices`.
-	pub fn reward_by_ids(
-		validators_points: impl IntoIterator<Item = (T::AccountId, u32)>
-	) {
-		if let Some(active_era) = Self::active_era() {
-			<ErasRewardPoints<T>>::mutate(active_era.index, |era_rewards| {
-				for (validator, points) in validators_points.into_iter() {
-					*era_rewards.individual.entry(validator).or_default() += points;
-					era_rewards.total += points;
-				}
-			});
-		}
-	}
+	// pub fn reward_by_ids(
+	// 	validators_points: impl IntoIterator<Item = (T::AccountId, u32)>
+	// ) {
+	// 	if let Some(active_era) = Self::active_era() {
+	// 		<ErasRewardPoints<T>>::mutate(active_era.index, |era_rewards| {
+	// 			for (validator, points) in validators_points.into_iter() {
+	// 				*era_rewards.individual.entry(validator).or_default() += points;
+	// 				era_rewards.total += points;
+	// 			}
+	// 		});
+	// 	}
+	// }
 
 	/// Ensures that at the end of the current session there will be a new era.
 	fn ensure_new_era() {
@@ -2038,13 +2038,17 @@ impl<T> pallet_authorship::EventHandler<T::AccountId, T::BlockNumber> for Module
 		T: Trait + pallet_authorship::Trait + pallet_session::Trait
 {
 	fn note_author(author: T::AccountId) {
-		Self::reward_by_ids(vec![(author, 20)])
+        // Self::reward_by_ids(vec![(author, 20)])
+        // ignore
+        debug::info!("|||||||NOTE_AUTHOR|||| : {:?}",author);
 	}
 	fn note_uncle(author: T::AccountId, _age: T::BlockNumber) {
-		Self::reward_by_ids(vec![
-			(<pallet_authorship::Module<T>>::author(), 2),
-			(author, 1)
-		])
+		// Self::reward_by_ids(vec![
+		// 	(<pallet_authorship::Module<T>>::author(), 2),
+		// 	(author, 1)
+        // ])
+        // ignore
+        debug::info!("|||||||NOTE_UNCLE|||| : {:?} {:?}",author,_age);
 	}
 }
 

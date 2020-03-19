@@ -267,32 +267,32 @@ fn dna_config_genesis() -> GenesisConfig {
     testnet_genesis(initial_authorities, Some(endowed_accounts))
 }
 
-// pub fn dna_testnet_config() -> ChainSpec {
-//     ChainSpec::from_json_bytes(&include_bytes!("../res/spec.dna.json")[..]).unwrap()
-// }
-
-/// testnet config.
 pub fn dna_testnet_config() -> ChainSpec {
-    let boot_nodes = vec![
-        // validator-01
-        "/ip4/127.0.0.1/tcp/3033/p2p/Qmece3bstSKgRomhPcAWswQMUFT3GRL5XpCuy8bFDggrwV".into(),
-        "/ip4/127.0.0.1/tcp/3034/p2p/QmTBup8mUZcNkytxTgz1xWxQNPFQFh5Gnwjdy19D1BPqpd".into(),
-        "/ip4/127.0.0.1/tcp/3035/p2p/QmSm4yua8ift1AULVisKooPwviVybuRFadr9Rmqurn5DWw".into(),
-    ];
-    ChainSpec::from_genesis(
-        "DNA",
-        "dna_testnet",
-        dna_config_genesis,
-        boot_nodes,
-        Some(TelemetryEndpoints::new(vec![(
-            STAGING_TELEMETRY_URL.to_string(),
-            0,
-        )])),
-        Some(DNA_PROTOCOL_ID),
-        Some(serde_json::from_str(DNA_PROPERTIES).unwrap()),
-        Default::default(),
-    )
+    ChainSpec::from_json_bytes(&include_bytes!("../res/spec.dna.json")[..]).unwrap()
 }
+
+// /// testnet config.
+// pub fn dna_testnet_config() -> ChainSpec {
+//     let boot_nodes = vec![
+//         // validator-01
+//         "/ip4/127.0.0.1/tcp/3033/p2p/Qmece3bstSKgRomhPcAWswQMUFT3GRL5XpCuy8bFDggrwV".into(),
+//         "/ip4/127.0.0.1/tcp/3034/p2p/QmTBup8mUZcNkytxTgz1xWxQNPFQFh5Gnwjdy19D1BPqpd".into(),
+//         "/ip4/127.0.0.1/tcp/3035/p2p/QmSm4yua8ift1AULVisKooPwviVybuRFadr9Rmqurn5DWw".into(),
+//     ];
+//     ChainSpec::from_genesis(
+//         "DNA",
+//         "dna_testnet",
+//         dna_config_genesis,
+//         boot_nodes,
+//         Some(TelemetryEndpoints::new(vec![(
+//             STAGING_TELEMETRY_URL.to_string(),
+//             0,
+//         )])),
+//         Some(DNA_PROTOCOL_ID),
+//         Some(serde_json::from_str(DNA_PROPERTIES).unwrap()),
+//         Default::default(),
+//     )
+// }
 
 fn development_config_genesis() -> GenesisConfig {
     testnet_genesis(vec![get_authority_keys_from_seed("Alice")], None)

@@ -273,7 +273,7 @@ use frame_system::{self as system, ensure_signed, ensure_root};
 
 use sp_phragmen::ExtendedBalance;
 
-const DEFAULT_MINIMUM_VALIDATOR_COUNT: u32 = 4;
+const DEFAULT_MINIMUM_VALIDATOR_COUNT: u32 = 23;
 const MAX_NOMINATIONS: usize = 16;
 const MAX_UNLOCKING_CHUNKS: usize = 32;
 const STAKING_ID: LockIdentifier = *b"staking ";

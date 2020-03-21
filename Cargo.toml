@@ -6,7 +6,6 @@ members = [
     "node/cli",
     "dna/assets",
     "dna/exchange",
-    "dna/im-online",
     "dna/staking"
 ]
 

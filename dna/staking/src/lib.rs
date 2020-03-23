@@ -240,8 +240,6 @@ mod slashing;
 #[cfg(test)]
 mod tests;
 
-pub mod inflation;
-
 use codec::{Decode, Encode, HasCompact};
 use frame_support::{
     debug, decl_error, decl_event, decl_module, decl_storage,
@@ -641,7 +639,7 @@ pub trait Trait: frame_system::Trait {
     type SessionInterface: self::SessionInterface<Self::AccountId>;
 
     /// The NPoS reward curve to use.
-    type RewardCurve: Get<&'static PiecewiseLinear<'static>>;
+    // type RewardCurve: Get<&'static PiecewiseLinear<'static>>;
 
     /// The maximum number of nominator rewarded for each validator.
     ///
@@ -1760,16 +1758,18 @@ impl<T: Trait> Module<T> {
             let now = T::Time::now();
 
             let era_duration = now - active_era_start;
-            let (total_payout, _max_payout) = inflation::compute_total_payout(
-                &T::RewardCurve::get(),
-                Self::eras_total_stake(&active_era.index),
-                T::Currency::total_issuance(),
-                // Duration of era; more than u64::MAX is rewarded as u64::MAX.
-                era_duration.saturated_into::<u64>(),
-            );
+            debug::info!("****** ERA ****** DURATION ****** {:?}", era_duration);
+            // let (total_payout, _max_payout) = inflation::compute_total_payout(
+            //     &T::RewardCurve::get(),
+            //     Self::eras_total_stake(&active_era.index),
+            //     T::Currency::total_issuance(),
+            //     // Duration of era; more than u64::MAX is rewarded as u64::MAX.
+            //     era_duration.saturated_into::<u64>(),
+            // );
+            let mut total_payout = 0;
 
             // Set ending era reward.
-            <ErasValidatorReward<T>>::insert(&active_era.index, total_payout);
+            // <ErasValidatorReward<T>>::insert(&active_era.index, &total_payout);
         }
     }
 

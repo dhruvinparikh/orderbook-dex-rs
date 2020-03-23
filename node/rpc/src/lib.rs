@@ -31,7 +31,7 @@
 
 use std::{fmt, sync::Arc};
 
-use node_primitives::{AccountId, Balance, Block, BlockNumber, Index};
+use node_primitives::{AccountId, Balance, Block, Index};
 use node_runtime::UncheckedExtrinsic;
 use sc_consensus_babe::{Config, Epoch};
 use sc_consensus_babe_rpc::BabeRPCHandler;

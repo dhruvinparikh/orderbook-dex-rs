@@ -395,7 +395,7 @@ impl<T: Trait> OwnedEPOpenedOrders<T> {
 }
 
 impl<T: Trait> Orderbook<T> {
-    pub fn add_to_order_book(order_hash: T::Hash, limit_order: LimitOrder<T>) {
+    pub fn add_to_order_book(_order_hash: T::Hash, limit_order: LimitOrder<T>) {
         // let order = new
         <Orderbook<T>>::mutate(|r| {
             r.push(Some(limit_order));
@@ -403,7 +403,7 @@ impl<T: Trait> Orderbook<T> {
         });
     }
 
-    pub fn remove_from_order_book(order_hash: T::Hash) {
+    pub fn remove_from_order_book(_order_hash: T::Hash) {
         // let mut orders;
         // if let Some(ts) = Self::get((account_id.clone(), ep_hash)) {
         //     orders = ts;

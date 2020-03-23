@@ -254,9 +254,8 @@ use frame_support::{
 use frame_system::{self as system, ensure_root, ensure_signed};
 use pallet_session::historical::SessionManager;
 use sp_runtime::{
-    curve::PiecewiseLinear,
     traits::{
-        AtLeast32Bit, CheckedSub, Convert, EnsureOrigin, SaturatedConversion, Saturating,
+        AtLeast32Bit, CheckedSub, Convert, EnsureOrigin, Saturating,
         StaticLookup, Zero,
     },
     PerThing, Perbill, RuntimeDebug,
@@ -637,9 +636,6 @@ pub trait Trait: frame_system::Trait {
 
     /// Interface for interacting with a session module.
     type SessionInterface: self::SessionInterface<Self::AccountId>;
-
-    /// The NPoS reward curve to use.
-    // type RewardCurve: Get<&'static PiecewiseLinear<'static>>;
 
     /// The maximum number of nominator rewarded for each validator.
     ///
@@ -1769,7 +1765,7 @@ impl<T: Trait> Module<T> {
             let mut total_payout = 0;
 
             // Set ending era reward.
-            // <ErasValidatorReward<T>>::insert(&active_era.index, &total_payout);
+            // <ErasValidatorReward<T>>::insert(&active_era.index, total_payout.into());
         }
     }
 
@@ -1791,7 +1787,7 @@ impl<T: Trait> Module<T> {
         // Set staking information for new era.
         let maybe_new_validators = Self::select_validators(current_era);
 
-        if (!current_era.is_zero()) {
+        if !current_era.is_zero() {
             let prev_validator_set = Self::select_validators(current_era - 1);
             debug::info!(
                 "****STAKING******NEW******ERA***** => {:?}",
@@ -2075,11 +2071,11 @@ impl<T> pallet_authorship::EventHandler<T::AccountId, T::BlockNumber> for Module
 where
     T: Trait + pallet_authorship::Trait + pallet_session::Trait,
 {
-    fn note_author(author: T::AccountId) {
+    fn note_author(_author: T::AccountId) {
         // Self::reward_by_ids(vec![(author, 20)])
         // ignore
     }
-    fn note_uncle(author: T::AccountId, _age: T::BlockNumber) {
+    fn note_uncle(_author: T::AccountId, _age: T::BlockNumber) {
         // Self::reward_by_ids(vec![
         // 	(<pallet_authorship::Module<T>>::author(), 2),
         // 	(author, 1)

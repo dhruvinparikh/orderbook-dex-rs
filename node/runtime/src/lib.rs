@@ -17,11 +17,11 @@ use inherents::{CheckInherentsResult, InherentData};
 use node_primitives::{
     AccountId, AccountIndex, Balance, BlockNumber, Hash, Index, Moment, Signature,
 };
-use primitives::u32_trait::{_1, _2, _3, _4, _5};
+use primitives::u32_trait::{_1, _2, _3, _4};
 use primitives::OpaqueMetadata;
 use sp_api::impl_runtime_apis;
 use sp_runtime::traits::{
-    self, BlakeTwo256, Block as BlockT, NumberFor, OpaqueKeys, SaturatedConversion, StaticLookup,
+    self, BlakeTwo256, Block as BlockT, OpaqueKeys, SaturatedConversion, StaticLookup,
 };
 use sp_runtime::transaction_validity::TransactionValidity;
 use sp_runtime::{create_runtime_str, generic, ApplyExtrinsicResult, Percent};
@@ -688,7 +688,7 @@ impl_runtime_apis! {
             // probability of a slot being empty), is done in accordance to the
             // slot duration and expected target block time, for safely
             // resisting network delays of maximum two seconds.
-            // <https://research.web3.foundation/en/latest/polkadot/BABE/Babe/#6-practical-results>
+            // <https://research.web3.foundation/en/latest/polkadot/BABE/Babe.html>
             babe_primitives::BabeConfiguration {
                 slot_duration: Babe::slot_duration(),
                 epoch_length: EpochDuration::get(),

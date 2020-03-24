@@ -1518,7 +1518,7 @@ impl<T: Trait> Module<T> {
         <Ledger<T>>::insert(&who, &nominator_ledger);
 
         let mut reward = Perbill::zero();
-        let era_reward_points = <ErasRewardPoints<T>>::get(&era);
+        // let era_reward_points = <ErasRewardPoints<T>>::get(&era);
 
         for (validator, nominator_index) in validators.into_iter() {
             let commission = Self::eras_validator_prefs(&era, &validator).commission;
@@ -1535,22 +1535,24 @@ impl<T: Trait> Module<T> {
                     nominator_exposure.value,
                     validator_exposure.total,
                 );
-                let validator_point = era_reward_points
-                    .individual
-                    .get(&validator)
-                    .map(|points| *points)
-                    .unwrap_or_else(|| Zero::zero());
-                let validator_point_part =
-                    Perbill::from_rational_approximation(validator_point, era_reward_points.total);
-                reward = reward.saturating_add(
-                    validator_point_part
-                        .saturating_mul(Perbill::one().saturating_sub(commission))
-                        .saturating_mul(nominator_exposure_part),
-                );
+                // let validator_point = era_reward_points
+                //     .individual
+                //     .get(&validator)
+                //     .map(|points| *points)
+                //     .unwrap_or_else(|| Zero::zero());
+                // let validator_point_part =
+                //     Perbill::from_rational_approximation(validator_point, 1);
+                // reward = reward.saturating_add(
+                //     validator_point_part
+                //         .saturating_mul(Perbill::one().saturating_sub(commission))
+                //         .saturating_mul(nominator_exposure_part),
+                // );
             }
         }
 
-        if let Some(imbalance) = Self::make_payout(&nominator_ledger.stash, reward * era_payout) {
+        if let Some(imbalance) =
+            Self::make_payout(&nominator_ledger.stash, /*reward * */ era_payout)
+        {
             Self::deposit_event(RawEvent::Reward(who, imbalance.peek()));
         }
 
@@ -1562,6 +1564,17 @@ impl<T: Trait> Module<T> {
         // `ledger.last_reward` in this case.
         let era_payout =
             <ErasValidatorReward<T>>::get(&era).ok_or_else(|| Error::<T>::InvalidEraToReward)?;
+
+        let validator_set = Self::select_validators(era);
+
+        let share: Perbill = Perbill::from_percent(10);
+
+        let validator_count = match validator_set {
+            Some(v) => v.len(),
+            None => 0,
+        };
+
+        let era_payout_share = (share * era_payout) / <BalanceOf<T>>::from(validator_count as u32);
 
         let mut ledger = <Ledger<T>>::get(&who).ok_or_else(|| Error::<T>::NotController)?;
         if ledger
@@ -1575,27 +1588,27 @@ impl<T: Trait> Module<T> {
         ledger.last_reward = Some(era);
         <Ledger<T>>::insert(&who, &ledger);
 
-        let era_reward_points = <ErasRewardPoints<T>>::get(&era);
-        let commission = Self::eras_validator_prefs(&era, &ledger.stash).commission;
-        let exposure = <ErasStakersClipped<T>>::get(&era, &ledger.stash);
+        // let era_reward_points = <ErasRewardPoints<T>>::get(&era);
+        // let commission = Self::eras_validator_prefs(&era, &ledger.stash).commission;
+        // let exposure = <ErasStakersClipped<T>>::get(&era, &ledger.stash);
 
-        let exposure_part = Perbill::from_rational_approximation(exposure.own, exposure.total);
-        let validator_point = era_reward_points
-            .individual
-            .get(&ledger.stash)
-            .map(|points| *points)
-            .unwrap_or_else(|| Zero::zero());
-        let validator_point_part =
-            Perbill::from_rational_approximation(validator_point, era_reward_points.total);
-        let reward = validator_point_part.saturating_mul(
-            commission.saturating_add(
-                Perbill::one()
-                    .saturating_sub(commission)
-                    .saturating_mul(exposure_part),
-            ),
-        );
+        // let exposure_part = Perbill::from_rational_approximation(exposure.own, exposure.total);
+        // let validator_point = era_reward_points
+        //     .individual
+        //     .get(&ledger.stash)
+        //     .map(|points| *points)
+        //     .unwrap_or_else(|| Zero::zero());
+        // let validator_point_part =
+        //     Perbill::from_rational_approximation(validator_point, era_reward_points.total);
+        // let reward = validator_point_part.saturating_mul(
+        //     commission.saturating_add(
+        //         Perbill::one()
+        //             .saturating_sub(commission)
+        //             .saturating_mul(exposure_part),
+        //     ),
+        // );
 
-        if let Some(imbalance) = Self::make_payout(&ledger.stash, reward * era_payout) {
+        if let Some(imbalance) = Self::make_payout(&ledger.stash, /* reward * */ era_payout) {
             Self::deposit_event(RawEvent::Reward(who, imbalance.peek()));
         }
 
@@ -1756,12 +1769,10 @@ impl<T: Trait> Module<T> {
         // Note: active_era_start can be None if end era is called during genesis config.
         if let Some(active_era_start) = active_era.start {
             // When PoA, used by compute_total_payout.
-            // let (total_payout, _) = Self::compute_total_payout(
-            //     T::Currency::total_issuance(),
-            //     _session_index.saturated_into::<u64>(),
-            // );
-            const COEFFICIENT_ERA_2: Perbill = Perbill::from_percent(80);
-            let total_payout = COEFFICIENT_ERA_2 * <BalanceOf<T>>::from(1000u32);
+            let (total_payout, _) = Self::compute_total_payout(
+                T::Currency::total_issuance(),
+                _session_index.saturated_into::<u64>(),
+            );
             // Set ending era reward.
             <ErasValidatorReward<T>>::insert(&active_era.index, total_payout);
         }
@@ -1802,6 +1813,7 @@ impl<T: Trait> Module<T> {
         N: AtLeast32Bit + Clone + From<u32>,
     {
         let mut payout = total_tokens.clone();
+        //TODO DP : figure a way to get exact coefficient value
         const COEFFICIENT_ERA_2: Perbill = Perbill::from_percent(80);
         const COEFFICIENT_ERA_3: Perbill = Perbill::from_percent(68); // 0.80 * 0.85
         const COEFFICIENT_ERA_4: Perbill = Perbill::from_percent(61); // 0.80 * 0.85 * 0.90 = 0.612

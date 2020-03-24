@@ -256,10 +256,11 @@ impl session::historical::Trait for Runtime {
 }
 
 parameter_types! {
-    pub const SessionsPerEra: sp_staking::SessionIndex = 2;
+    pub const SessionsPerEra: sp_staking::SessionIndex = 6;
     pub const BondingDuration: staking::EraIndex = 24 * 28;
     pub const SlashDeferDuration: staking::EraIndex = 24 * 7; // 1/4 the bonding duration.
     pub const MaxNominatorRewardedPerValidator: u32 = 64;
+    pub const ScaleFactor: u32 = SCALE as _;
 }
 
 parameter_types! {
@@ -301,6 +302,7 @@ impl staking::Trait for Runtime {
     type SessionInterface = Self;
     // type RewardCurve = ();
     type MaxNominatorRewardedPerValidator = MaxNominatorRewardedPerValidator;
+    type Scale = ScaleFactor;
 }
 
 impl authority_discovery::Trait for Runtime {}

@@ -252,10 +252,11 @@ use frame_support::{
     weights::SimpleDispatchInfo,
 };
 use frame_system::{self as system, ensure_root, ensure_signed};
+use node_primitives::Balance;
 use pallet_session::historical::SessionManager;
 use sp_runtime::{
     traits::{
-        AtLeast32Bit, CheckedSub, Convert, EnsureOrigin, Saturating,
+        AtLeast32Bit, CheckedSub, Convert, EnsureOrigin, SaturatedConversion, Saturating,
         StaticLookup, Zero,
     },
     PerThing, Perbill, RuntimeDebug,
@@ -642,6 +643,9 @@ pub trait Trait: frame_system::Trait {
     /// For each validator only the `$MaxNominatorRewardedPerValidator` biggest stakers can claim
     /// their reward. This used to limit the i/o cost for the nominator payout.
     type MaxNominatorRewardedPerValidator: Get<u32>;
+
+    /// Scale factor for DNA block timings
+    type Scale: Get<u32>;
 }
 
 /// Mode of era-forcing.
@@ -1751,21 +1755,13 @@ impl<T: Trait> Module<T> {
 
         // Note: active_era_start can be None if end era is called during genesis config.
         if let Some(active_era_start) = active_era.start {
-            let now = T::Time::now();
-
-            let era_duration = now - active_era_start;
-            debug::info!("****** ERA ****** DURATION ****** {:?}", era_duration);
-            // let (total_payout, _max_payout) = inflation::compute_total_payout(
-            //     &T::RewardCurve::get(),
-            //     Self::eras_total_stake(&active_era.index),
-            //     T::Currency::total_issuance(),
-            //     // Duration of era; more than u64::MAX is rewarded as u64::MAX.
-            //     era_duration.saturated_into::<u64>(),
-            // );
-            let mut total_payout = 0;
-
+            // When PoA, used by compute_total_payout.
+            let (total_payout, _) = Self::compute_total_payout(
+                T::Currency::total_issuance(),
+                _session_index.saturated_into::<u64>(),
+            );
             // Set ending era reward.
-            // <ErasValidatorReward<T>>::insert(&active_era.index, total_payout.into());
+            <ErasValidatorReward<T>>::insert(&active_era.index, total_payout);
         }
     }
 
@@ -1796,6 +1792,48 @@ impl<T: Trait> Module<T> {
         }
 
         maybe_new_validators
+    }
+
+    /// The total payout to all operators and validators and their nominators per era.
+    fn compute_total_payout<N>(total_tokens: N, _session_index: u64) -> (N, N)
+    where
+        N: AtLeast32Bit + Clone + From<u32>,
+    {
+        let mut payout = total_tokens.clone();
+        // let portion = Perbill::from_rational_approximation(BASIC_ERA_PAYOUT as u64, 1);
+
+        if _session_index == 1u64 {
+            const BASIC_ERA_PAYOUT: u64 = 256 * 2764800 * 6;
+            let portion = Perbill::from_rational_approximation(BASIC_ERA_PAYOUT as u64, 1);
+            payout = (portion * total_tokens.clone()) / total_tokens.clone();
+        }
+
+        if _session_index == 2u64 {
+            const BASIC_ERA_PAYOUT: u64 = 3397386240;
+            let portion = Perbill::from_rational_approximation(BASIC_ERA_PAYOUT as u64, 1);
+            payout = (portion * total_tokens.clone()) / total_tokens.clone();
+        }
+
+        if _session_index == 3u64 {
+            const BASIC_ERA_PAYOUT: u64 = 2887778304;
+            let portion = Perbill::from_rational_approximation(BASIC_ERA_PAYOUT as u64, 1);
+            payout = (portion * total_tokens.clone()) / total_tokens.clone();
+        }
+        if _session_index == 4u64 {
+            const BASIC_ERA_PAYOUT: u64 = 2599000474;
+            let portion = Perbill::from_rational_approximation(BASIC_ERA_PAYOUT as u64, 1);
+            payout = (portion * total_tokens.clone()) / total_tokens.clone();
+        }
+        if _session_index >= 5u64 {
+            const BASIC_ERA_PAYOUT: u64 = 2469050450;
+            let portion = Perbill::from_rational_approximation(BASIC_ERA_PAYOUT as u64, 1);
+            payout = (portion * total_tokens.clone()) / total_tokens.clone();
+        }
+        // if _session_index == 5u64 {
+        //     payout =
+        //         (portion * 0.80 * 0.85 * 0.90 * 0.95 * total_tokens.clone()) / total_tokens.clone();
+        // }
+        (payout.clone(), payout)
     }
 
     /// Clear all era information for given era.

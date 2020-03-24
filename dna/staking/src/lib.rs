@@ -259,7 +259,7 @@ use sp_runtime::{
         AtLeast32Bit, CheckedSub, Convert, EnsureOrigin, SaturatedConversion, Saturating,
         StaticLookup, Zero,
     },
-    PerThing, Perbill, RuntimeDebug,
+    PerThing, Perbill, Permill, RuntimeDebug,
 };
 #[cfg(feature = "std")]
 use sp_runtime::{Deserialize, Serialize};
@@ -1756,10 +1756,12 @@ impl<T: Trait> Module<T> {
         // Note: active_era_start can be None if end era is called during genesis config.
         if let Some(active_era_start) = active_era.start {
             // When PoA, used by compute_total_payout.
-            let (total_payout, _) = Self::compute_total_payout(
-                T::Currency::total_issuance(),
-                _session_index.saturated_into::<u64>(),
-            );
+            // let (total_payout, _) = Self::compute_total_payout(
+            //     T::Currency::total_issuance(),
+            //     _session_index.saturated_into::<u64>(),
+            // );
+            const COEFFICIENT_ERA_2: Perbill = Perbill::from_percent(80);
+            let total_payout = COEFFICIENT_ERA_2 * <BalanceOf<T>>::from(1000u32);
             // Set ending era reward.
             <ErasValidatorReward<T>>::insert(&active_era.index, total_payout);
         }
@@ -1800,39 +1802,39 @@ impl<T: Trait> Module<T> {
         N: AtLeast32Bit + Clone + From<u32>,
     {
         let mut payout = total_tokens.clone();
-        // let portion = Perbill::from_rational_approximation(BASIC_ERA_PAYOUT as u64, 1);
-
+        const COEFFICIENT_ERA_2: Perbill = Perbill::from_percent(80);
+        const COEFFICIENT_ERA_3: Perbill = Perbill::from_percent(68); // 0.80 * 0.85
+        const COEFFICIENT_ERA_4: Perbill = Perbill::from_percent(61); // 0.80 * 0.85 * 0.90 = 0.612
+        const COEFFICIENT_ERA_5: Perbill = Perbill::from_percent(58); // 0.80 * 0.85 * 0.90 * 0.95 = 0.5814
+        const BASIC_ERA_PAYOUT: u64 = 256 * 2764800 * 6;
+        let portion = Perbill::from_rational_approximation(BASIC_ERA_PAYOUT as u64, 1);
         if _session_index == 1u64 {
-            const BASIC_ERA_PAYOUT: u64 = 256 * 2764800 * 6;
-            let portion = Perbill::from_rational_approximation(BASIC_ERA_PAYOUT as u64, 1);
             payout = (portion * total_tokens.clone()) / total_tokens.clone();
         }
 
         if _session_index == 2u64 {
-            const BASIC_ERA_PAYOUT: u64 = 3397386240;
-            let portion = Perbill::from_rational_approximation(BASIC_ERA_PAYOUT as u64, 1);
-            payout = (portion * total_tokens.clone()) / total_tokens.clone();
+            // const BASIC_ERA_PAYOUT: u64 = 3397386240;
+            payout = COEFFICIENT_ERA_2 * (portion * total_tokens.clone()) / total_tokens.clone();
         }
 
         if _session_index == 3u64 {
-            const BASIC_ERA_PAYOUT: u64 = 2887778304;
-            let portion = Perbill::from_rational_approximation(BASIC_ERA_PAYOUT as u64, 1);
-            payout = (portion * total_tokens.clone()) / total_tokens.clone();
+            // const BASIC_ERA_PAYOUT: u64 = 2887778304;
+            payout = COEFFICIENT_ERA_3 * (portion * total_tokens.clone()) / total_tokens.clone();
         }
         if _session_index == 4u64 {
-            const BASIC_ERA_PAYOUT: u64 = 2599000474;
-            let portion = Perbill::from_rational_approximation(BASIC_ERA_PAYOUT as u64, 1);
-            payout = (portion * total_tokens.clone()) / total_tokens.clone();
+            // const BASIC_ERA_PAYOUT: u64 = 2599000474;
+            payout = COEFFICIENT_ERA_4 * (portion * total_tokens.clone()) / total_tokens.clone();
         }
         if _session_index >= 5u64 {
-            const BASIC_ERA_PAYOUT: u64 = 2469050450;
-            let portion = Perbill::from_rational_approximation(BASIC_ERA_PAYOUT as u64, 1);
-            payout = (portion * total_tokens.clone()) / total_tokens.clone();
+            let _session_index_diff = 5 - _session_index;
+            // let mut coefficient : Perbill = COEFFICIENT_ERA_5;
+            // for ( x = 0; x < _session_index_diff; xx++) {
+            //     coefficient = coefficient * COEFFICIENT_ERA_5;
+            // }
+            // const BASIC_ERA_PAYOUT: u64 = 2469050450;
+            payout = COEFFICIENT_ERA_5 * (portion * total_tokens.clone()) / total_tokens.clone();
         }
-        // if _session_index == 5u64 {
-        //     payout =
-        //         (portion * 0.80 * 0.85 * 0.90 * 0.95 * total_tokens.clone()) / total_tokens.clone();
-        // }
+
         (payout.clone(), payout)
     }
 

@@ -259,7 +259,7 @@ use sp_runtime::{
         AtLeast32Bit, CheckedSub, Convert, EnsureOrigin, SaturatedConversion, Saturating,
         StaticLookup, Zero,
     },
-    PerThing, Perbill, Permill, RuntimeDebug,
+    PerThing, Perbill, RuntimeDebug,
 };
 #[cfg(feature = "std")]
 use sp_runtime::{Deserialize, Serialize};
@@ -1517,11 +1517,11 @@ impl<T: Trait> Module<T> {
         nominator_ledger.last_reward = Some(era);
         <Ledger<T>>::insert(&who, &nominator_ledger);
 
-        let mut reward = Perbill::zero();
+        // let mut reward = Perbill::zero();
         // let era_reward_points = <ErasRewardPoints<T>>::get(&era);
 
         for (validator, nominator_index) in validators.into_iter() {
-            let commission = Self::eras_validator_prefs(&era, &validator).commission;
+            // let commission = Self::eras_validator_prefs(&era, &validator).commission;
             let validator_exposure = <ErasStakersClipped<T>>::get(&era, &validator);
 
             if let Some(nominator_exposure) =
@@ -1531,10 +1531,10 @@ impl<T: Trait> Module<T> {
                     continue;
                 }
 
-                let nominator_exposure_part = Perbill::from_rational_approximation(
-                    nominator_exposure.value,
-                    validator_exposure.total,
-                );
+                // let nominator_exposure_part = Perbill::from_rational_approximation(
+                //     nominator_exposure.value,
+                //     validator_exposure.total,
+                // );
                 // let validator_point = era_reward_points
                 //     .individual
                 //     .get(&validator)
@@ -1574,7 +1574,7 @@ impl<T: Trait> Module<T> {
             None => 0,
         };
 
-        let era_payout_share = (share * era_payout) / <BalanceOf<T>>::from(validator_count as u32);
+        let _era_payout_share = (share * era_payout) / <BalanceOf<T>>::from(validator_count as u32);
 
         let mut ledger = <Ledger<T>>::get(&who).ok_or_else(|| Error::<T>::NotController)?;
         if ledger
@@ -1608,7 +1608,7 @@ impl<T: Trait> Module<T> {
         //     ),
         // );
 
-        if let Some(imbalance) = Self::make_payout(&ledger.stash, /* reward * */ era_payout) {
+        if let Some(imbalance) = Self::make_payout(&ledger.stash, /* reward * */ _era_payout_share) {
             Self::deposit_event(RawEvent::Reward(who, imbalance.peek()));
         }
 
@@ -1764,10 +1764,10 @@ impl<T: Trait> Module<T> {
 
     /// Compute payout for era.
     fn end_era(active_era: ActiveEraInfo<MomentOf<T>>, _session_index: SessionIndex) {
-        debug::info!("*** END ************** ERA ***************");
+        debug::info!("*** END ************** ERA *************** {:?}", active_era);
 
         // Note: active_era_start can be None if end era is called during genesis config.
-        if let Some(active_era_start) = active_era.start {
+        if let Some(_active_era_start) = active_era.start {
             // When PoA, used by compute_total_payout.
             let (total_payout, _) = Self::compute_total_payout(
                 T::Currency::total_issuance(),
@@ -1818,33 +1818,36 @@ impl<T: Trait> Module<T> {
         const COEFFICIENT_ERA_3: Perbill = Perbill::from_percent(68); // 0.80 * 0.85
         const COEFFICIENT_ERA_4: Perbill = Perbill::from_percent(61); // 0.80 * 0.85 * 0.90 = 0.612
         const COEFFICIENT_ERA_5: Perbill = Perbill::from_percent(58); // 0.80 * 0.85 * 0.90 * 0.95 = 0.5814
-        const BASIC_ERA_PAYOUT: u64 = 256 * 2764800 * 6;
+        // const BASIC_ERA_PAYOUT: u64 = 256 * 2764800 * 6;
+        const BASIC_ERA_PAYOUT: u64 = 256 * 2 * 6;
         let portion = Perbill::from_rational_approximation(BASIC_ERA_PAYOUT as u64, 1);
         if _session_index == 1u64 {
             payout = (portion * total_tokens.clone()) / total_tokens.clone();
         }
 
         if _session_index == 2u64 {
-            // const BASIC_ERA_PAYOUT: u64 = 3397386240;
             payout = COEFFICIENT_ERA_2 * (portion * total_tokens.clone()) / total_tokens.clone();
         }
 
         if _session_index == 3u64 {
-            // const BASIC_ERA_PAYOUT: u64 = 2887778304;
             payout = COEFFICIENT_ERA_3 * (portion * total_tokens.clone()) / total_tokens.clone();
         }
         if _session_index == 4u64 {
-            // const BASIC_ERA_PAYOUT: u64 = 2599000474;
             payout = COEFFICIENT_ERA_4 * (portion * total_tokens.clone()) / total_tokens.clone();
         }
         if _session_index >= 5u64 {
             let _session_index_diff = 5 - _session_index;
-            // let mut coefficient : Perbill = COEFFICIENT_ERA_5;
-            // for ( x = 0; x < _session_index_diff; xx++) {
-            //     coefficient = coefficient * COEFFICIENT_ERA_5;
-            // }
-            // const BASIC_ERA_PAYOUT: u64 = 2469050450;
-            payout = COEFFICIENT_ERA_5 * (portion * total_tokens.clone()) / total_tokens.clone();
+            let mut coefficient : Perbill = Perbill::one();
+            let mut count = 0u64;
+
+            loop {
+                if !count <= _session_index_diff{
+                    break;
+                } 
+                coefficient = coefficient.saturating_mul(COEFFICIENT_ERA_5);
+                count += 1;                
+            }
+            payout = coefficient * (portion * total_tokens.clone()) / total_tokens.clone();
         }
 
         (payout.clone(), payout)

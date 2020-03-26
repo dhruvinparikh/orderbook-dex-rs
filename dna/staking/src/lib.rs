@@ -1608,7 +1608,9 @@ impl<T: Trait> Module<T> {
         //     ),
         // );
 
-        if let Some(imbalance) = Self::make_payout(&ledger.stash, /* reward * */ _era_payout_share) {
+        if let Some(imbalance) =
+            Self::make_payout(&ledger.stash, /* reward * */ _era_payout_share)
+        {
             Self::deposit_event(RawEvent::Reward(who, imbalance.peek()));
         }
 
@@ -1640,18 +1642,19 @@ impl<T: Trait> Module<T> {
     /// to pay the right payee for the given staker account.
     fn make_payout(stash: &T::AccountId, amount: BalanceOf<T>) -> Option<PositiveImbalanceOf<T>> {
         let dest = Self::payee(stash);
-        let rwd = 2560000;
         match dest {
             RewardDestination::Controller => Self::bonded(stash).and_then(|controller| {
-                T::Currency::deposit_into_existing(&controller, rwd.into()).ok()
+                T::Currency::deposit_into_existing(&controller, amount.into()).ok()
             }),
-            RewardDestination::Stash => T::Currency::deposit_into_existing(stash, rwd.into()).ok(),
+            RewardDestination::Stash => {
+                T::Currency::deposit_into_existing(stash, amount.into()).ok()
+            }
             RewardDestination::Staked => Self::bonded(stash)
                 .and_then(|c| Self::ledger(&c).map(|l| (c, l)))
                 .and_then(|(controller, mut l)| {
                     l.active += amount;
                     l.total += amount;
-                    let r = T::Currency::deposit_into_existing(stash, rwd.into()).ok();
+                    let r = T::Currency::deposit_into_existing(stash, amount.into()).ok();
                     Self::update_ledger(&controller, &l);
                     r
                 }),
@@ -1764,17 +1767,57 @@ impl<T: Trait> Module<T> {
 
     /// Compute payout for era.
     fn end_era(active_era: ActiveEraInfo<MomentOf<T>>, _session_index: SessionIndex) {
-        debug::info!("*** END ************** ERA *************** {:?}", active_era);
+        let mut payout = <BalanceOf<T>>::from(0);
+        //TODO DP : figure a way to get exact coefficient value
+        const COEFFICIENT_ERA_2: Perbill = Perbill::from_percent(80);
+        const COEFFICIENT_ERA_3: Perbill = Perbill::from_percent(68); // 0.80 * 0.85
+        const COEFFICIENT_ERA_4: Perbill = Perbill::from_percent(61); // 0.80 * 0.85 * 0.90 = 0.612
+        const COEFFICIENT_ERA_5: Perbill = Perbill::from_percent(58); // 0.80 * 0.85 * 0.90 * 0.95 = 0.5814
+        // const BASIC_ERA_PAYOUT: u64 = 256 * 2764800 * 6;
+        let sessions = T::SessionsPerEra::get() as u32;
+        const BASIC_ERA_PAYOUT: u32 = 2560000 * 2;
 
         // Note: active_era_start can be None if end era is called during genesis config.
         if let Some(_active_era_start) = active_era.start {
             // When PoA, used by compute_total_payout.
-            let (total_payout, _) = Self::compute_total_payout(
-                T::Currency::total_issuance(),
-                _session_index.saturated_into::<u64>(),
-            );
+            // let (total_payout, _) = Self::compute_total_payout(
+            //     T::Currency::total_issuance(),
+            //     _session_index.saturated_into::<u32>(),
+            // );
+            if _session_index == sessions - 1 {
+                payout = <BalanceOf<T>>::from(BASIC_ERA_PAYOUT * sessions);
+            }
+
+            if _session_index == ((sessions * 2) - 1) {
+                let amt = COEFFICIENT_ERA_2 * BASIC_ERA_PAYOUT;
+                payout = <BalanceOf<T>>::from(amt);
+            }
+
+            if _session_index == ((sessions * 3) - 1) {
+                let amt = COEFFICIENT_ERA_3 * BASIC_ERA_PAYOUT;
+                payout = <BalanceOf<T>>::from(amt);
+            }
+            if _session_index == ((sessions * 4) - 1) {
+                let amt = COEFFICIENT_ERA_4 * BASIC_ERA_PAYOUT;
+                payout = <BalanceOf<T>>::from(amt);
+            }
+            if _session_index >= ((sessions * 5) - 1) {
+                let _session_index_diff = _session_index - ((sessions * 5) - 1);
+                let mut coefficient: Perbill = Perbill::one();
+                let mut count = 0;
+                loop {
+                    coefficient = coefficient.saturating_mul(COEFFICIENT_ERA_5);
+                    if !count > _session_index_diff {
+                        break;
+                    } else {
+                        count += sessions;
+                    }
+                }
+                payout = <BalanceOf<T>>::from(coefficient * 1);
+            }
+            debug::info!("********* PAY : {:?}", payout);
             // Set ending era reward.
-            <ErasValidatorReward<T>>::insert(&active_era.index, total_payout);
+            <ErasValidatorReward<T>>::insert(&active_era.index, payout);
         }
     }
 
@@ -1807,8 +1850,56 @@ impl<T: Trait> Module<T> {
         maybe_new_validators
     }
 
+    fn calc(_session_index: SessionIndex) -> Option<BalanceOf<T>> {
+        // const COEFFICIENT_ERA_2: Perbill = Perbill::from_percent(80);
+        // let c = COEFFICIENT_ERA_2 * 100u32;
+        // let kk = <BalanceOf<T>>::from(c);
+        // Some(kk.clone())
+
+        let mut payout = <BalanceOf<T>>::from(0);
+        //TODO DP : figure a way to get exact coefficient value
+        const COEFFICIENT_ERA_2: Perbill = Perbill::from_percent(80);
+        const COEFFICIENT_ERA_3: Perbill = Perbill::from_percent(68); // 0.80 * 0.85
+        const COEFFICIENT_ERA_4: Perbill = Perbill::from_percent(61); // 0.80 * 0.85 * 0.90 = 0.612
+        const COEFFICIENT_ERA_5: Perbill = Perbill::from_percent(58); // 0.80 * 0.85 * 0.90 * 0.95 = 0.5814
+                                                                      // const BASIC_ERA_PAYOUT: u64 = 256 * 2764800 * 6;
+        const BASIC_ERA_PAYOUT: u32 = 256 * 2 * 6;
+        if _session_index == 5 {
+            payout = <BalanceOf<T>>::from(BASIC_ERA_PAYOUT);
+        }
+
+        if _session_index == 11 {
+            let amt = COEFFICIENT_ERA_2 * BASIC_ERA_PAYOUT;
+            payout = <BalanceOf<T>>::from(amt);
+        }
+
+        if _session_index == 17 {
+            let amt = COEFFICIENT_ERA_3 * BASIC_ERA_PAYOUT;
+            payout = <BalanceOf<T>>::from(amt);
+        }
+        if _session_index == 23 {
+            let amt = COEFFICIENT_ERA_4 * BASIC_ERA_PAYOUT;
+            payout = <BalanceOf<T>>::from(amt);
+        }
+        if _session_index >= 29 {
+            let _session_index_diff = _session_index - 29;
+            let mut coefficient: Perbill = Perbill::one();
+            let mut count = 0;
+            loop {
+                coefficient = coefficient.saturating_mul(COEFFICIENT_ERA_5);
+                if !count > _session_index_diff {
+                    break;
+                } else {
+                    count += 6;
+                }
+            }
+            payout = <BalanceOf<T>>::from(coefficient * 1);
+        }
+        Some(payout)
+    }
+
     /// The total payout to all operators and validators and their nominators per era.
-    fn compute_total_payout<N>(total_tokens: N, _session_index: u64) -> (N, N)
+    fn compute_total_payout<N>(total_tokens: N, _session_index: u32) -> (N, N)
     where
         N: AtLeast32Bit + Clone + From<u32>,
     {
@@ -1818,38 +1909,37 @@ impl<T: Trait> Module<T> {
         const COEFFICIENT_ERA_3: Perbill = Perbill::from_percent(68); // 0.80 * 0.85
         const COEFFICIENT_ERA_4: Perbill = Perbill::from_percent(61); // 0.80 * 0.85 * 0.90 = 0.612
         const COEFFICIENT_ERA_5: Perbill = Perbill::from_percent(58); // 0.80 * 0.85 * 0.90 * 0.95 = 0.5814
-        // const BASIC_ERA_PAYOUT: u64 = 256 * 2764800 * 6;
+                                                                      // const BASIC_ERA_PAYOUT: u64 = 256 * 2764800 * 6;
         const BASIC_ERA_PAYOUT: u64 = 256 * 2 * 6;
         let portion = Perbill::from_rational_approximation(BASIC_ERA_PAYOUT as u64, 1);
-        if _session_index == 1u64 {
+        if _session_index == 5 {
             payout = (portion * total_tokens.clone()) / total_tokens.clone();
         }
 
-        if _session_index == 2u64 {
+        if _session_index == 11 {
             payout = COEFFICIENT_ERA_2 * (portion * total_tokens.clone()) / total_tokens.clone();
         }
 
-        if _session_index == 3u64 {
+        if _session_index == 17 {
             payout = COEFFICIENT_ERA_3 * (portion * total_tokens.clone()) / total_tokens.clone();
         }
-        if _session_index == 4u64 {
+        if _session_index == 23 {
             payout = COEFFICIENT_ERA_4 * (portion * total_tokens.clone()) / total_tokens.clone();
         }
-        if _session_index >= 5u64 {
-            let _session_index_diff = 5 - _session_index;
-            let mut coefficient : Perbill = Perbill::one();
-            let mut count = 0u64;
-
+        if _session_index >= 29 {
+            let _session_index_diff = _session_index - 29;
+            let mut coefficient: Perbill = Perbill::one();
+            let mut count = 0;
             loop {
-                if !count <= _session_index_diff{
-                    break;
-                } 
                 coefficient = coefficient.saturating_mul(COEFFICIENT_ERA_5);
-                count += 1;                
+                if !count > _session_index_diff {
+                    break;
+                } else {
+                    count += 6;
+                }
             }
             payout = coefficient * (portion * total_tokens.clone()) / total_tokens.clone();
         }
-
         (payout.clone(), payout)
     }
 

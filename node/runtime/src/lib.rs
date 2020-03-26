@@ -261,6 +261,7 @@ parameter_types! {
     pub const SlashDeferDuration: staking::EraIndex = 24 * 7; // 1/4 the bonding duration.
     pub const MaxNominatorRewardedPerValidator: u32 = 64;
     pub const ScaleFactor: u32 = SCALE as _;
+    pub const RewardsPerBlock: u32 = 2560000;
 }
 
 parameter_types! {
@@ -303,6 +304,8 @@ impl staking::Trait for Runtime {
     // type RewardCurve = ();
     type MaxNominatorRewardedPerValidator = MaxNominatorRewardedPerValidator;
     type Scale = ScaleFactor;
+    type SessionDuration = SessionDurationStaking;
+    type RewardsPerBlock = RewardsPerBlock;
 }
 
 impl authority_discovery::Trait for Runtime {}
@@ -335,6 +338,7 @@ pub type SubmitTransaction = TransactionSubmitter<ImOnlineId, Runtime, Unchecked
 
 parameter_types! {
     pub const SessionDuration: BlockNumber = EPOCH_DURATION_IN_BLOCKS as _;
+    pub const SessionDurationStaking: u32 = EPOCH_DURATION_IN_BLOCKS as u32;
 }
 
 impl im_online::Trait for Runtime {

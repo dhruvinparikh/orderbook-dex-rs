@@ -1,4 +1,4 @@
-# Substrated Based Order book based DEX
+# Substrate Based Order book based DEX
 
 ## Setup
 
